@@ -1,8 +1,43 @@
 .navbar {
+    background-color: #ffc107;
     border:0;
     border-radius: 0;
+    margin: 0;
 }
 
+#hyper .navbar a {
+    border-bottom: 5px solid #ffc107;
+    color: #fff;
+    height: 60px;
+    padding-top: 20px;
+    text-transform: lowercase;
+}
+
+#hyper .navbar a:hover, #hyper .navbar a:focus {
+    background: none;
+    border-color: #ff8f00;
+}
+
+.navbar .navbar-brand {
+    font-size: 2em;
+}
 .navbar .navbar-brand small {
     display:inline;
+    font-size: 0.6em;
+}
+
+.btn.btn-primary {
+    border-color: #ffb300;
+    background-color: #ffc107;
+}
+
+.btn.btn-primary:hover {
+    background-color: #ffb300;
+}
+
+#hyper .panel pre {
+    border: 0;
+    border-radius: 0;
+    background: none;
+    padding: 0;
 }

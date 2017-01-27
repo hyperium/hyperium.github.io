@@ -1,0 +1,25 @@
+<!doctype html>
+<html>
+  <head>
+    {% include head.html %}
+  </head>
+  <body id="hyper">
+    {% include header.html %}
+    <div class="container">
+      <div class="row">
+        <div class="col-md-3">
+          <nav>
+            <ul class="nav">
+
+            </ul>
+          </nav>
+        </div>
+        <div class="col-md-9">
+            {{ content }}
+        </div>
+      </div>
+    </div>
+
+    {% include footer.html %}
+  </body>
+</html>

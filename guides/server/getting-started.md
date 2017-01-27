@@ -1,5 +1,6 @@
 ---
 title:  Getting Started with a Server
+layout: guide
 ---
 
 Let's start by making a "Hello, World!" server, and expand from there.
@@ -41,3 +42,4 @@ impl Service for HelloWorld {
 }
 ```
 
+[service]: /hyper/master/hyper/server/trait.Service.html

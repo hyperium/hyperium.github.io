@@ -1,3 +1,7 @@
+body {
+    font-size: 16px;
+}
+
 a {
     color: #ee9107;
 }
@@ -6,6 +10,11 @@ a:hover, a:focus {
     color: ff8f00
 }
 
+code {
+    background: #f4f4f4;
+    color: #333;
+    padding: 3px 5px;
+}
 .navbar {
     border: 0;
     border-bottom: 1px solid #ee9107;
@@ -56,6 +65,10 @@ a:hover, a:focus {
     padding: 0;
 }
 
+.hyper-content {
+    line-height: 1.7em;
+    max-width: 700px;
+}
 
 .hyper-footer {
     background: #f5f5f5;

@@ -11,13 +11,13 @@ A [`Service`][service] is how you define how to serve incoming requests
 with outgoing responses. Let's define a simple one, naming it after what
 we expect our service to do.
 
-```rust,ignore
+```rust
 struct HelloWorld;
 ```
 
 Next, we need to implement [`Service`][service] for `HelloWorld`:
 
-```rust,ignore
+```rust
 const PHRASE: &'static str = "Hello, World!";
 
 impl Service for HelloWorld {
@@ -39,6 +39,17 @@ impl Service for HelloWorld {
                 .with_body(PHRASE)
         )
     }
+}
+```
+
+Lastly, we need to hook up our `HelloWorld` service into a running hyper
+Server.
+
+```rust
+fn main() {
+    let addr = "127.0.0.1:3000".parse().unwrap();
+    let server = Http::new().bind(&addr, || Ok(HelloWorld)).unwrap();
+    server.run().unwrap();
 }
 ```
 

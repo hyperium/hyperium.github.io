@@ -14,4 +14,4 @@ hyper = "0.11"
 
 - If building a web server, continue with the [Server guide][].
 
-[Server guide]: ./server/getting-stared/
+[Server guide]: ./server

@@ -22,12 +22,12 @@ a {
 }
 
 a:hover, a:focus {
-    color: #ff8f00
+    color: $primary-highlight-color;
 }
 
-code {
+code, a > code {
     background: $code-bg-color;
-    color: #333;
+    color: $primary-color;
     padding: 3px 5px;
 }
 
@@ -73,7 +73,7 @@ pre code {
 
 #hyper .navbar a:hover, #hyper .navbar a:focus {
     background: none;
-    border-color: #ff8f00;
+    border-color: $primary-highlight-color;
 }
 
 .navbar .navbar-brand {
@@ -108,6 +108,11 @@ pre code {
 .hyper-content {
     line-height: 1.7em;
     max-width: 700px;
+}
+
+.hyper-content h2 {
+    color: $primary-color;
+    margin: 2rem 0 1rem;
 }
 
 .hyper-footer {

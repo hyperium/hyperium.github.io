@@ -5,6 +5,20 @@ layout: guide
 
 Let's start by making a "Hello, World!" server, and expand from there.
 
+First, some imports in our `main.rs`:
+
+```rust
+extern crate hyper;
+extern crate futures;
+```
+
+We also need to `use` a few things:
+
+```rust
+use hyper::header::ContentLength;
+use hyper::server::{Http, Request, Response, Service};
+```
+
 ## Creating a Service
 
 A [`Service`][service] is how you define how to serve incoming requests
@@ -42,8 +56,14 @@ impl Service for HelloWorld {
 }
 ```
 
+## Starting the Server
+
 Lastly, we need to hook up our `HelloWorld` service into a running hyper
 Server.
+
+We'll dive in to the specifics of some of these things in another guide.
+This just sets up an `Http` protocol, binds it to a socket address we
+want, and then runs it forever.
 
 ```rust
 fn main() {

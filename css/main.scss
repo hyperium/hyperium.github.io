@@ -105,6 +105,16 @@ pre code {
   background: none;
 }
 
+.hyper-sidebar .nav {
+    display: block;
+}
+
+.hyper-sidebar .nav li > a {
+    display: block;
+    font-size: 90%;
+    padding: .25rem;
+}
+
 .hyper-content {
     line-height: 1.7em;
     max-width: 700px;

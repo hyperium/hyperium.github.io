@@ -15,8 +15,10 @@ extern crate futures;
 We also need to `use` a few things:
 
 ```rust
+# extern crate hyper;
 use hyper::header::ContentLength;
 use hyper::server::{Http, Request, Response, Service};
+# fn main() {}
 ```
 
 ## Creating a Service
@@ -32,6 +34,11 @@ struct HelloWorld;
 Next, we need to implement [`Service`][service] for `HelloWorld`:
 
 ```rust
+# extern crate futures;
+# extern crate hyper;
+# use hyper::header::ContentLength;
+# use hyper::server::{Service, Request, Response};
+# struct HelloWorld;
 const PHRASE: &'static str = "Hello, World!";
 
 impl Service for HelloWorld {
@@ -54,6 +61,7 @@ impl Service for HelloWorld {
         )
     }
 }
+# fn main() {}
 ```
 
 ## Starting the Server
@@ -65,7 +73,27 @@ We'll dive in to the specifics of some of these things in another guide.
 This just sets up an `Http` protocol, binds it to a socket address we
 want, and then runs it forever.
 
-```rust
+```rust,no_run
+# extern crate futures;
+# extern crate hyper;
+# use hyper::header::ContentLength;
+# use hyper::server::{Http, Service, Request, Response};
+# struct HelloWorld;
+# const PHRASE: &'static str = "Hello, World!";
+#
+# impl Service for HelloWorld {
+#     // boilerplate hooking up hyper's server types
+#     type Request = Request;
+#     type Response = Response;
+#     type Error = hyper::Error;
+#     // The future representing the eventual Response your call will
+#     // resolve to. This can change to whatever Future you need.
+#     type Future = futures::future::FutureResult<Self::Response, Self::Error>;
+#
+#     fn call(&self, _req: Request) -> Self::Future {
+#         unimplemented!()
+#     }
+# }
 fn main() {
     let addr = "127.0.0.1:3000".parse().unwrap();
     let server = Http::new().bind(&addr, || Ok(HelloWorld)).unwrap();

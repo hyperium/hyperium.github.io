@@ -102,6 +102,7 @@ First up, plain echo. Both the `Request` and the `Response` have body streams, a
 #             (&Method::Get, "/") => {
 #                 response.set_body("Try POSTing data to /echo");
 #             },
+// inside that match from before
 (&Method::Post, "/echo") => {
     response.set_body(req.body());
 },
@@ -179,20 +180,20 @@ impl Service for Echo {
 #          match (req.method(), req.path()) {
 #             (&Method::Get, "/") => {
 #             },
-// ...
-// only this match arm needs to change
-(&Method::Post, "/echo") => {
-    response.set_body(req.body().map(to_uppercase as _));
-},
-// ...
+            // ...
+            // only this match arm needs to change
+            (&Method::Post, "/echo") => {
+                response.set_body(req.body().map(to_uppercase as _));
+            },
+            // ...
 #             _ => {
 #                 response.set_status(StatusCode::NotFound);
 #             },
 #         };
 #
 #         futures::future::ok(response)
-#     }
-#
+    }
+
 }
 # fn main() {}
 ```

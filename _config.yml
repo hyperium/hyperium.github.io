@@ -3,6 +3,19 @@ title: hyper
 baseurl: "/" # the subpath of your site, e.g. /blog/
 url: "https://hyper.rs" # the base hostname & protocol for your site
 
+defaults:
+  -
+    scope:
+      path: "_guides"
+      type: "guides"
+    values:
+      layout: "guide"
+
+collections:
+  guides:
+    permalink: /:collection/:path/
+    output: true
+
 # Build settings
 markdown: kramdown
 highlighter: rouge

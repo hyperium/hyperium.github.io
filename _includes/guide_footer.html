@@ -1,0 +1,18 @@
+eeeee
+<div>{{ site.data.guides }}</div>
+{% assign guides = site.data.guides | map: 'guides' | join:',' | split:',' %}
+{% for guide in guides %}
+  {% assign guide_url = guide | prepend:"/guides/" | append:"/" %}
+  {% if guide_url == page.url %}
+    <div>
+      <div>
+          {% assign next = forloop.index0 | plus: 1 %}
+          {% assign next_page = guides[next] | prepend:"/guides/" | append:"/" %}
+          <a href="{{ next_page }}">Next</a>
+      </div>
+    </div>
+  {% else %}
+    {{ guide_url }} vs {{ page.url }}
+    <br/>
+  {% endif %}
+{% endfor %}

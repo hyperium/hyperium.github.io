@@ -1,6 +1,7 @@
 ---
 title:  Getting Started
 layout: guide
+permalink: /guides/
 ---
 
 hyper is an HTTP library for the Rust language.

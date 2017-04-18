@@ -23,3 +23,6 @@ highlighter: rouge
 kramdown:
     input: GFM
     syntax_highlighter: rouge
+
+docs_url: https://hyper.rs/hyper/master
+futures_url: https://docs.rs/futures/*

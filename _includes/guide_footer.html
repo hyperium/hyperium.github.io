@@ -1,18 +1,29 @@
-eeeee
-<div>{{ site.data.guides }}</div>
-{% assign guides = site.data.guides | map: 'guides' | join:',' | split:',' %}
-{% for guide in guides %}
-  {% assign guide_url = guide | prepend:"/guides/" | append:"/" %}
-  {% if guide_url == page.url %}
-    <div>
-      <div>
-          {% assign next = forloop.index0 | plus: 1 %}
-          {% assign next_page = guides[next] | prepend:"/guides/" | append:"/" %}
-          <a href="{{ next_page }}">Next</a>
-      </div>
-    </div>
-  {% else %}
-    {{ guide_url }} vs {{ page.url }}
-    <br/>
-  {% endif %}
+{% comment %}
+{% for topic in site.data.guides %}
+  {% for guide in topic.guides %}
+    {% assign guide_url = guide | prepend:"/" | prepend: topic.path | prepend:"/guides" | append:"/" %}
+    {% if guide_url == page.url %}
+      <footer class="pagination">
+        {% if forloop.first %}
+
+        {% else %}
+        <div class="prev">
+            {% assign prev = forloop.index0 | minus: 1 %}
+            {% assign prev_page = topic.guides[prev] | prepend: "/" | prepend: topic.path | prepend:"/guides" | append:"/" %}
+            <a href="{{ prev_page }}">Previous</a>
+        </div>
+        {% endif %}
+        {% if forloop.last %}
+        {% else %}
+        <div class="next">
+            {% assign next = forloop.index0 | plus: 1 %}
+            {% assign next_page = topic.guides[next] | prepend: "/" | prepend: topic.path | prepend:"/guides" | append:"/" %}
+            <a href="{{ next_page }}">Next</a>
+        </div>
+        {% endif %}
+      </footer>
+      {% break %}
+    {% endif %}
+  {% endfor %}
 {% endfor %}
+{% endcomment %}

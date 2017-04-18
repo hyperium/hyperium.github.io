@@ -1,6 +1,5 @@
 ---
-title: Echo
-layout: guide
+title: Echo, echo, echo
 ---
 
 You already have a [Hello World server](./index)? Excellent! Usually,

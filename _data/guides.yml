@@ -1,13 +1,17 @@
 - title: Guide
+  path: ""
   guides:
   - server
   - client
 
 - title: Server
+  path: "/server"
   guides:
   - hello-world
   - echo
 
 - title: Client
+  path: "/client"
   guides:
-  - something
+  - basic
+  - advanced

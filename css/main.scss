@@ -10,6 +10,7 @@ $text-color: #333;
 
 $primary-color: #ee9107;
 $primary-highlight-color: #ff8f00;
+$primary-pagehead-color: #ffc107;
 $secondary-color: #077cee;
 
 $code-bg-color: #f5f5f5;
@@ -78,19 +79,47 @@ pre code {
 }
 
 .navbar .navbar-brand {
-    font-size: 2em;
+    font-size: 2rem;
     padding: 0;
 }
 .navbar .navbar-brand small {
     display:inline;
-    font-size: 0.5em;
+    font-size: 0.5rem;
 }
 
 .hyper-pageheader {
-    background: #ffc107;
+    background: $primary-pagehead-color;
     color: #fff;
-    margin-bottom: 4em;
-    padding:4em;
+    margin-bottom: 4rem;
+    padding:4rem;
+}
+
+.hyper-home .hyper-pageheader {
+    text-align: center;
+    padding-top: 8rem;
+    padding-bottom: 6rem;
+}
+
+.hyper-home .hyper-pageheader h1 {
+    font-size: 4rem;
+    margin: 2rem 0;
+}
+.hyper-home .hyper-pageheader p {
+    font-size: 2rem;
+    margin: 2rem 0;
+}
+
+.hyper-home .hyper-pageheader .hyper-getstarted {
+    background: none;
+    border: 1px solid #fff;
+    color: #fff;
+    font-size: 1.25rem;
+    padding: 1rem 2rem;
+}
+
+.hyper-home .hyper-pageheader .hyper-getstarted:hover {
+    background: #fff;
+    color: $primary-color;
 }
 
 .btn.btn-primary {
@@ -100,10 +129,6 @@ pre code {
 
 .btn.btn-primary:hover {
     background-color: #ffb300;
-}
-
-#hyper .jumbotron {
-  background: none;
 }
 
 .hyper-sidebar .guide-topic-title {
@@ -136,7 +161,7 @@ pre code {
 }
 
 .hyper-content {
-    line-height: 1.7em;
+    line-height: 1.7rem;
     max-width: 700px;
 }
 
@@ -147,8 +172,12 @@ pre code {
 
 .hyper-footer {
     background: #f5f5f5;
-    margin-top: 4em;
-    padding: 4em;
+    margin-top: 4rem;
+    padding: 4rem;
+}
+
+.hyper-home .hyper-footer {
+    background: none;
 }
 
 /* code styles */

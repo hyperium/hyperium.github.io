@@ -14,5 +14,10 @@ hyper = { git = "https://github.com/hyperium/hyper" }
 ```
 
 - If building a web server, continue with the [Server guide][].
+- If trying to talk to a server, continue with the [Client guide][].
 
+You could also look at the [generated API documentaton][docs].
+
+[docs]: {{ site.docs_url }}
 [Server guide]: ./server/hello-world
+[Client guide]: ./client/basic

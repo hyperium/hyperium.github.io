@@ -1,0 +1,11 @@
+
+<section class="guide-topic">
+  <h4 class="guide-topic-title">{{ topic.title }}</h4>
+  <ul class="nav">
+  {% for guide in  topic.guides %}
+    {% assign guide_url = guide | prepend:"/" | prepend: topic.path | prepend:"/guides" | append:"/" %}
+    {% assign p = site.guides | where:"url", guide_url | first %}
+    <li {% if guide_url == page.url %}class="active"{% endif %}><a href="{{ p.url }}">{{ p.title }} </a></li>
+  {% endfor %}
+  </ul>
+</section>

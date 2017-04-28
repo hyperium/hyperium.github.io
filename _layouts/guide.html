@@ -14,21 +14,12 @@
       <div class="row">
         <aside class="col-md-3 hyper-sidebar">
           <nav>
-            <section class="guide-topic">
-              <h4 class="guide-topic-title">Server</h4>
-              <ul class="nav">
-                <li><a href="/guides/server/hello-world">Hello World!</a></li>
-                <li><a href="/guides/server/echo">Echo, echo, echo!</a></li>
-              </ul>
-            </section>
-            <section class="guide-topic">
-              <h4 class="guide-topic-title">Client</h4>
-              <ul class="nav">
-                <li><a href="/guides/client/basic">Basic Example</a></li>
-                <li><a href="/guides/client/advanced">Advanced</a></li>
-                <li><a href="/guides/client/configuration">Configuration</a></li>
-              </ul>
-            </section>
+            {% assign topics = site.data.guides | first %}
+            {% for guides in topics.guides %}
+            {% assign topic_sub_url = guides | prepend:"/" %}
+            {% assign topic = site.data.guides | where: "path", topic_sub_url | first %}
+            {% include guide_ul.html topic=topic %}
+            {% endfor %}
           </nav>
         </aside>
         <article class="col-md-9 hyper-content">

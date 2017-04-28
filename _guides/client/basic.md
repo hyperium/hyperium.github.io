@@ -1,5 +1,5 @@
 ---
-title: A Simple Client Fetch
+title: Getting Started with a Client
 ---
 
 To start with, we'll just get a simple `GET` request to a webpage working,

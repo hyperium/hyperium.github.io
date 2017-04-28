@@ -121,9 +121,18 @@ pre code {
 }
 
 .hyper-sidebar .nav li > a {
+    color: #777;
     display: block;
     font-size: 90%;
     padding: .25rem 0;
+}
+
+.hyper-sidebar .nav li:hover > a {
+    color: $grey-color-dark;
+}
+
+.hyper-sidebar .nav li.active > a {
+    color: $primary-highlight-color;
 }
 
 .hyper-content {

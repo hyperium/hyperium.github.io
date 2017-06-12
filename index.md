@@ -22,11 +22,10 @@ fn run() -> Result<(), hyper::Error> {
             .with_header(ContentType::plaintext())
             .with_body(TEXT))
     };
+    let per_conn = || Ok(service_fn(hello);
 
-    let server = Http::new().bind(addr, || Ok(service_fn(hello)))?;
-    server.run()?;
-
-    Ok(())
+    let server = Http::new().bind(addr, per_conn)?;
+    server.run()
 }
 
 fn main() {

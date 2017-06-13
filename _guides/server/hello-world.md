@@ -101,4 +101,4 @@ fn main() {
 }
 ```
 
-[service]: /hyper/master/hyper/server/trait.Service.html
+[service]: https://docs.rs/tokio-service/*/tokio_service/trait.Service.html

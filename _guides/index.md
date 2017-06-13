@@ -10,7 +10,7 @@ You can start using it by first adding it to your `Cargo.toml`:
 
 ```toml
 [dependencies]
-hyper = { git = "https://github.com/hyperium/hyper" }
+hyper = "0.11"
 ```
 
 - If building a web server, continue with the [Server guide][].

@@ -35,15 +35,17 @@ to drive our asynchronous request to completion. With a `Core`, we can then crea
 a hyper [`Client`][Client] that will be registered to our event loop.
 
 ```rust
-let work = client.get("http://hyper.rs");
+let uri = "http://hyper.rs".parse().unwrap();
+let work = client.get(uri);
 ```
 
 Calling `client.get` returns a `Future` that will eventually be fulfilled with a 
 [`Response`][Response].
 
 ```rust
-let work = client.get("http://hyper.rs").and_then(move |res| {
+let work = client.get("http://hyper.rs").and_then(|res| {
     println!("Response: {}", res.status());
+    Ok(())
 });
 ```
 
@@ -52,11 +54,11 @@ and print out the [`StatusCode`][StatusCode] of the response. If it isn't on fir
 the server should have responded with a `200 OK` status.
 
 ```rust
-let work = client.get("http://hyper.rs").and_then(move |res| {
+let work = client.get(uri).and_then(|res| {
     println!("Response: {}", res.status());
 
-    res.body().for_each(move |chunk| {
-        io::stdout().write_all(&chunk).map(|_| ())
+    res.body().for_each(|chunk| {
+        io::stdout().write_all(&chunk).map(|_| ()).map_err(From::from)
     })
 });
 ```
@@ -88,11 +90,12 @@ fn main() {
     let mut core = Core::new().unwrap();
     let client = Client::new(&core.handle());
 
-    let work = client.get("http://hyper.rs").and_then(move |res| {
+    let uri = "http://hyper.rs".parse().unwrap();
+    let work = client.get(uri).and_then(|res| {
         println!("Response: {}", res.status());
 
-        res.body().for_each(move |chunk| {
-            io::stdout().write_all(&chunk).map(|_| ())
+        res.body().for_each(|chunk| {
+            io::stdout().write_all(&chunk).map(|_| ()).map_err(From::from)
         })
     });
     core.run(work).unwrap();

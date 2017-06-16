@@ -1,3 +1,4 @@
 Gemfile*
 _site*
 .sass-cache
+tmp/

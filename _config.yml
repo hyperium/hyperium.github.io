@@ -26,3 +26,4 @@ kramdown:
 
 docs_url: https://docs.rs/hyper/*
 futures_url: https://docs.rs/futures/*
+hyper_tls_url: https://docs.rs/hyper-tls/*

@@ -14,10 +14,14 @@ extern crate tokio_core;
 We need to import pieces to use from our dependencies:
 
 ```rust
+# extern crate futures;
+# extern crate hyper;
+# extern crate tokio_core;
 use std::io::{self, Write};
 use futures::{Future, Stream};
 use hyper::Client;
 use tokio_core::reactor::Core;
+# fn main() {}
 ```
 
 Now, we'll make a request in the `main` of our program. This may seem
@@ -26,8 +30,16 @@ but the point here is just to show all the setup required. Once you have this,
 you are set to make thousands of client requests efficiently.
 
 ```rust
-let mut core = Core::new().unwrap();
+# extern crate hyper;
+# extern crate tokio_core;
+# use hyper::Client;
+# use tokio_core::reactor::Core;
+# fn run() -> Result<(), Box<::std::error::Error>> {
+let mut core = Core::new()?;
 let client = Client::new(&core.handle());
+# Ok(())
+# }
+# fn main() {}
 ```
 
 We have to create a `Core`, which is a Tokio event loop,
@@ -35,33 +47,79 @@ to drive our asynchronous request to completion. With a `Core`, we can then crea
 a hyper [`Client`][Client] that will be registered to our event loop.
 
 ```rust
-let uri = "http://hyper.rs".parse().unwrap();
+# extern crate hyper;
+# extern crate tokio_core;
+# use hyper::Client;
+# use tokio_core::reactor::Core;
+# fn run() -> Result<(), Box<::std::error::Error>> {
+# let mut core = Core::new()?;
+# let client = Client::new(&core.handle());
+let uri = "http://httpbin.org/ip".parse()?;
 let work = client.get(uri);
+# Ok(())
+# }
+# fn main() {}
 ```
 
-Calling `client.get` returns a `Future` that will eventually be fulfilled with a 
+Calling `client.get` returns a `Future` that will eventually be fulfilled with a
 [`Response`][Response].
 
 ```rust
-let work = client.get("http://hyper.rs").and_then(|res| {
+# extern crate hyper;
+# extern crate futures;
+# extern crate tokio_core;
+# use futures::Future;
+# use hyper::Client;
+# use tokio_core::reactor::Core;
+# fn run() -> Result<(), Box<::std::error::Error>> {
+# let mut core = Core::new()?;
+# let client = Client::new(&core.handle());
+# let uri = "http://httpbin.org/ip".parse()?;
+let work = client.get(uri).map(|res| {
     println!("Response: {}", res.status());
-    Ok(())
 });
+# Ok(())
+# }
+# fn main() {}
 ```
 
-We chain on the success of that [`Future`][Future] using `and_then`,
+We chain on the success of that [`Future`][Future] using `map`,
 and print out the [`StatusCode`][StatusCode] of the response. If it isn't on fire,
 the server should have responded with a `200 OK` status.
 
+The `map` combinator is useful when your next piece of work doesn't need to
+return any more `Future`s. But what if we do?
+
 ```rust
+# extern crate hyper;
+# extern crate futures;
+# extern crate tokio_core;
+# use std::io::{self, Write};
+# use futures::{Future, Stream};
+# use hyper::Client;
+# use tokio_core::reactor::Core;
+# fn run() -> Result<(), Box<::std::error::Error>> {
+# let mut core = Core::new()?;
+# let client = Client::new(&core.handle());
+# let uri = "http://httpbin.org/ip".parse()?;
 let work = client.get(uri).and_then(|res| {
     println!("Response: {}", res.status());
 
     res.body().for_each(|chunk| {
-        io::stdout().write_all(&chunk).map(|_| ()).map_err(From::from)
+        io::stdout()
+            .write_all(&chunk)
+            .map(|_| ())
+            .map_err(From::from)
     })
 });
+# Ok(())
+# }
+# fn main() {}
+
 ```
+
+We can use the `and_then` combinator instead, saying that after that `Future`
+is ready, we plan to return a new `Future`.
 
 Then, we access the body of the `Response`. The body is just a [`Stream`][Stream] of
 chunks of data. A `Stream` will yield its items as they become available. In our case,
@@ -77,29 +135,57 @@ actually do anything until poked, repeatedly. We can tell our event loop (the `C
 "run" the future in `work` until it succeeds or fails.
 
 ```rust
-core.run(work).unwrap();
+# extern crate hyper;
+# extern crate tokio_core;
+# use hyper::Client;
+# use tokio_core::reactor::Core;
+# fn run() -> Result<(), Box<::std::error::Error>> {
+# let mut core = Core::new()?;
+# let client = Client::new(&core.handle());
+# let uri = "http://httpbin.org/ip".parse()?;
+# let work = client.get(uri);
+core.run(work)?;
+# Ok(())
+# }
+# fn main() {}
 ```
 
 Once that line has completed, all the work in the HTTP request and respose and chained
 `and_then` has finished.
 
-Here's the full `main` function:
+Here's the full example:
 
 ```rust
-fn main() {
-    let mut core = Core::new().unwrap();
-    let client = Client::new(&core.handle());
+extern crate futures;
+extern crate hyper;
+extern crate tokio_core;
+use std::io::{self, Write};
+use futures::{Future, Stream};
+use hyper::Client;
+use tokio_core::reactor::Core;
+# fn run() -> Result<(), Box<::std::error::Error>> {
+# let mut core = Core::new()?;
+# let client = Client::new(&core.handle());
+# let uri = "http://httpbin.org/ip".parse()?;
+# let work = client.get(uri);
+let mut core = Core::new()?;
+let client = Client::new(&core.handle());
 
-    let uri = "http://hyper.rs".parse().unwrap();
-    let work = client.get(uri).and_then(|res| {
-        println!("Response: {}", res.status());
+let uri = "http://httpbin.org/ip".parse()?;
+let work = client.get(uri).and_then(|res| {
+    println!("Response: {}", res.status());
 
-        res.body().for_each(|chunk| {
-            io::stdout().write_all(&chunk).map(|_| ()).map_err(From::from)
-        })
-    });
-    core.run(work).unwrap();
-}
+    res.body().for_each(|chunk| {
+        io::stdout()
+            .write_all(&chunk)
+            .map(|_| ())
+            .map_err(From::from)
+    })
+});
+core.run(work)?;
+# Ok(())
+# }
+# fn main() {}
 ```
 
 And that's it!

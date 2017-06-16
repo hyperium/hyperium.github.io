@@ -16,19 +16,16 @@ static TEXT: &'static str = "Hello, World!";
 fn run() -> Result<(), hyper::Error> {
     let addr = ([127, 0, 0, 1], 3000).into();
 
-    let hello = |_req| {
-        Ok(Response::new()
+    let hello = || Ok(service_fn(|_req|{
+        Ok(Response::<hyper::Body>::new()
             .with_header(ContentLength(TEXT.len() as u64))
             .with_header(ContentType::plaintext())
             .with_body(TEXT))
-    };
-    let per_conn = || Ok(service_fn(hello));
+    }));
 
-    let server = Http::new().bind(addr, per_conn)?;
+    let server = Http::new().bind(&addr, hello)?;
     server.run()
 }
 
-fn main() {
-    run().expect("Server error");
-}
+# fn main() {}
 ```

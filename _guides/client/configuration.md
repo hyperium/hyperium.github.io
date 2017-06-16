@@ -16,11 +16,15 @@ extern crate hyper;
 extern crate hyper_tls;
 extern crate tokio_core;
 
+use hyper::Client;
+use hyper_tls::HttpsConnector;
+use tokio_core::reactor::Core;
+
 # fn run() -> Result<(), Box<::std::error::Error>> {
 let mut core = Core::new()?;
 let handle = core.handle();
 let client = Client::configure()
-    .connector(hyper_tls::HttpsConnector::new(4, &handle)?)
+    .connector(HttpsConnector::new(4, &handle)?)
     .build(&handle);
 
 let req = client.get("https://hyper.rs".parse()?);

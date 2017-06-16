@@ -1,5 +1,18 @@
 language: rust
 sudo: false
+dist: trusty
+matrix:
+    fast_finish: true
+    include:
+        - rust: nightly
+        - rust: beta
+        - rust: stable
+        - rust: 1.15.0
+
+cache:
+    directories:
+        - tmp/target/debug/deps
+        - tmp/target/debug/build
 
 script:
-  - .travis.sh
+  - ./.travis.sh

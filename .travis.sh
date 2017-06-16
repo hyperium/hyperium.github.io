@@ -3,7 +3,10 @@
 if [ ! -d tmp ]; then
     cargo new tmp
     cat >> tmp/Cargo.toml <<-EOF
-hyper = { git = "https://github.com/hyperium/hyper" }
+futures = "0.1.14"
+hyper = "0.11"
+hyper-tls = "0.1"
+tokio-core = "0.1"
 EOF
     cargo build --manifest-path tmp/Cargo.toml
 fi

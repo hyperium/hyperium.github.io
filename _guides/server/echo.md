@@ -72,7 +72,7 @@ are checking for `POST /echo`, but currently don't do anything about it.
 Our third rule catches any other method and path combination, and
 changes the `StatusCode` of the `Response`. The default status of a
 `Response` is HTTP's `200 OK` (`StatusCode::Ok`), which is correct for
-the other routes. But the third case will instead send back `400 Not
+the other routes. But the third case will instead send back `404 Not
 Found`.
 
 ## Body Streams

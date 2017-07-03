@@ -14,5 +14,6 @@
   path: "/client"
   guides:
   - basic
+  - json
   - advanced
   - configuration

@@ -15,7 +15,6 @@ service-fn = { git = "https://github.com/tokio-rs/service-fn" }
 EOF
     cargo build --manifest-path tmp/Cargo.toml
 fi
-exit 0
 
 status=0
 for f in `git ls-files | grep '\.md$'`; do

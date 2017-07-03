@@ -9,10 +9,5 @@ matrix:
         - rust: stable
         - rust: 1.15.0
 
-cache:
-    directories:
-        - tmp/target/debug/deps
-        - tmp/target/debug/build
-
 script:
   - ./.travis.sh

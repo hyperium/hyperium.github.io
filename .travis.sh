@@ -12,6 +12,7 @@ hyper = "0.11"
 hyper-tls = "0.1"
 tokio-core = "0.1"
 service-fn = { git = "https://github.com/tokio-rs/service-fn" }
+serde_json = "1.0.2"
 EOF
     cargo build --manifest-path tmp/Cargo.toml
 fi

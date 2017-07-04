@@ -1,4 +1,3 @@
-
 ---
 title: Parsing a JSON response body
 ---

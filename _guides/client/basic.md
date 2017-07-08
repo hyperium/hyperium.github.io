@@ -15,7 +15,7 @@ Make sure you have these dependencies listed in your ```Cargo.toml```, else you 
 to check if these are the latest versions from [Crates.io](https://crates.io)
 
 ```
-[dependencies]
+`[dependencies`]
 hyper = "0.11"
 futures = "0.1.14"
 tokio-core = "0.1.8"

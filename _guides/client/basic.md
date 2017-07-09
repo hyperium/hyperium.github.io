@@ -13,6 +13,7 @@ futures = "0.1"
 tokio-core = "0.1"
 ```
 
+Now, we are ready to import the dependencies in our Rust file.
 ```rust
 extern crate futures;
 extern crate hyper;

@@ -3,22 +3,20 @@ title: Getting Started with a Client
 ---
 
 To start with, we'll just get a simple `GET` request to a webpage working,
-so we can see all the moving parts. First, we need our dependencies.
+so we can see all the moving parts. First, we need our dependencies. We need 
+to tell Cargo our dependencies first, by having this in the Cargo.toml.
+
+```
+`[dependencies`]
+hyper = "0.1"
+futures = "0.1"
+tokio-core = "0.1"
+```
 
 ```rust
 extern crate futures;
 extern crate hyper;
 extern crate tokio_core;
-```
-
-Make sure you have these dependencies listed in your ```Cargo.toml```, else you may get errors. You may need 
-to check if these are the latest versions from [Crates.io](https://crates.io)
-
-```
-`[dependencies`]
-hyper = "0.11"
-futures = "0.1.14"
-tokio-core = "0.1.8"
 ```
 
 We need to import pieces to use from our dependencies:

@@ -6,8 +6,8 @@ To start with, we'll just get a simple `GET` request to a webpage working,
 so we can see all the moving parts. First, we need our dependencies. We need 
 to tell Cargo our dependencies first, by having this in the Cargo.toml.
 
-```
-`[dependencies`]
+```toml
+[dependencies]
 hyper = "0.1"
 futures = "0.1"
 tokio-core = "0.1"

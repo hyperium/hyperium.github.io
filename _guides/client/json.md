@@ -34,7 +34,7 @@ res.body().concat2().and_then(move |body: Chunk| {
 # fn main() {}
 ```
 
-The `response.body()` method returns a value of type `hyper::Body`. A `hyper::Body` is a [`Stream`][Stream] of [`Chunk`][Chunk] values. We need a non-blocking way to get all the chunks so we can deserialize the response. The `concat2()` function takes the separate body chunks and makes one `hyper::Chunk` value with the contents of the entire body. Once we have a chunk that contains the entire body contents, we can leverage the fact `Chunk` types can be converted, via `AsRef`, into a slice of bytes (`[u8]`). We can then use the `serde_json::from_slice()` function to deserialize the bytes into a `serde_json::Value`.
+The `response.body()` method returns a value of type `hyper::Body`. A `hyper::Body` is a [`Stream`][Stream] of [`Chunk`][Chunk] values. We need a non-blocking way to get all the chunks so we can deserialize the response. The `concat2()` function takes the separate body chunks and makes one `hyper::Chunk` value with the contents of the entire body. Once we have a chunk that contains the entire body contents, we can leverage the fact `Chunk` types can be converted, via `Deref`, into a slice of bytes (`[u8]`). We can then use the `serde_json::from_slice()` function to deserialize the bytes into a `serde_json::Value`.
 
 The complete example is below, with error handling. The `serde_json::Error` type does not automatically convert to `hyper::Error`, so instead we map the `serde_json::Error` to `io::Error`. The `io::Error` type will automatically convert to `hyper::Error`.
 

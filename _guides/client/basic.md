@@ -160,7 +160,7 @@ core.run(work)?;
 # fn main() {}
 ```
 
-Once that line has completed, all the work in the HTTP request and respose and chained
+Once that line has completed, all the work in the HTTP request and response and chained
 `and_then` has finished.
 
 Here's the full example:

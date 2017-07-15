@@ -55,10 +55,13 @@ pre code {
 }
 
 .navbar-hyper {
+    position: fixed;
+    background: #fff;
+    width: 100%;
+    z-index: 1;
     border: 0;
     border-bottom: 1px solid #ee9107;
     border-radius: 0;
-    margin: 0;
     padding: 0;
 }
 
@@ -91,7 +94,7 @@ pre code {
     background: $primary-pagehead-color;
     color: #fff;
     margin-bottom: 4rem;
-    padding:4rem;
+    padding: 7.375rem 4rem 4rem;
 }
 
 .hyper-home .hyper-pageheader {

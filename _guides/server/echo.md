@@ -116,7 +116,7 @@ First up, plain echo. Both the `Request` and the `Response` have body streams, a
 # fn main() {}
 ```
 
-Running our server now will echo the any data we `POST` to `/echo`. That was easy. What if we wanted to uppercase all the text? We could use a `map` on our streams.
+Running our server now will echo any data we `POST` to `/echo`. That was easy. What if we wanted to uppercase all the text? We could use a `map` on our streams.
 
 ### Body mapping
 
@@ -201,7 +201,7 @@ impl Service for Echo {
 
 What if we wanted our echo service to respond with the data reversed? We can't really stream the data as it comes in, since we need to find the end before we can respond. To do this, we can explore how to easily collect the full body.
 
-To try to reduce complexity for now, we'll back our uppercasing logic out, and go back to the default `Response` type.
+To reduce complexity for now, we'll back our uppercasing logic out, and go back to the default `Response` type.
 
 In this case, however, we can't really generate a `Response` immediately, but instead must wait for the full request body to be received. That means we cannot make use of the `FutureResult` as our `Service`s `Future`. That's because the type `FutureResult` is used for values that are **immediately** available. It allows wrapping up any value as a `Future`. It's something to reach for when you need to return a `Future`, but you already know the answer. In our case, we no longer do.
 

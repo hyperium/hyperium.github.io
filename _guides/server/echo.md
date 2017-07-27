@@ -208,7 +208,7 @@ In this case, however, we can't really generate a `Response` immediately, but in
 That's OK! We can just change the `Future` type to something else that can eventually resolve to a `Response`. We have two cases now:
 
 1. With `GET /`, we have an immediate `Response`, and would like to use `FutureResult`.
-2. With `POST /echo`, we need to wait before we can give a `Response`. We'll be waiting on concatenating all the `Chunk`s together, so this future would be a `futures::stream::Concat` combined with a `futures::future::Map`.
+2. With `POST /echo`, we need to wait before we can give a `Response`. We'll be waiting on concatenating all the `Chunk`s together, so this future would be a `futures::stream::Concat2` combined with a `futures::future::Map`.
 
 It turns out that the futures crate includes a type, `Either`, that allows us to combine two different future types into one type.
 
@@ -234,7 +234,7 @@ Add some imports:
 ```rust
 # extern crate futures;
 use futures::future::{Either, Map};
-use futures::stream::Concat;
+use futures::stream::Concat2;
 # fn main() {}
 ```
 
@@ -244,7 +244,7 @@ Now, we want to concatenate the request body, and map the result into our `rever
 # extern crate futures;
 # extern crate hyper;
 # use futures::future::{Either, Future, FutureResult, Map};
-# use futures::stream::{Concat, Stream};
+# use futures::stream::{Concat2, Stream};
 # use hyper::{Body, Chunk, Method, StatusCode};
 # use hyper::server::{Request, Response, Service};
 # struct Echo;
@@ -261,7 +261,7 @@ impl Service for Echo {
 #     type Error = hyper::Error;
     type Future = Either<
         FutureResult<Self::Response, Self::Error>,
-        Map<Concat<Body>, fn(Chunk) -> Self::Response>
+        Map<Concat2<Body>, fn(Chunk) -> Self::Response>
     >;
     // back to default Response
     type Response = Response;
@@ -276,7 +276,7 @@ impl Service for Echo {
             (&Method::Post, "/echo") => {
                 Either::B(
                     req.body()
-                        .concat()
+                        .concat2()
                         .map(reverse)
                 )
             },

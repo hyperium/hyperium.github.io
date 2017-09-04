@@ -5,7 +5,15 @@ layout: guide
 
 Let's start by making a "Hello, World!" server, and expand from there.
 
-First, some imports in our `main.rs`:
+First, we need our dependencies. Let's tell Cargo about our dependencies by having this in the `Cargo.toml`.
+
+```toml
+[dependencies]
+futures = "0.1.14"
+hyper = "0.11.2"
+```
+
+Now lets start on our `main.rs`, and add some imports:
 
 ```rust
 extern crate hyper;

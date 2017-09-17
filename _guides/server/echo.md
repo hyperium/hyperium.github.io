@@ -112,7 +112,7 @@ First up, plain echo. Both the `Request` and the `Response` have body streams, a
 #             },
 #         };
 #
-#         futures::future::ok(response)
+#         Box::new(futures::future::ok(response))
 #     }
 # }
 # fn main() {}

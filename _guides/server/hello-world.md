@@ -24,6 +24,7 @@ We also need to `use` a few things:
 
 ```rust
 # extern crate hyper;
+# extern crate futures;
 use futures::future::Future;
 
 use hyper::header::ContentLength;
@@ -46,6 +47,7 @@ Next, we need to implement [`Service`][service] for `HelloWorld`:
 ```rust
 # extern crate futures;
 # extern crate hyper;
+# use futures::future::Future;
 # use hyper::header::ContentLength;
 # use hyper::server::{Service, Request, Response};
 # struct HelloWorld;

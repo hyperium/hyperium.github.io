@@ -30,6 +30,7 @@ And make some changes to your `Service`:
 ```rust
 # extern crate futures;
 # extern crate hyper;
+# use futures::future::Future;
 # use hyper::{Method, StatusCode};
 # use hyper::server::{Request, Response, Service};
 
@@ -84,6 +85,7 @@ First up, plain echo. Both the `Request` and the `Response` have body streams, a
 ```rust
 # extern crate futures;
 # extern crate hyper;
+# use futures::future::Future;
 # use hyper::{Method, StatusCode};
 # use hyper::server::{Request, Response, Service};
 # struct Echo;
@@ -154,6 +156,7 @@ We'll also need to update the `Stream` type that our `Response` is using. By def
 ```rust
 # extern crate futures;
 # extern crate hyper;
+# use futures::future::Future;
 # use hyper::{Body, Chunk, Method, StatusCode};
 # use hyper::server::{Request, Response, Service};
 # use futures::Stream;
@@ -169,7 +172,7 @@ We'll also need to update the `Stream` type that our `Response` is using. By def
 impl Service for Echo {
 #     type Request = Request;
 #     type Error = hyper::Error;
-#     type Future = futures::future::FutureResult<Self::Response, Self::Error>;
+#     type Future = Box<Future<Item=Self::Response, Error=Self::Error>>;
     // other types stay the same
     type Response = Response<Map<Body, fn(Chunk) -> Chunk>>;
 
@@ -190,7 +193,7 @@ impl Service for Echo {
 #             },
 #         };
 #
-#         futures::future::ok(response)
+#         Box::new(futures::future::ok(response))
     }
 
 }
@@ -233,6 +236,7 @@ Add some imports:
 
 ```rust
 # extern crate futures;
+# use futures::future::Future;
 use futures::future::{Either, Map};
 use futures::stream::Concat2;
 # fn main() {}

@@ -30,6 +30,7 @@ And make some changes to your `Service`:
 ```rust
 # extern crate futures;
 # extern crate hyper;
+# use futures::future::Future;
 # use hyper::{Method, StatusCode};
 # use hyper::server::{Request, Response, Service};
 
@@ -40,7 +41,7 @@ impl Service for Echo {
 #    type Request = Request;
 #    type Response = Response;
 #    type Error = hyper::Error;
-#    type Future = futures::future::FutureResult<Self::Response, Self::Error>;
+#    type Future = Box<Future<Item=Self::Response, Error=Self::Error>>;
 
     fn call(&self, req: Request) -> Self::Future {
         let mut response = Response::new();
@@ -57,7 +58,7 @@ impl Service for Echo {
             },
         };
 
-        futures::future::ok(response)
+        Box::new(futures::future::ok(response))
     }
 }
 
@@ -84,6 +85,7 @@ First up, plain echo. Both the `Request` and the `Response` have body streams, a
 ```rust
 # extern crate futures;
 # extern crate hyper;
+# use futures::future::Future;
 # use hyper::{Method, StatusCode};
 # use hyper::server::{Request, Response, Service};
 # struct Echo;
@@ -92,7 +94,7 @@ First up, plain echo. Both the `Request` and the `Response` have body streams, a
 #     type Request = Request;
 #     type Response = Response;
 #     type Error = hyper::Error;
-#     type Future = futures::future::FutureResult<Self::Response, Self::Error>;
+#     type Future = Box<Future<Item=Self::Response, Error=Self::Error>>;
 #
 #     fn call(&self, req: Request) -> Self::Future {
 #         let mut response = Response::new();
@@ -110,7 +112,7 @@ First up, plain echo. Both the `Request` and the `Response` have body streams, a
 #             },
 #         };
 #
-#         futures::future::ok(response)
+#         Box::new(futures::future::ok(response))
 #     }
 # }
 # fn main() {}
@@ -154,6 +156,7 @@ We'll also need to update the `Stream` type that our `Response` is using. By def
 ```rust
 # extern crate futures;
 # extern crate hyper;
+# use futures::future::Future;
 # use hyper::{Body, Chunk, Method, StatusCode};
 # use hyper::server::{Request, Response, Service};
 # use futures::Stream;
@@ -169,7 +172,7 @@ We'll also need to update the `Stream` type that our `Response` is using. By def
 impl Service for Echo {
 #     type Request = Request;
 #     type Error = hyper::Error;
-#     type Future = futures::future::FutureResult<Self::Response, Self::Error>;
+#     type Future = Box<Future<Item=Self::Response, Error=Self::Error>>;
     // other types stay the same
     type Response = Response<Map<Body, fn(Chunk) -> Chunk>>;
 
@@ -190,7 +193,7 @@ impl Service for Echo {
 #             },
 #         };
 #
-#         futures::future::ok(response)
+#         Box::new(futures::future::ok(response))
     }
 
 }
@@ -203,7 +206,7 @@ What if we wanted our echo service to respond with the data reversed? We can't r
 
 To reduce complexity for now, we'll back our uppercasing logic out, and go back to the default `Response` type.
 
-In this case, however, we can't really generate a `Response` immediately, but instead must wait for the full request body to be received. That means we cannot make use of the `FutureResult` as our `Service`s `Future`. That's because the type `FutureResult` is used for values that are **immediately** available. It allows wrapping up any value as a `Future`. It's something to reach for when you need to return a `Future`, but you already know the answer. In our case, we no longer do.
+In this case, however, we can't really generate a `Response` immediately, but instead must wait for the full request body to be received. That means we cannot make use of the `FutureResult` as our `Service`s `Future`. That's because the type `FutureResult`, which in this case is generated via `futures::future::ok`, is used for values that are **immediately** available. It allows wrapping up any value as a `Future`. It's something to reach for when you need to return a `Future`, but you already know the answer. In our case, we no longer do.
 
 That's OK! We can just change the `Future` type to something else that can eventually resolve to a `Response`. We have two cases now:
 
@@ -233,6 +236,7 @@ Add some imports:
 
 ```rust
 # extern crate futures;
+# use futures::future::Future;
 use futures::future::{Either, Map};
 use futures::stream::Concat2;
 # fn main() {}
@@ -260,7 +264,7 @@ impl Service for Echo {
 #     type Request = Request;
 #     type Error = hyper::Error;
     type Future = Either<
-        FutureResult<Self::Response, Self::Error>,
+        Box<Future<Item=Self::Response, Error=Self::Error>>,
         Map<Concat2<Body>, fn(Chunk) -> Self::Response>
     >;
     // back to default Response
@@ -269,8 +273,8 @@ impl Service for Echo {
     fn call(&self, req: Request) -> Self::Future {
          match (req.method(), req.path()) {
             (&Method::Get, "/") => {
-                Either::A(futures::future::ok(
-                    Response::new().with_body("Try POSTing data to /echo")
+                Either::A(Box::new(futures::future::ok(
+                    Response::new().with_body("Try POSTing data to /echo"))
                 ))
             },
             (&Method::Post, "/echo") => {
@@ -281,8 +285,8 @@ impl Service for Echo {
                 )
             },
             _ => {
-                Either::A(futures::future::ok(
-                    Response::new().with_status(StatusCode::NotFound)
+                Either::A(Box::new(futures::future::ok(
+                    Response::new().with_status(StatusCode::NotFound))
                 ))
             },
         }

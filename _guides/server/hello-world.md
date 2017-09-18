@@ -24,6 +24,9 @@ We also need to `use` a few things:
 
 ```rust
 # extern crate hyper;
+# extern crate futures;
+use futures::future::Future;
+
 use hyper::header::ContentLength;
 use hyper::server::{Http, Request, Response, Service};
 # fn main() {}
@@ -44,6 +47,7 @@ Next, we need to implement [`Service`][service] for `HelloWorld`:
 ```rust
 # extern crate futures;
 # extern crate hyper;
+# use futures::future::Future;
 # use hyper::header::ContentLength;
 # use hyper::server::{Service, Request, Response};
 # struct HelloWorld;
@@ -56,17 +60,17 @@ impl Service for HelloWorld {
     type Error = hyper::Error;
     // The future representing the eventual Response your call will
     // resolve to. This can change to whatever Future you need.
-    type Future = futures::future::FutureResult<Self::Response, Self::Error>;
+    type Future = Box<Future<Item=Self::Response, Error=Self::Error>>;
 
     fn call(&self, _req: Request) -> Self::Future {
         // We're currently ignoring the Request
         // And returning an 'ok' Future, which means it's ready
         // immediately, and build a Response with the 'PHRASE' body.
-        futures::future::ok(
+        Box::new(futures::future::ok(
             Response::new()
                 .with_header(ContentLength(PHRASE.len() as u64))
                 .with_body(PHRASE)
-        )
+        ))
     }
 }
 # fn main() {}

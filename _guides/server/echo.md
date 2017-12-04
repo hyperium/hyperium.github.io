@@ -134,7 +134,7 @@ We're going to need a couple of extra imports, so let's add those to the top of 
 # extern crate hyper;
 use std::ascii::AsciiExt;
 use futures::Stream;
-use hyper::Chunk;
+use hyper::{Body, Chunk};
 # fn main() {}
 ```
 

@@ -12,6 +12,7 @@ hyper = "0.11.7"
 hyper-tls = "0.1"
 tokio-core = "0.1"
 serde_json = "1.0.2"
+url = "1.0"
 EOF
     cargo build --manifest-path tmp/Cargo.toml
 fi

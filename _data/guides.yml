@@ -9,6 +9,8 @@
   guides:
   - hello-world
   - echo
+  - handle_post
+  - response_strategies
 
 - title: Client
   path: "/client"

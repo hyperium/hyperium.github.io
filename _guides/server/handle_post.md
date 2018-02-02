@@ -32,7 +32,7 @@ will need to be generated in a separate stream from the response body.
 ## Setup
 
 The basic structure of the `'params.rs` example is the same as in the
-[Echo, echo, echo](./echo) guide. Aside from handling Post, which we
+[Echo, echo, echo](echo.md) guide. Aside from handling Post, which we
 discuss below, the key differences are:
 
 Import the `url` crate for form parsing:
@@ -238,4 +238,4 @@ client. To parse a Json Post:
 Finally we generate the response body. In this case the body is a
 simple string. More complex approaches, such as database queries or
 web service calls, are addressed in the [Response
-Strategies](./response_strategies) guide.
+Strategies](response_strategies.md) guide.

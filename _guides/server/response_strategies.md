@@ -5,9 +5,9 @@ layout: guide
 
 ## Overview
 
-The [Echo, echo, echo](./echo) guide discusses how to transform
+The [Echo, echo, echo](echo.md) guide discusses how to transform
 request bodies into response bodies, and the [Handling
-Posts](./handle_post) guide discusses processing more complex request
+Posts](handle_post.md) guide discusses processing more complex request
 bodies. We will now look into more advanced ways of generating
 responses.
 
@@ -380,7 +380,7 @@ let body: ResponseStream = Box::new(Body::from("A simple response"));
 For the purposes of this example, we will include a web api to test
 against, but normally one would connect to a different service. Our
 web api is a simple uppercasing as discussed in [Echo, echo,
-echo](./echo):
+echo](echo.md):
 
 ```rust
 # extern crate futures;
@@ -466,7 +466,7 @@ static LOWERCASE: &[u8] = b"i am a lower case string";
 
 We start by creating a hyper client with a post request. Client
 programming is discussed in detail in the Client portion of these
-guides. The [Advanced Client Usage](../client/advanced) page discusses
+guides. The [Advanced Client Usage](../client/advanced.md) page discusses
 how to create and process Posts. Since we already have a handle to the
 tokio reactor, we do not need to create one here. `web_res_future` is
 a Future containing the results of our query.

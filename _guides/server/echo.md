@@ -2,7 +2,7 @@
 title: Echo, echo, echo
 ---
 
-You already have a [Hello World server](./index)? Excellent! Usually,
+You already have a [Hello World server](hello-world.md)? Excellent! Usually,
 servers do more than just spit out the same body for every request. To
 exercise several more parts of hyper, this guide will go through
 building an echo server.

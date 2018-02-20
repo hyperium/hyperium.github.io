@@ -69,16 +69,17 @@ static NOTNUMERIC: &[u8] = b"Number field is not numeric";
 #     type Future = Box<Future<Item = Self::Response, Error = Self::Error>>;
 #     fn call(&self, req: Request) -> Self::Future {
 #          match (req.method(), req.path()) {
-		    (&Post, "/post") => {
-			    Box::new(req.body().concat2().
-				    map(|b| {
-					    // see below
-#					    Response::new().with_body("filler to compile")
-				    }))
-	        },
-#			(_, _) => Box::new(futures::future::ok(Response::new().with_body("filler to compile")))
-# 	    }
-# 	}
+(&Post, "/post") => {
+    Box::new(
+        req.body().concat2().map(|b| {
+           // see below
+#          Response::new().with_body("filler to compile")
+        })
+    )
+},
+#     (_, _) => Box::new(futures::future::ok(Response::new().with_body("filler to compile")))
+#     }
+# }
 # }
 # fn main() {}
 ```
@@ -98,7 +99,7 @@ engine of Post handling.
 # fn main() {
 # let b = Chunk::from("some data");
     let params = form_urlencoded::parse(b.as_ref()).into_owned().collect::<HashMap<String, String>>();
-#	}
+# }
 ```
 
 Parse the request body. `form_urlencoded::parse` always succeeds, so
@@ -131,9 +132,9 @@ static NOTNUMERIC: &[u8] = b"Number field is not numeric";
 #     type Future = Box<Future<Item = Self::Response, Error = Self::Error>>;
 #     fn call(&self, req: Request) -> Self::Future {
 #          match (req.method(), req.path()) {
-#		    (&Post, "/post") => {
-#			    Box::new(req.body().concat2().
-#				    map(|b| {
+#              (&Post, "/post") => {
+#                  Box::new(req.body().concat2()
+#                  .map(|b| {
 #                       let params = form_urlencoded::parse(b.as_ref()).into_owned().collect::<HashMap<String, String>>();
     let name = if let Some(n) = params.get("name") {
         n
@@ -158,12 +159,12 @@ static NOTNUMERIC: &[u8] = b"Number field is not numeric";
             .with_header(ContentLength(MISSING.len() as u64))
             .with_body(MISSING);
     };
-#					    Response::new().with_body("filler to compile")
-#				    }))
-#	        },
-#			(_, _) => Box::new(futures::future::ok(Response::new().with_body("filler to compile")))
-# 	    }
-# 	}
+#                      Response::new().with_body("filler to compile")
+#                 }))
+#        },
+#         (_, _) => Box::new(futures::future::ok(Response::new().with_body("filler to compile")))
+#     }
+# }
 # }
 # fn main() {}
 ```
@@ -187,14 +188,14 @@ client. To parse a Json Post:
 # fn f(b: &str) -> Response {
     let bad_request: &[u8] = b"Missing field";
     let json: serde_json::Value = if let Ok(j) = serde_json::from_slice(b.as_ref()) {
-	    j
+        j
     } else {
         return Response::new()
             .with_status(StatusCode::BadRequest)
             .with_header(ContentLength(bad_request.len() as u64))
             .with_body(bad_request);
-	};
-# 	Response::new().with_body("filler to compile")
+    };
+# Response::new().with_body("filler to compile")
 # }
 # fn main() {}
 ```
@@ -217,20 +218,20 @@ client. To parse a Json Post:
 #     type Future = Box<Future<Item = Self::Response, Error = Self::Error>>;
 #     fn call(&self, req: Request) -> Self::Future {
 #          match (req.method(), req.path()) {
-#		    (&Post, "/post") => {
-#			    Box::new(req.body().concat2().
-#				    map(|b| {
-#					    let name = "M. Filler Text";
+#    (&Post, "/post") => {
+#    Box::new(req.body().concat2().
+#    map(|b| {
+#    let name = "M. Filler Text";
 #                       let number = 42;
     let body = format!("Hello {}, your number is {}", name, number);
     Response::new()
         .with_header(ContentLength(body.len() as u64))
         .with_body(body)
 # }))
-#	        },
-#			(_, _) => Box::new(futures::future::ok(Response::new().with_body("filler to compile")))
-# 	    }
-# 	}
+#        },
+# (_, _) => Box::new(futures::future::ok(Response::new().with_body("filler to compile")))
+#     }
+# }
 # }
 # fn main() {}
 ```

@@ -67,7 +67,7 @@ takes place before the buffer is generated.
 fn simple_file_send(f: &str) -> Box<Future<Item = Response, Error = hyper::Error>> {
     let filename = f.to_string(); // we need to copy for lifetime issues
     let (tx, rx) = oneshot::channel();
-#	thread::spawn(move || {tx.send(Response::new().with_body("filler to compile"))});
+#   thread::spawn(move || {tx.send(Response::new().with_body("filler to compile"))});
 #   Box::new(rx.map_err(|e| Error::from(io::Error::new(io::ErrorKind::Other, e))))
 # }
 # fn main() {}
@@ -93,7 +93,7 @@ thread.
 #    let filename = f.to_string(); // we need to copy for lifetime issues
 #    let (tx, rx) = oneshot::channel();
     thread::spawn(move || {
-	    let not_found: &[u8] = b"not found";
+        let not_found: &[u8] = b"not found";
         let mut file = match File::open(filename) {
             Ok(f) => f,
             Err(_) => {
@@ -105,7 +105,7 @@ thread.
                 return;
             },
         };
-#	});
+#   });
 #   Box::new(rx.map_err(|e| Error::from(io::Error::new(io::ErrorKind::Other, e))))
 # }
 # fn main() {}
@@ -165,7 +165,7 @@ instead return an Internal Service Error.
 # fn simple_file_send(f: &str) -> Box<Future<Item = Response, Error = hyper::Error>> {
 #    let filename = f.to_string(); // we need to copy for lifetime issues
 #    let (tx, rx) = oneshot::channel();
-#	thread::spawn(move || {tx.send(Response::new().with_body("filler to compile"))});
+#    thread::spawn(move || {tx.send(Response::new().with_body("filler to compile"))});
     Box::new(rx.map_err(|e| Error::from(io::Error::new(io::ErrorKind::Other, e))))
 }
 # fn main() {}
@@ -206,7 +206,7 @@ fn stream_file(f: &str) -> Box<Future<Item = Response, Error = hyper::Error>> {
     let filename = f.to_string(); // we need to copy for lifetime issues
     let (tx, rx) = oneshot::channel();
     thread::spawn(move || {
-	    let not_found: &[u8] = b"not found";
+        let not_found: &[u8] = b"not found";
         let mut file = match File::open(filename) {
             Ok(f) => f,
             Err(_) => {
@@ -218,7 +218,7 @@ fn stream_file(f: &str) -> Box<Future<Item = Response, Error = hyper::Error>> {
                 return;
             },
         };
-#	});
+#    });
 #   Box::new(rx.map_err(|e| Error::from(io::Error::new(io::ErrorKind::Other, e))))
 # }
 # fn main() {}
@@ -245,7 +245,7 @@ We begin the same as the simple approach.
         let (mut tx_body, rx_body) = mpsc::channel(1);
         let res = Response::new().with_body(rx_body);
         tx.send(res).expect("Send error on successful file read");
-#	});
+#    });
 #   Box::new(rx.map_err(|e| Error::from(io::Error::new(io::ErrorKind::Other, e))))
 # }
 # fn main() {}
@@ -408,12 +408,12 @@ echo](echo.md):
                 }));
                 Box::new(futures::future::ok(Response::new().with_body(body)))
             },
-#			(_, _) => {
-#               let body: ResponseStream = Box::new(Body::from("filler to compile"));
-#               Box::new(futures::future::ok(Response::new().with_body(body)))
-#           }
-# 	    }
-# 	}
+#           (_, _) => {
+#                 let body: ResponseStream = Box::new(Body::from("filler to compile"));
+#                 Box::new(futures::future::ok(Response::new().with_body(body)))
+#             }
+#         }
+#     }
 # }
 # fn main() {}
 ```
@@ -454,12 +454,12 @@ static LOWERCASE: &[u8] = b"i am a lower case string";
 #                    Response::new().with_body(body)
 #                }))
 #            },
-#			(_, _) => {
+#            (_, _) => {
 #               let body: ResponseStream = Box::new(Body::from("filler to compile"));
 #               Box::new(futures::future::ok(Response::new().with_body(body)))
 #           }
-# 	    }
-# 	}
+#       }
+#    }
 # }
 # fn main() {}
 ```
@@ -503,12 +503,12 @@ a Future containing the results of our query.
                     Response::new().with_body(body)
                 }))
             },
-#			(_, _) => {
+#           (_, _) => {
 #               let body: ResponseStream = Box::new(Body::from("filler to compile"));
 #               Box::new(futures::future::ok(Response::new().with_body(body)))
 #           }
-# 	    }
-# 	}
+#         }
+#     }
 # }
 # fn main() {}
 ```

@@ -12,7 +12,7 @@ data, process it (possibly including service calls to a database or
 web service), and render a response. Responses can include web pages,
 images, or chunks of Json. A basic example of form processing is
 included in the hyper distribution,
-[params.rs](https://github.com/hyperium/hyper/blob/master/examples/params.rs). We
+[params.rs](https://github.com/hyperium/hyper/blob/v0.11.25/examples/params.rs). We
 will start by discussing key aspects of that example, then address how
 to modify the approach for handling other types of posted data and
 rendered responses.

@@ -8,8 +8,8 @@ if [ ! -e tmp/Cargo.toml ]; then
     fi
     cat >> tmp/Cargo.toml <<-EOF
 futures = "0.1.14"
-hyper = "0.11.7"
-hyper-tls = "0.1"
+hyper =  { git = "https://github.com/hyperium/hyper"}
+hyper-tls =  { git = "https://github.com/hyperium/hyper-tls"}
 tokio-core = "0.1"
 serde_json = "1.0.2"
 url = "1.0"

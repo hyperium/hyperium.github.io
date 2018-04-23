@@ -41,12 +41,9 @@ you are set to make thousands of client requests efficiently.
 
 ```rust
 # extern crate hyper;
-# extern crate tokio_core;
 # use hyper::Client;
-# use tokio_core::reactor::Core;
 # fn run() -> Result<(), Box<::std::error::Error>> {
-let mut core = Core::new()?;
-let client = Client::new(&core.handle());
+let client = Client::new();
 # Ok(())
 # }
 # fn main() {}
@@ -58,12 +55,9 @@ a hyper [`Client`][Client] that will be registered to our event loop.
 
 ```rust
 # extern crate hyper;
-# extern crate tokio_core;
 # use hyper::Client;
-# use tokio_core::reactor::Core;
 # fn run() -> Result<(), Box<::std::error::Error>> {
-# let mut core = Core::new()?;
-# let client = Client::new(&core.handle());
+# let client = Client::new();
 let uri = "http://httpbin.org/ip".parse()?;
 let work = client.get(uri);
 # Ok(())
@@ -83,7 +77,7 @@ Calling `client.get` returns a `Future` that will eventually be fulfilled with a
 # use tokio_core::reactor::Core;
 # fn run() -> Result<(), Box<::std::error::Error>> {
 # let mut core = Core::new()?;
-# let client = Client::new(&core.handle());
+# let client = Client::new();
 # let uri = "http://httpbin.org/ip".parse()?;
 let work = client.get(uri).map(|res| {
     println!("Response: {}", res.status());
@@ -109,17 +103,16 @@ return any more `Future`s. But what if we do?
 # use hyper::Client;
 # use tokio_core::reactor::Core;
 # fn run() -> Result<(), Box<::std::error::Error>> {
-# let mut core = Core::new()?;
-# let client = Client::new(&core.handle());
+# let client = Client::new();
 # let uri = "http://httpbin.org/ip".parse()?;
 let work = client.get(uri).and_then(|res| {
     println!("Response: {}", res.status());
 
-    res.body().for_each(|chunk| {
+    res.into_body().for_each(|chunk| {
         io::stdout()
             .write_all(&chunk)
             .map(|_| ())
-            .map_err(From::from)
+            .map_err(|e| panic!("example expects stdout is open, error={}", e))
     })
 });
 # Ok(())
@@ -145,16 +138,16 @@ actually do anything until poked, repeatedly. We can tell our event loop (the `C
 "run" the future in `work` until it succeeds or fails.
 
 ```rust
+# extern crate futures;
+# extern crate tokio;
 # extern crate hyper;
-# extern crate tokio_core;
 # use hyper::Client;
-# use tokio_core::reactor::Core;
+# use futures::Future;
 # fn run() -> Result<(), Box<::std::error::Error>> {
-# let mut core = Core::new()?;
-# let client = Client::new(&core.handle());
+# let client = Client::new();
 # let uri = "http://httpbin.org/ip".parse()?;
-# let work = client.get(uri);
-core.run(work)?;
+# let work = client.get(uri).map(|_| ());
+tokio::executor::current_thread::block_on_all(work);
 # Ok(())
 # }
 # fn main() {}
@@ -176,21 +169,17 @@ use hyper::Client;
 use tokio_core::reactor::Core;
 
 # fn run() -> Result<(), Box<::std::error::Error>> {
-# let mut core = Core::new()?;
-# let client = Client::new(&core.handle());
-# let uri = "http://httpbin.org/ip".parse()?;
-# let work = client.get(uri);
 let mut core = Core::new()?;
-let client = Client::new(&core.handle());
+let client = Client::new();
 
 let uri = "http://httpbin.org/ip".parse()?;
 let work = client.get(uri).and_then(|res| {
     println!("Response: {}", res.status());
 
-    res.body().for_each(|chunk| {
+    res.into_body().for_each(|chunk| {
         io::stdout()
             .write_all(&chunk)
-            .map_err(From::from)
+            .map_err(|e| panic!("example expects stdout is open, error={}", e))
     })
 });
 core.run(work)?;

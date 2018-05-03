@@ -3,27 +3,28 @@ title: hyper.rs
 layout: home
 ---
 
-```rust
+```rust,no_run
 extern crate hyper;
 
-use hyper::header::{ContentLength, ContentType};
-use hyper::server::{Http, Response, const_service, service_fn};
+use hyper::{Body, Response, Server};
+use hyper::rt::Future;
+use hyper::service::service_fn_ok;
 
-static TEXT: &'static str = "Hello, World!";
+static TEXT: &str = "Hello, World!";
 
-fn run() -> Result<(), hyper::Error> {
+fn main() {
     let addr = ([127, 0, 0, 1], 3000).into();
 
-    let hello = const_service(service_fn(|_req|{
-        Ok(Response::<hyper::Body>::new()
-            .with_header(ContentLength(TEXT.len() as u64))
-            .with_header(ContentType::plaintext())
-            .with_body(TEXT))
-    }));
+    let new_svc = || {
+        service_fn_ok(|_req|{
+            Response::new(Body::from(TEXT))
+        })
+    };
 
-    let server = Http::new().bind(&addr, hello)?;
-    server.run()
+    let server = Server::bind(&addr)
+        .serve(new_svc)
+        .map_err(|e| eprintln!("server error: {}", e));
+
+    hyper::rt::run(server);
 }
-
-# fn main() {}
 ```

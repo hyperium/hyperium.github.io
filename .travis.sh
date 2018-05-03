@@ -7,12 +7,10 @@ if [ ! -e tmp/Cargo.toml ]; then
         cargo init tmp
     fi
     cat >> tmp/Cargo.toml <<-EOF
-futures = "0.1.14"
+futures = "0.1.21"
 hyper =  { git = "https://github.com/hyperium/hyper"}
 hyper-tls =  { git = "https://github.com/hyperium/hyper-tls"}
-tokio-core = "0.1"
-serde_json = "1.0.2"
-url = "1.0"
+tokio = "0.1.5"
 EOF
     cargo build --manifest-path tmp/Cargo.toml
 fi

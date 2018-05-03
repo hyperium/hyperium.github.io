@@ -20,6 +20,9 @@
             {% assign topic = site.data.guides | where: "path", topic_sub_url | first %}
             {% include guide_ul.html topic=topic %}
             {% endfor %}
+            <h4 class="guide-topic-title">
+              <a href="{{ site.docs_url }}">Reference</a>
+            </h4>
           </nav>
         </aside>
         <article class="col-md-9 hyper-content">

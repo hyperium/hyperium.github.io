@@ -29,6 +29,6 @@ relative_links:
   collections: true
 
 docs_url: https://docs.rs/hyper/*
-futures_url: https://docs.rs/futures/*
-tokio_core_url: https://docs.rs/tokio-core/*
+examples_url: https://github.com/hyperium/hyper/tree/master/examples
+futures_url: https://docs.rs/futures/0.1.*
 hyper_tls_url: https://docs.rs/hyper-tls/*

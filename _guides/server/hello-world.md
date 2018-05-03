@@ -9,108 +9,91 @@ First, we need our dependencies. Let's tell Cargo about our dependencies by havi
 
 ```toml
 [dependencies]
-futures = "0.1.14"
-hyper = "0.11.2"
+hyper = "0.12"
 ```
 
 Now lets start on our `main.rs`, and add some imports:
 
 ```rust
 extern crate hyper;
-extern crate futures;
 ```
 
 We also need to `use` a few things:
 
 ```rust
 # extern crate hyper;
-# extern crate futures;
-use futures::future::Future;
-
-use hyper::header::ContentLength;
-use hyper::server::{Http, Request, Response, Service};
+use hyper::{Body, Request, Response, Server};
+use hyper::rt::Future;
+use hyper::service::service_fn_ok;
 # fn main() {}
 ```
 
 ## Creating a Service
 
 A [`Service`][service] is how you define how to serve incoming requests
-with outgoing responses. Let's define a simple one, naming it after what
-we expect our service to do.
+with outgoing responses. It's possible to implement the trait directly,
+but there are a few patterns that a pretty common, and thus hyper includes
+some helpers when that pattern fits our needs.
+
+In this example, we don't have any state to carry around, so we really just
+need a simple function:
 
 ```rust
-struct HelloWorld;
-```
-
-Next, we need to implement [`Service`][service] for `HelloWorld`:
-
-```rust
-# extern crate futures;
 # extern crate hyper;
-# use futures::future::Future;
-# use hyper::header::ContentLength;
-# use hyper::server::{Service, Request, Response};
-# struct HelloWorld;
-const PHRASE: &'static str = "Hello, World!";
-
-impl Service for HelloWorld {
-    // boilerplate hooking up hyper's server types
-    type Request = Request;
-    type Response = Response;
-    type Error = hyper::Error;
-    // The future representing the eventual Response your call will
-    // resolve to. This can change to whatever Future you need.
-    type Future = Box<Future<Item=Self::Response, Error=Self::Error>>;
-
-    fn call(&self, _req: Request) -> Self::Future {
-        // We're currently ignoring the Request
-        // And returning an 'ok' Future, which means it's ready
-        // immediately, and build a Response with the 'PHRASE' body.
-        Box::new(futures::future::ok(
-            Response::new()
-                .with_header(ContentLength(PHRASE.len() as u64))
-                .with_body(PHRASE)
-        ))
-    }
-}
+# use hyper::{Body, Request, Response};
 # fn main() {}
+const PHRASE: &str = "Hello, World!";
+
+fn hello_world(_req: Request<Body>) -> Response<Body> {
+    Response::new(Body::from(PHRASE))
+}
 ```
+
+As soon as we get a request, nothing is stopping us from knowing the response
+immediately! That function will be used when starting our server.
+
+That new `Response` will by default have a `200 OK` status code, and the `Body`
+is able to tell that it is made from a static string, and is able to add a
+`Content-Length` header for us automatically.
 
 ## Starting the Server
 
-Lastly, we need to hook up our `HelloWorld` service into a running hyper
+Lastly, we need to hook up our `hello_world` service into a running hyper
 Server.
 
 We'll dive in to the specifics of some of these things in another guide.
-This just sets up an `Http` protocol, binds it to a socket address we
-want, and then runs it forever.
 
-```rust,no_run
-# extern crate futures;
+```rust
 # extern crate hyper;
-# use hyper::header::ContentLength;
-# use hyper::server::{Http, Service, Request, Response};
-# struct HelloWorld;
-# const PHRASE: &'static str = "Hello, World!";
-#
-# impl Service for HelloWorld {
-#     // boilerplate hooking up hyper's server types
-#     type Request = Request;
-#     type Response = Response;
-#     type Error = hyper::Error;
-#     // The future representing the eventual Response your call will
-#     // resolve to. This can change to whatever Future you need.
-#     type Future = futures::future::FutureResult<Self::Response, Self::Error>;
-#
-#     fn call(&self, _req: Request) -> Self::Future {
-#         unimplemented!()
-#     }
+# use hyper::{Body, Request, Response, Server};
+# use hyper::rt::Future;
+# use hyper::service::service_fn_ok;
+# const PHRASE: &str = "Hello, World!";
+# fn hello_world(_req: Request<Body>) -> Response<Body> {
+#     Response::new(Body::from(PHRASE))
 # }
-fn main() {
-    let addr = "127.0.0.1:3000".parse().unwrap();
-    let server = Http::new().bind(&addr, || Ok(HelloWorld)).unwrap();
-    server.run().unwrap();
-}
+# fn run() {
+// This is our socket address...
+let addr = ([127, 0, 0, 1], 3000).into();
+
+// A `Service` is needed for every connection, so this
+// creates on of our `hello_world` function.
+let new_svc = || {
+    // service_fn_ok converts our function into a `Service`
+    service_fn_ok(hello_world)
+};
+
+let server = Server::bind(&addr)
+    .serve(new_svc)
+    .map_err(|e| eprintln!("server error: {}", e));
+
+// Run this server for... forever!
+hyper::rt::run(server);
+# }
+# fn main() {}
 ```
 
-[service]: https://docs.rs/tokio-service/*/tokio_service/trait.Service.html
+To see all the snippets put together, check out the [full example][example]!
+
+[service]: {{ site.docs_url }}/hyper/trait.Service.html
+[example]: {{ site.examples_url }}/hello.rs

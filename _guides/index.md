@@ -10,7 +10,7 @@ You can start using it by first adding it to your `Cargo.toml`:
 
 ```toml
 [dependencies]
-hyper = "0.11"
+hyper = "0.12"
 ```
 
 - If building a web server, continue with the [Server guide][].

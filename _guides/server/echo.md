@@ -12,56 +12,60 @@ request body as the response body on `POST` requests.
 
 ## Routing
 
-First thing we will do, beyond renaming our service to `Echo`, is setup some
+First thing we will do, beyond renaming our service to `echo`, is setup some
 routing. We want to have a route explaining instructions on how to use
 our server, and another for receiving data. Oh, and we should also
 handle the case when someone asks for a route we don't know!
 
-We need to add some to our imports:
+We're going to be using more of the [futures][] crate, so let's add that as
+a dependency:
+
+```toml
+[dependencies]
+hyper = "0.12"
+futures = "0.1" # yes, 0.1 for now
+```
+
+Then, we need to add some to our imports:
 
 ```rust
 # extern crate hyper;
+extern crate futures;
+
+use futures::future;
 use hyper::{Method, StatusCode};
 # fn main() {}
 ```
 
-And make some changes to your `Service`:
+And make some changes to your `Service`, such as returning a `Future` of a `Response`,
+since we may not have one ready immediately:
 
 ```rust
 # extern crate futures;
 # extern crate hyper;
-# use futures::future::Future;
-# use hyper::{Method, StatusCode};
-# use hyper::server::{Request, Response, Service};
+# use futures::future::{self, Future};
+# use hyper::{Body, Method, Request, Response, StatusCode};
 
-struct Echo;
+// Just a simple type alias
+type BoxFut = Box<Future<Item=Response<Body>, Error=hyper::Error> + Send>;
 
-impl Service for Echo {
-    // ... types here
-#    type Request = Request;
-#    type Response = Response;
-#    type Error = hyper::Error;
-#    type Future = Box<Future<Item=Self::Response, Error=Self::Error>>;
+fn echo(req: Request<Body>) -> BoxFut {
+    let mut response = Response::new(Body::empty());
 
-    fn call(&self, req: Request) -> Self::Future {
-        let mut response = Response::new();
+    match (req.method(), req.uri().path()) {
+        (&Method::GET, "/") => {
+            *response.body_mut() = Body::from("Try POSTing data to /echo");
+        },
+        (&Method::POST, "/echo") => {
+            // we'll be back
+        },
+        _ => {
+            *response.status_mut() = StatusCode::NOT_FOUND;
+        },
+    };
 
-         match (req.method(), req.path()) {
-            (&Method::Get, "/") => {
-                response.set_body("Try POSTing data to /echo");
-            },
-            (&Method::Post, "/echo") => {
-                // we'll be back
-            },
-            _ => {
-                response.set_status(StatusCode::NotFound);
-            },
-        };
-
-        Box::new(futures::future::ok(response))
-    }
+    Box::new(future::ok(response))
 }
-
 # fn main() {}
 ```
 
@@ -72,9 +76,18 @@ are checking for `POST /echo`, but currently don't do anything about it.
 
 Our third rule catches any other method and path combination, and
 changes the `StatusCode` of the `Response`. The default status of a
-`Response` is HTTP's `200 OK` (`StatusCode::Ok`), which is correct for
+`Response` is HTTP's `200 OK` (`StatusCode::OK`), which is correct for
 the other routes. But the third case will instead send back `404 Not
 Found`.
+
+Finally, we introduced returning a `Future`. So far, we have the `Response`
+ready immediately, so we can wrap it in a `future::ok` call.
+
+What's with the `Box`? The example so far doesn't need it, and even as we
+expand it, it is true that you can do all these without allocating a trait
+object. The reason, though, is for ease. We will need to return *different*
+`Future`s, while starting out, it's easiest to just put all the different
+possible return values into a boxed trait object.
 
 ## Body Streams
 
@@ -87,37 +100,18 @@ and by default, you can easily just pass the `Body` of the `Request` into the
 `Response`.
 
 ```rust
-# extern crate futures;
 # extern crate hyper;
-# use futures::future::Future;
-# use hyper::{Method, StatusCode};
-# use hyper::server::{Request, Response, Service};
-# struct Echo;
-# impl Service for Echo {
-#     // ... types here
-#     type Request = Request;
-#     type Response = Response;
-#     type Error = hyper::Error;
-#     type Future = Box<Future<Item=Self::Response, Error=Self::Error>>;
-#
-#     fn call(&self, req: Request) -> Self::Future {
-#         let mut response = Response::new();
-#
-#          match (req.method(), req.path()) {
-#             (&Method::Get, "/") => {
-#                 response.set_body("Try POSTing data to /echo");
-#             },
+# use hyper::{Body, Method, Request, Response};
+# fn echo(req: Request<Body>) -> Response<Body> {
+#     let mut response = Response::default();
+#     match (req.method(), req.uri().path()) {
 // inside that match from before
-(&Method::Post, "/echo") => {
-    response.set_body(req.body());
+(&Method::POST, "/echo") => {
+    *response.body_mut() = req.into_body();
 },
-#             _ => {
-#                 response.set_status(StatusCode::NotFound);
-#             },
-#         };
-#
-#         Box::new(futures::future::ok(response))
+#         _ => unreachable!(),
 #     }
+#     response
 # }
 # fn main() {}
 ```
@@ -132,9 +126,8 @@ We're going to need a couple of extra imports, so let's add those to the top of 
 ```rust
 # extern crate futures;
 # extern crate hyper;
-use std::ascii::AsciiExt;
 use futures::Stream;
-use hyper::{Body, Chunk};
+use hyper::Chunk;
 # fn main() {}
 ```
 
@@ -143,152 +136,93 @@ A `Body` implements the `Stream` trait from futures, producing a bunch of
 that represents a bunch of bytes. It can be easily converted into other
 typical containers of bytes.
 
-Next, let's make a function that maps our bytes into uppercase:
+Next, let's add a new `/echo/uppercase` route mapping the body to uppercase:
 
 ```rust
 # extern crate hyper;
-# use std::ascii::AsciiExt;
-# use hyper::Chunk;
-fn to_uppercase(chunk: Chunk) -> Chunk {
-    let uppered = chunk.iter()
-        .map(|byte| byte.to_ascii_uppercase())
-        .collect::<Vec<u8>>();
-    Chunk::from(uppered)
-}
-# fn main() {}
-```
+# use hyper::rt::Stream;
+# use hyper::{Body, Method, Request, Response};
+# fn echo(req: Request<Body>) -> Response<Body> {
+#     let mut response = Response::default();
+#     match (req.method(), req.uri().path()) {
+// Yet another route inside our match block...
+(&Method::POST, "/echo/uppercase") => {
+    // This is actually a new `futures::Stream`...
+    let mapping = req
+        .into_body()
+        .map(|chunk| {
+            chunk.iter()
+                .map(|byte| byte.to_ascii_uppercase())
+                .collect::<Vec<u8>>()
+        });
 
-We'll also need to update the `Stream` type that our `Response` is using.
-By default, it just uses `hyper::Body`, but `Response` can use any `Stream`
-of items that implement `AsRef<[u8]>`. To make things easy, we'll use a boxed
-`Stream`, like so:
-
-```rust
-# extern crate futures;
-# extern crate hyper;
-# use futures::{Future, Stream};
-# use hyper::{Body, Chunk, Method, StatusCode};
-# use hyper::server::{Request, Response, Service};
-# use std::ascii::AsciiExt;
-# fn to_uppercase(chunk: Chunk) -> Chunk {
-#     let uppered = chunk.iter()
-#         .map(|byte| byte.to_ascii_uppercase())
-#         .collect::<Vec<u8>>();
-#     Chunk::from(uppered)
+    // Use `Body::wrap_stream` to convert it to a `Body`...
+    *response.body_mut() = Body::wrap_stream(mapping);
+},
+#         _ => unreachable!(),
+#     }
+#     response
 # }
-# struct Echo;
-impl Service for Echo {
-#     type Request = Request;
-#     type Error = hyper::Error;
-#     type Future = Box<Future<Item=Self::Response, Error=Self::Error>>;
-    // other types stay the same
-    type Response = Response<Box<Stream<Item=Chunk, Error=Self::Error>>>;
-
-    fn call(&self, req: Request) -> Self::Future {
-#         let mut response = Response::new();
-#
-#          match (req.method(), req.path()) {
-            // ...
-            // we need to convert this to a boxed stream now
-            (&Method::Get, "/") => {
-                let body: Box<Stream<Item=_, Error=_>> = Box::new(Body::from("Try POSTing to /echo!"));
-                response.set_body(body);
-            },
-            // we make a Map stream, and box it!
-            (&Method::Post, "/echo") => {
-                let mapping = req.body().map(to_uppercase as fn(Chunk) -> Chunk);
-                let body: Box<Stream<Item=_, Error=_>> = Box::new(mapping);
-                response.set_body(body);
-            },
-            // ...
-#             _ => {
-#                 response.set_status(StatusCode::NotFound);
-#             },
-#         };
-#
-#         Box::new(futures::future::ok(response))
-    }
-
-}
 # fn main() {}
 ```
+
+And like that, we have two echo routes: `/echo` which does no transformation,
+and `/echo/uppercase` which returns all bytes after converting them to ASCII
+uppercase.
 
 ## Buffering the Request Body
 
 What if we wanted our echo service to respond with the data reversed? We can't really stream the data as it comes in, since we need to find the end before we can respond. To do this, we can explore how to easily collect the full body.
 
-To reduce complexity for now, we'll back our uppercasing logic out, and go back to the default `Response` type.
+In this case, we can't really generate a `Response` immediately, but instead must wait for the full request body to be received.
 
-In this case, however, we can't really generate a `Response` immediately, but instead must wait for the full request body to be received.
-
-
-1. With `GET /`, we have an immediate `Response`, and would like to use `future::ok`.
-2. With `POST /echo`, we need to wait before we can give a `Response`. We'll be waiting on concatenating all the `Chunk`s together, so this future would be a `futures::stream::Concat2` combined with a `futures::future::Map`.
+1. With `GET /`, `POST /echo`, and `POST /echo/uppercase`, we have an immediate `Response`, and would like to use `future::ok`.
+2. With `POST /echo/reverse`, we need to wait before we can give a `Response`. We'll be waiting on concatenating all the `Chunk`s together, so this future would be a `futures::stream::Concat2` combined with a `futures::future::Map`.
 
 Since we're returning boxed `Future`s, this should be pretty easy to do.
 
-First up, we'll make a simple function to map onto our concatenated `Chunk`:
+We want to concatenate the request body, and map the result into our `reverse` function, and return the eventual result.
 
 ```rust
 # extern crate hyper;
-# use hyper::Chunk;
-# use hyper::server::Response;
-fn reverse(chunk: Chunk) -> Response {
-    let reversed = chunk.iter()
-        .rev()
-        .cloned()
-        .collect::<Vec<u8>>();
-    Response::new()
-        .with_body(reversed)
-}
-# fn main() {}
-```
+# use hyper::{Body, Method, Request, Response};
+# use hyper::rt::{Future, Stream};
+# fn echo(req: Request<Body>) -> Box<Future<Item=Response<Body>, Error=hyper::Error> + Send> {
+#     let mut response = Response::default();
+#     match (req.method(), req.uri().path()) {
+// Yet another route inside our match block...
+(&Method::POST, "/echo/reverse") => {
+    // This is actually a new `Future`, waiting on `concat`...
+    let reversed = req
+        .into_body()
+        // A future of when we finally have the full body...
+        .concat2()
+        // `move` the `Response` into this future...
+        .map(move |chunk| {
+            let body = chunk.iter()
+                .rev()
+                .cloned()
+                .collect::<Vec<u8>>();
 
-Now, we want to concatenate the request body, and map the result into our `reverse` function, and return the eventual result.
+            *response.body_mut() = Body::from(body);
+            response
+        });
 
-```rust
-# extern crate futures;
-# extern crate hyper;
-# use futures::{Future, Stream};
-# use hyper::{Chunk, Method, StatusCode};
-# use hyper::server::{Request, Response, Service};
-# struct Echo;
-# fn reverse(chunk: Chunk) -> Response {
-#     let reversed = chunk.iter()
-#         .rev()
-#         .cloned()
-#         .collect::<Vec<u8>>();
-#     Response::new()
-#         .with_body(reversed)
+    // We can't just return the `Resposne` from this match arm,
+    // because we can't set the body until the `concat` future
+    // completed...
+    //
+    // However, `reversed` is actually a `Future` that will return
+    // a `Response`! So, let's return it immediately instead of
+    // falling through to the default return of this function.
+    return Box::new(reversed)
+},
+#         _ => unreachable!(),
+#     }
 # }
-impl Service for Echo {
-#     type Request = Request;
-#     type Error = hyper::Error;
-#     type Future = Box<Future<Item=Self::Response, Error=Self::Error>>;
-    // back to default Response
-    type Response = Response;
-
-    fn call(&self, req: Request) -> Self::Future {
-         match (req.method(), req.path()) {
-            (&Method::Get, "/") => {
-                Box::new(futures::future::ok(
-                    Response::new().with_body("Try POSTing data to /echo")
-                ))
-            },
-            (&Method::Post, "/echo") => {
-                Box::new(
-                    req.body()
-                        .concat2()
-                        .map(reverse)
-                )
-            },
-            _ => {
-                Box::new(futures::future::ok(
-                    Response::new().with_status(StatusCode::NotFound)
-                ))
-            },
-        }
-    }
-}
 # fn main() {}
 ```
+
+You can see a compiling [example here][example].
+
+[example]: {{ site.examples_url }}/echo.rs

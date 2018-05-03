@@ -9,14 +9,10 @@
   guides:
   - hello-world
   - echo
-  - handle_post
-  - response_strategies
 
 - title: Client
   path: "/client"
   guides:
   - basic
   - advanced
-  - json
   - configuration
-  - timeout

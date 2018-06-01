@@ -8,8 +8,8 @@ if [ ! -e tmp/Cargo.toml ]; then
     fi
     cat >> tmp/Cargo.toml <<-EOF
 futures = "0.1.21"
-hyper =  { git = "https://github.com/hyperium/hyper"}
-hyper-tls =  { git = "https://github.com/hyperium/hyper-tls"}
+hyper = "0.12"
+hyper-tls =  "0.2"
 tokio = "0.1.5"
 EOF
     cargo build --manifest-path tmp/Cargo.toml

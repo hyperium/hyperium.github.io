@@ -32,7 +32,7 @@ use hyper::service::service_fn_ok;
 
 A [`Service`][service] is how you define how to serve incoming requests
 with outgoing responses. It's possible to implement the trait directly,
-but there are a few patterns that a pretty common, and thus hyper includes
+but there are a few patterns that are pretty common, and thus hyper includes
 some helpers when that pattern fits our needs.
 
 In this example, we don't have any state to carry around, so we really just

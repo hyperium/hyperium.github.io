@@ -17,8 +17,8 @@ routing. We want to have a route explaining instructions on how to use
 our server, and another for receiving data. Oh, and we should also
 handle the case when someone asks for a route we don't know!
 
-We're going to be using more of the [futures][] crate, so let's add that as
-a dependency:
+We're going to be using more of the [futures][future-crate] crate, so let's add
+that as a dependency:
 
 ```toml
 [dependencies]
@@ -172,9 +172,13 @@ uppercase.
 
 ## Buffering the Request Body
 
-What if we wanted our echo service to respond with the data reversed? We can't really stream the data as it comes in, since we need to find the end before we can respond. To do this, we can explore how to easily collect the full body.
+What if we want our echo service to reverse the data it received and send it
+back to use? We can't really stream the data as it comes in, since we need to
+find the end before we can respond. To do this, we can explore how to easily
+collect the full body.
 
-In this case, we can't really generate a `Response` immediately, but instead must wait for the full request body to be received.
+In this case, we can't really generate a `Response` immediately. Instead, we
+must wait for the full request body to be received.
 
 1. With `GET /`, `POST /echo`, and `POST /echo/uppercase`, we have an immediate `Response`, and would like to use `future::ok`.
 2. With `POST /echo/reverse`, we need to wait before we can give a `Response`. We'll be waiting on concatenating all the `Chunk`s together, so this future would be a `futures::stream::Concat2` combined with a `futures::future::Map`.
@@ -208,7 +212,7 @@ We want to concatenate the request body, and map the result into our `reverse` f
             response
         });
 
-    // We can't just return the `Resposne` from this match arm,
+    // We can't just return the `Response` from this match arm,
     // because we can't set the body until the `concat` future
     // completed...
     //
@@ -226,3 +230,4 @@ We want to concatenate the request body, and map the result into our `reverse` f
 You can see a compiling [example here][example].
 
 [example]: {{ site.examples_url }}/echo.rs
+[future-crate]: https://github.com/rust-lang-nursery/futures-rs

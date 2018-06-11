@@ -30,7 +30,7 @@ use hyper::service::service_fn_ok;
 
 ## Creating a Service
 
-A [`Service`][service] lets you define how to response to incoming requests.
+A [`Service`][service] lets you define how to respond to incoming requests.
 While it is possible to implement the trait directly, there are a few patterns
 that are common when using Hyper. We've included some helpers for when these
 patterns fit our needs.

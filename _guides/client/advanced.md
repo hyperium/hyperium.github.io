@@ -25,14 +25,17 @@ After a quick addition to imports
 # extern crate http;
 # use http::header::HeaderValue;
 # use hyper::{Method, Request, Body};
-# fn run() -> Result<(), Box<::std::error::Error>> {
+# fn run() {
+// still inside rt::run...
 let json = r#"{"library":"hyper"}"#;
-let uri: hyper::Uri = "http://httpbin.org/post".parse()?;
+let uri: hyper::Uri = "http://httpbin.org/post".parse().unwrap();
 let mut req = Request::new(Body::from(json));
 *req.method_mut() = Method::POST;
 *req.uri_mut() = uri.clone();
-req.headers_mut().insert("content-type", HeaderValue::from_str("application/json")?);
-# Ok(())
+req.headers_mut().insert(
+    hyper::header::CONTENT_LENGTH,
+    HeaderValue::from_static("application/json")
+);
 # }
 # fn main() {}
 ```
@@ -57,7 +60,8 @@ can give that to the `client` with the `request` method:
 # let mut req = Request::new(Body::from(json));
 # *req.method_mut() = Method::POST;
 # *req.uri_mut() = uri.clone();
-# req.headers_mut().insert("content-type", HeaderValue::from_str("application/json")?);
+# req.headers_mut().insert("content-type", HeaderValue::from_static("application/json"));
+// still inside rt::run...
 let post = client.request(req).and_then(|res| {
     println!("POST: {}", res.status());
 
@@ -84,7 +88,8 @@ the future to the `core`.
 # use hyper::{Client, Method, Request};
 # fn run() -> Result<(), Box<::std::error::Error>> {
 # let client = Client::new();
-let get = client.get("http://httpbin.org/headers".parse()?).and_then(|res| {
+// still inside rt::run...
+let get = client.get("http://httpbin.org/headers".parse().unwrap()).and_then(|res| {
     println!("GET: {}", res.status());
 
     res.into_body().concat2()
@@ -107,40 +112,46 @@ values of both in a tuple.
 # extern crate tokio;
 # use futures::{Future, Stream};
 # use http::header::HeaderValue;
-# use hyper::{Client, Method, Request, Body};
+# use hyper::{rt, Client, Method, Request, Body};
 # use std::str;
-# fn run() -> Result<(), Box<::std::error::Error>> {
+# fn run() {
+# rt::run(rt::lazy(|| {
 # let client = Client::new();
 # let json = r#"{"library":"hyper"}"#;
-# let uri: hyper::Uri = "http://httpbin.org/post".parse()?;
+# let uri: hyper::Uri = "http://httpbin.org/post".parse().unwrap();
 # let mut req = Request::new(Body::from(json));
 # *req.method_mut() = Method::POST;
 # *req.uri_mut() = uri.clone();
-# req.headers_mut().insert("content-type", HeaderValue::from_str("application/json")?);
+# req.headers_mut().insert("content-type", HeaderValue::from_static("application/json"));
 # let post = client.request(req).and_then(|res| {
 #     println!("POST: {}", res.status());
 #
 #     res.into_body().concat2()
 # });
 #
-# let get = client.get("http://httpbin.org/headers".parse()?).and_then(|res| {
+# let get = client.get("http://httpbin.org/headers".parse().unwrap()).and_then(|res| {
 #     println!("GET: {}", res.status());
 #
 #     res.into_body().concat2()
 # });
+// still inside rt::run...
 let work = post.join(get);
-let (posted, got) = tokio::executor::current_thread::block_on_all(work).unwrap();
 
-println!("POST: {}", str::from_utf8(&posted)?);
-println!("GET: {}", str::from_utf8(&got)?);
-# Ok(())
+work
+    .map(|(posted, got)| {
+        println!("GET: {:?}", got);
+        println!("POST: {:?}", posted);
+    })
+    .map_err(|err| {
+        println!("Error: {}", err);
+    })
+# }));
 # }
 # fn main() {}
 
 ```
 
-Last step, we are just decoding the bytes of the body into UTF-8 strings, and
-printing them to stdout.
+Last step, we are just printing them to stdout.
 
 [Request]: {{ site.docs_url }}/hyper/client/struct.Request.html
 [Method]: {{ site.docs_url }}/hyper/enum.Method.html

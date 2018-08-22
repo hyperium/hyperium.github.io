@@ -33,7 +33,7 @@ let mut req = Request::new(Body::from(json));
 *req.method_mut() = Method::POST;
 *req.uri_mut() = uri.clone();
 req.headers_mut().insert(
-    hyper::header::CONTENT_LENGTH,
+    hyper::header::CONTENT_TYPE,
     HeaderValue::from_static("application/json")
 );
 # }

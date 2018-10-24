@@ -77,7 +77,7 @@ We'll dive in to the specifics of some of these things in another guide.
 let addr = ([127, 0, 0, 1], 3000).into();
 
 // A `Service` is needed for every connection, so this
-// creates on of our `hello_world` function.
+// creates one from our `hello_world` function.
 let new_svc = || {
     // service_fn_ok converts our function into a `Service`
     service_fn_ok(hello_world)

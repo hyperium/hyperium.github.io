@@ -6,6 +6,8 @@ To start with, we'll just get a simple `GET` request to a webpage working,
 so we can see all the moving parts. First, we need our dependencies.
 Let's tell Cargo about our dependencies by having this in the Cargo.toml.
 
+## Dependencies
+
 ```toml
 [dependencies]
 hyper = "0.12"
@@ -27,16 +29,37 @@ use hyper::rt::{self, Future, Stream};
 # fn main() {}
 ```
 
+## Runtime
+
 Now, we'll make a request in the `main` of our program. This may seem
 like a bit of work just to make a simple request, and you'd be correct,
 but the point here is just to show all the setup required. Once you have this,
 you are set to make thousands of client requests efficiently.
 
 We have to setup some sort of runtime. By default, hyper can make use of the
-Tokio runtime, via `hyper::rt`. We can then create a hyper [`Client`][Client]
-that will be registered to our runtime.
+[Tokio runtime][Tokio], via `hyper::rt`. If you've never used futures in Rust
+before, you may wish to read through [Tokio's guide on Futures](Tokio Futures).
+
+
+```rust
+# extern crate hyper;
+# use hyper::rt;
+fn main() {
+    rt::run(rt::lazy(|| {
+        // This is main future that the runtime will execute.
+        //
+        // The `lazy` is because we don't want any of this executing *right now*,
+        // but rather once the runtime has started up all its resources.
+        //
+        // This is where we will setup our HTTP client requests.
+# Ok::<(), ()>(())
+    }));
+}
+```
 
 ## GET
+
+We can now create a hyper [`Client`][Client] that will be registered to our runtime.
 
 Calling `client.get` returns a `Future` that will eventually be fulfilled with a
 [`Response`][Response].
@@ -123,6 +146,8 @@ has been read and written to `stdout`.
 And that's it! You can see the [full example here][example].
 
 [Client]: {{ site.docs_url }}/hyper/struct.Client.html
+[Tokio]: https://tokio.rs
+[Tokio Futures]: https://tokio.rs/docs/getting-started/futures/
 [StatusCode]: {{ site.docs_url }}/hyper/struct.StatusCode.html
 [Response]: {{ site.docs_url }}/hyper/struct.Response.html
 [Future]: {{ site.futures_url }}/futures/future/trait.Future.html

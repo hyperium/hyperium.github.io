@@ -38,7 +38,7 @@ you are set to make thousands of client requests efficiently.
 
 We have to setup some sort of runtime. By default, hyper can make use of the
 [Tokio runtime][Tokio], via `hyper::rt`. If you've never used futures in Rust
-before, you may wish to read through [Tokio's guide on Futures](Tokio-Futures).
+before, you may wish to read through [Tokio's guide on Futures][Tokio-Futures].
 
 
 ```rust

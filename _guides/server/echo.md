@@ -89,6 +89,45 @@ object. The reason, though, is for ease. We will need to return *different*
 `Future`s, while starting out, it's easiest to just put all the different
 possible return values into a boxed trait object.
 
+## Hooking up the Service
+
+Since we're changing the status code, we can't use the same `service_fn_ok` from the previous guide to wrap our service.
+Instead, we'll use `service_fn`:
+
+```rust
+# extern crate hyper;
+use hyper::service::service_fn;
+```
+
+So, the server setup will change accordingly (inlined a bit for brevity):
+
+```rust
+# extern crate futures;
+# extern crate hyper;
+# 
+# use futures::future;
+# use hyper::rt::Future;
+# use hyper::{Body, Request, Response, Server};
+# use hyper::service::service_fn;
+# 
+# type BoxFut = Box<Future<Item=Response<Body>, Error=hyper::Error> + Send>;
+# 
+# fn echo(_req: Request<Body>) -> BoxFut {
+#     Box::new(future::ok(Response::new(Body::empty())))
+# }
+# 
+# fn run() {
+    let addr = ([127, 0, 0, 1], 3000).into();
+
+    let server = Server::bind(&addr)
+        .serve(|| service_fn(echo))
+        .map_err(|e| eprintln!("server error: {}", e));
+
+    hyper::rt::run(server);
+# }
+# fn main() {}
+```
+
 ## Body Streams
 
 So let's get that echo in place. We'll start with the simplest solution, and

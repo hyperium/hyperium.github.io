@@ -32,7 +32,7 @@ Then, we need to add some to our imports:
 # extern crate hyper;
 extern crate futures;
 
-use futures::Future;
+use futures::future;
 use hyper::{Method, StatusCode};
 # fn main() {}
 ```

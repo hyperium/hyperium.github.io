@@ -53,7 +53,7 @@ can give that to the `client` with the `request` method:
 # use http::header::HeaderValue;
 # use hyper::{Client, Method, Request, Body};
 # use tokio_core::reactor::Core;
-# fn run() -> Result<(), Box<::std::error::Error>> {
+# fn run() -> Result<(), Box<dyn std::error::Error>> {
 # let client = Client::new();
 # let json = r#"{"library":"hyper"}"#;
 # let uri: hyper::Uri = "http://httpbin.org/post".parse()?;
@@ -86,7 +86,7 @@ the future to the `core`.
 # extern crate hyper;
 # use futures::{Future, Stream};
 # use hyper::{Client, Method, Request};
-# fn run() -> Result<(), Box<::std::error::Error>> {
+# fn run() -> Result<(), Box<dyn std::error::Error>> {
 # let client = Client::new();
 // still inside rt::run...
 let get = client.get("http://httpbin.org/headers".parse().unwrap()).and_then(|res| {

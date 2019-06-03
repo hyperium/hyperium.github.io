@@ -47,7 +47,7 @@ since we may not have one ready immediately:
 # use hyper::{Body, Method, Request, Response, StatusCode};
 
 // Just a simple type alias
-type BoxFut = Box<Future<Item=Response<Body>, Error=hyper::Error> + Send>;
+type BoxFut = Box<dyn Future<Item=Response<Body>, Error=hyper::Error> + Send>;
 
 fn echo(req: Request<Body>) -> BoxFut {
     let mut response = Response::new(Body::empty());
@@ -110,7 +110,7 @@ So, the server setup will change accordingly (inlined a bit for brevity):
 # use hyper::{Body, Request, Response, Server};
 # use hyper::service::service_fn;
 # 
-# type BoxFut = Box<Future<Item=Response<Body>, Error=hyper::Error> + Send>;
+# type BoxFut = Box<dyn Future<Item=Response<Body>, Error=hyper::Error> + Send>;
 # 
 # fn echo(_req: Request<Body>) -> BoxFut {
 #     Box::new(future::ok(Response::new(Body::empty())))
@@ -230,7 +230,7 @@ We want to concatenate the request body, and map the result into our `reverse` f
 # extern crate hyper;
 # use hyper::{Body, Method, Request, Response};
 # use hyper::rt::{Future, Stream};
-# fn echo(req: Request<Body>) -> Box<Future<Item=Response<Body>, Error=hyper::Error> + Send> {
+# fn echo(req: Request<Body>) -> Box<dyn Future<Item=Response<Body>, Error=hyper::Error> + Send> {
 #     let mut response = Response::default();
 #     match (req.method(), req.uri().path()) {
 // Yet another route inside our match block...

@@ -2,8 +2,8 @@
 title: Advanced Client Usage
 ---
 
-Once you've done all the setup in the simple guide, you probably
-have more advanced request you need to make. In this guide, we'll
+Once you've done all the setup in the [simple guide][], you probably
+have more advanced requests you need to make. In this guide, we'll
 make a `POST` request, and make multiple requests at the same time.
 
 ## Making a POST
@@ -153,6 +153,7 @@ work
 
 Last step, we are just printing them to stdout.
 
+[simple guide]: ./basic.md
 [Request]: {{ site.docs_url }}/hyper/client/struct.Request.html
 [Method]: {{ site.docs_url }}/hyper/enum.Method.html
 [Join]: {{ site.futures_url }}/futures/future/trait.Future.html#method.join

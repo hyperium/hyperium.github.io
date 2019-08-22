@@ -47,12 +47,10 @@ can give that to the `client` with the `request` method:
 ```rust
 # extern crate futures;
 # extern crate hyper;
-# extern crate tokio_core;
 # extern crate http;
 # use futures::{Future, Stream};
 # use http::header::HeaderValue;
 # use hyper::{Client, Method, Request, Body};
-# use tokio_core::reactor::Core;
 # fn run() -> Result<(), Box<dyn std::error::Error>> {
 # let client = Client::new();
 # let json = r#"{"library":"hyper"}"#;

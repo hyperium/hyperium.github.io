@@ -3,21 +3,20 @@ title: hyper.rs
 layout: home
 ---
 
-```rust,no_run
+```rust
 extern crate hyper;
+# mod no_run {
 
 use hyper::{Body, Response, Server};
 use hyper::rt::Future;
 use hyper::service::service_fn_ok;
-
-static TEXT: &str = "Hello, World!";
 
 fn main() {
     let addr = ([127, 0, 0, 1], 3000).into();
 
     let new_svc = || {
         service_fn_ok(|_req|{
-            Response::new(Body::from(TEXT))
+            Response::new(Body::from("Hello, World!"))
         })
     };
 
@@ -27,4 +26,5 @@ fn main() {
 
     hyper::rt::run(server);
 }
+# }
 ```

@@ -9,7 +9,7 @@ if [ ! -e tmp/Cargo.toml ]; then
     cat >> tmp/Cargo.toml <<-EOF
 futures = "0.1.21"
 hyper = "0.12"
-hyper-tls =  "0.2"
+hyper-tls =  "0.3"
 tokio = "0.1.5"
 EOF
     cargo build --manifest-path tmp/Cargo.toml

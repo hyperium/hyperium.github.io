@@ -95,5 +95,5 @@ hyper::rt::run(server);
 
 To see all the snippets put together, check out the [full example][example]!
 
-[service]: {{ site.docs_url }}/hyper/trait.Service.html
+[service]: {{ site.docs_url }}/hyper/service/trait.Service.html
 [example]: {{ site.examples_url }}/hello.rs

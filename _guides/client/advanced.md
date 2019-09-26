@@ -14,7 +14,8 @@ that's what we'll do.
 
 ```rust
 # extern crate hyper;
-use hyper::{Method, Request};
+use hyper::header::HeaderValue;
+use hyper::{Body, Method, Request};
 # fn main() {}
 ```
 

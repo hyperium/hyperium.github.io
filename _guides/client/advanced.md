@@ -14,145 +14,101 @@ that's what we'll do.
 
 ```rust
 # extern crate hyper;
-use hyper::header::HeaderValue;
-use hyper::{Body, Method, Request};
+use hyper::{Body, Method, Request, Uri};
 # fn main() {}
 ```
 
-After a quick addition to imports
+After a quick addition to imports, let's prepare a `Request`:
 
 ```rust
 # extern crate hyper;
-# extern crate http;
-# use http::header::HeaderValue;
-# use hyper::{Method, Request, Body};
-# fn run() {
-// still inside rt::run...
-let json = r#"{"library":"hyper"}"#;
-let uri: hyper::Uri = "http://httpbin.org/post".parse().unwrap();
-let mut req = Request::new(Body::from(json));
-*req.method_mut() = Method::POST;
-*req.uri_mut() = uri.clone();
-req.headers_mut().insert(
-    hyper::header::CONTENT_TYPE,
-    HeaderValue::from_static("application/json")
-);
+# extern crate tokio;
+# mod no_run {
+# use hyper::{Body, Method, Request};
+#[tokio::main]
+async fn main() -> Result<(), Box<dyn std::error::Error + Send + Sync>> {
+    let req = Request::builder()
+        .method(Method::POST)
+        .uri("http://httpbin.org/post")
+        .header("content-type", "application/json")
+        .body(Body::from(r#"{"library":"hyper"}"#))?;
+
+    // We'll send it in a second...
+
+    Ok(())
+# }
 # }
 # fn main() {}
 ```
 
-We set the [`Method`][Method] to `Post`, add a URL, and some headers describing our
-payload. Lastly, a call to `set_body` with our JSON bytes. Then, we
-can give that to the `client` with the `request` method:
+Using a convenient request builder, we set the [`Method`][Method] to `POST`,
+add a URL, and some headers describing our payload. Lastly, a call to `body`
+with our JSON bytes.
+
+Now, we can give that to the `client` with the `request` method:
+
 
 ```rust
-# extern crate futures;
 # extern crate hyper;
-# extern crate http;
-# use futures::{Future, Stream};
-# use http::header::HeaderValue;
-# use hyper::{Client, Method, Request, Body};
-# fn run() -> Result<(), Box<dyn std::error::Error>> {
-# let client = Client::new();
-# let json = r#"{"library":"hyper"}"#;
-# let uri: hyper::Uri = "http://httpbin.org/post".parse()?;
-# let mut req = Request::new(Body::from(json));
-# *req.method_mut() = Method::POST;
-# *req.uri_mut() = uri.clone();
-# req.headers_mut().insert("content-type", HeaderValue::from_static("application/json"));
-// still inside rt::run...
-let post = client.request(req).and_then(|res| {
-    println!("POST: {}", res.status());
+# use hyper::{Client, Request};
+# async fn run() -> Result<(), Box<dyn std::error::Error + Send + Sync>> {
+# let req = Request::default();
+// let req = ...
 
-    res.into_body().concat2()
-});
+let client = Client::new();
+
+// POST it...
+let resp = client.request(req).await?;
+
+println!("Response: {}", resp.status());
 # Ok(())
 # }
 # fn main() {}
 ```
-
-The future in `post` will resolve with a concatenated body stream,
-which we'll print to the console soon. But first, let's also show
-that we can make multiple requests at the same time.
-
-Remember, the work in `post` won't actually do anything until we give
-the future to the `core`.
 
 ## Multiple Requests
 
-```rust
-# extern crate futures;
-# extern crate hyper;
-# use futures::{Future, Stream};
-# use hyper::{Client, Method, Request};
-# fn run() -> Result<(), Box<dyn std::error::Error>> {
-# let client = Client::new();
-// still inside rt::run...
-let get = client.get("http://httpbin.org/headers".parse().unwrap()).and_then(|res| {
-    println!("GET: {}", res.status());
+While `await` allows us to write "asynchronous" code in a way that looks
+"synchronous", to take full advantage of it, we can make multiple requests
+in parallel instead of serially.
 
-    res.into_body().concat2()
-});
+We're going to take advantage of "joining" futures, and so need to update our
+imports again:
+
+```toml
+[dependencies]
+hyper = "0.13"
+tokio = { version = "0.2", features = ["full'} }
+futures = "0.3"
+```
+
+Now, we'll create some `async` blocks to describe each future, but since they
+are lazy, we can start them in parallel.
+
+```rust
+# extern crate hyper;
+# extern crate futures;
+# use hyper::{Client, Request, Uri};
+# async fn run() -> Result<(), Box<dyn std::error::Error + Send + Sync>> {
+let client = Client::new();
+
+let ip_fut = async {
+    let resp = client.get(Uri::from_static("http://httpbin.org/ip")).await?;
+    hyper::body::to_bytes(resp.into_body()).await
+};
+let headers_fut = async {
+    let resp = client.get(Uri::from_static("http://httpbin.org/headers")).await?;
+    hyper::body::to_bytes(resp.into_body()).await
+};
+
+// Wait on both them at the same time:
+let (ip, headers) = futures::try_join!(ip_fut, headers_fut)?;
+#
 # Ok(())
 # }
 # fn main() {}
 ```
-
-Just a simple `GET` request, also not actually running yet. We want to run
-both of these futures until they are both finished. With futures, we call that
-joining. We can [`join`][Join] the futures together, and that will return
-a new `Future` that will only resolve once both are finished, yielding the return
-values of both in a tuple.
-
-```rust
-# extern crate futures;
-# extern crate hyper;
-# extern crate http;
-# extern crate tokio;
-# use futures::{Future, Stream};
-# use http::header::HeaderValue;
-# use hyper::{rt, Client, Method, Request, Body};
-# use std::str;
-# fn run() {
-# rt::run(rt::lazy(|| {
-# let client = Client::new();
-# let json = r#"{"library":"hyper"}"#;
-# let uri: hyper::Uri = "http://httpbin.org/post".parse().unwrap();
-# let mut req = Request::new(Body::from(json));
-# *req.method_mut() = Method::POST;
-# *req.uri_mut() = uri.clone();
-# req.headers_mut().insert("content-type", HeaderValue::from_static("application/json"));
-# let post = client.request(req).and_then(|res| {
-#     println!("POST: {}", res.status());
-#
-#     res.into_body().concat2()
-# });
-#
-# let get = client.get("http://httpbin.org/headers".parse().unwrap()).and_then(|res| {
-#     println!("GET: {}", res.status());
-#
-#     res.into_body().concat2()
-# });
-// still inside rt::run...
-let work = post.join(get);
-
-work
-    .map(|(posted, got)| {
-        println!("GET: {:?}", got);
-        println!("POST: {:?}", posted);
-    })
-    .map_err(|err| {
-        println!("Error: {}", err);
-    })
-# }));
-# }
-# fn main() {}
-
-```
-
-Last step, we are just printing them to stdout.
 
 [simple guide]: ./basic.md
 [Request]: {{ site.docs_url }}/hyper/struct.Request.html
 [Method]: {{ site.docs_url }}/hyper/struct.Method.html
-[Join]: {{ site.futures_url }}/futures/future/trait.Future.html#method.join

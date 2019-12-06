@@ -22,17 +22,16 @@ that as a dependency:
 
 ```toml
 [dependencies]
-hyper = "0.12"
-futures = "0.1" # yes, 0.1 for now
+hyper = "0.13"
+tokio = { version = "0.2", features = ["full"] }
+futures = "0.3"
 ```
 
 Then, we need to add some to our imports:
 
 ```rust
 # extern crate hyper;
-extern crate futures;
-
-use futures::future;
+# extern crate futures;
 use hyper::{Method, StatusCode};
 # fn main() {}
 ```
@@ -45,11 +44,8 @@ since we may not have one ready immediately:
 # extern crate hyper;
 # use futures::future::{self, Future};
 # use hyper::{Body, Method, Request, Response, StatusCode};
-
-// Just a simple type alias
-type BoxFut = Box<dyn Future<Item=Response<Body>, Error=hyper::Error> + Send>;
-
-fn echo(req: Request<Body>) -> BoxFut {
+#
+async fn echo(req: Request<Body>) -> Result<Response<Body>, hyper::Error> {
     let mut response = Response::new(Body::empty());
 
     match (req.method(), req.uri().path()) {
@@ -64,7 +60,7 @@ fn echo(req: Request<Body>) -> BoxFut {
         },
     };
 
-    Box::new(future::ok(response))
+    Ok(response)
 }
 # fn main() {}
 ```
@@ -80,57 +76,9 @@ changes the `StatusCode` of the `Response`. The default status of a
 the other routes. But the third case will instead send back `404 Not
 Found`.
 
-Finally, we introduced returning a `Future`. So far, we have the `Response`
-ready immediately, so we can wrap it in a `future::ok` call.
-
-What's with the `Box`? The example so far doesn't need it, and even as we
-expand it, it is true that you can do all these without allocating a trait
-object. The reason, though, is for ease. We will need to return *different*
-`Future`s, while starting out, it's easiest to just put all the different
-possible return values into a boxed trait object.
-
-## Hooking up the Service
-
-Since we're changing the status code, we can't use the same `service_fn_ok` from the previous guide to wrap our service.
-Instead, we'll use `service_fn`:
-
-```rust
-# extern crate hyper;
-use hyper::service::service_fn;
-```
-
-So, the server setup will change accordingly (inlined a bit for brevity):
-
-```rust
-# extern crate futures;
-# extern crate hyper;
-# 
-# use futures::future;
-# use hyper::rt::Future;
-# use hyper::{Body, Request, Response, Server};
-# use hyper::service::service_fn;
-# 
-# type BoxFut = Box<dyn Future<Item=Response<Body>, Error=hyper::Error> + Send>;
-# 
-# fn echo(_req: Request<Body>) -> BoxFut {
-#     Box::new(future::ok(Response::new(Body::empty())))
-# }
-# 
-# fn run() {
-    let addr = ([127, 0, 0, 1], 3000).into();
-
-    let server = Server::bind(&addr)
-        .serve(|| service_fn(echo))
-        .map_err(|e| eprintln!("server error: {}", e));
-
-    hyper::rt::run(server);
-# }
-# fn main() {}
-```
-
 ## Body Streams
 
-So let's get that echo in place. We'll start with the simplest solution, and
+Now let's get that echo in place. We'll start with the simplest solution, and
 then make alterations exercising more complex things you can do with the
 `Body` streams.
 
@@ -165,13 +113,12 @@ We're going to need a couple of extra imports, so let's add those to the top of 
 ```rust
 # extern crate futures;
 # extern crate hyper;
-use futures::Stream;
-use hyper::Chunk;
+use futures::TryStreamExt as _;
 # fn main() {}
 ```
 
 A `Body` implements the `Stream` trait from futures, producing a bunch of
-`Chunk`s, as data comes in. A `Chunk` is just a convenient type from hyper
+`Bytes`s, as data comes in. `Bytes` is just a convenient type from hyper
 that represents a bunch of bytes. It can be easily converted into other
 typical containers of bytes.
 
@@ -179,7 +126,8 @@ Next, let's add a new `/echo/uppercase` route mapping the body to uppercase:
 
 ```rust
 # extern crate hyper;
-# use hyper::rt::Stream;
+# extern crate futures;
+# use futures::TryStreamExt as _;
 # use hyper::{Body, Method, Request, Response};
 # fn echo(req: Request<Body>) -> Response<Body> {
 #     let mut response = Response::default();
@@ -189,7 +137,7 @@ Next, let's add a new `/echo/uppercase` route mapping the body to uppercase:
     // This is actually a new `futures::Stream`...
     let mapping = req
         .into_body()
-        .map(|chunk| {
+        .map_ok(|chunk| {
             chunk.iter()
                 .map(|byte| byte.to_ascii_uppercase())
                 .collect::<Vec<u8>>()
@@ -219,49 +167,30 @@ collect the full body.
 In this case, we can't really generate a `Response` immediately. Instead, we
 must wait for the full request body to be received.
 
-1. With `GET /`, `POST /echo`, and `POST /echo/uppercase`, we have an immediate `Response`, and would like to use `future::ok`.
-2. With `POST /echo/reverse`, we need to wait before we can give a `Response`. We'll be waiting on concatenating all the `Chunk`s together, so this future would be a `futures::stream::Concat2` combined with a `futures::future::Map`.
-
-Since we're returning boxed `Future`s, this should be pretty easy to do.
-
-We want to concatenate the request body, and map the result into our `reverse` function, and return the eventual result.
+We want to concatenate the request body, and map the result into our `reverse` function, and return the eventual result. We can make use of the `hyper::body::to_bytes` utility function to make this easy.
 
 ```rust
 # extern crate hyper;
 # use hyper::{Body, Method, Request, Response};
-# use hyper::rt::{Future, Stream};
-# fn echo(req: Request<Body>) -> Box<dyn Future<Item=Response<Body>, Error=hyper::Error> + Send> {
+# async fn echo(req: Request<Body>) -> Result<Response<Body>, hyper::Error> {
 #     let mut response = Response::default();
 #     match (req.method(), req.uri().path()) {
 // Yet another route inside our match block...
 (&Method::POST, "/echo/reverse") => {
-    // This is actually a new `Future`, waiting on `concat`...
-    let reversed = req
-        .into_body()
-        // A future of when we finally have the full body...
-        .concat2()
-        // `move` the `Response` into this future...
-        .map(move |chunk| {
-            let body = chunk.iter()
-                .rev()
-                .cloned()
-                .collect::<Vec<u8>>();
+    // Await the full body to be concatenated into a single `Bytes`...
+    let full_body = hyper::body::to_bytes(req.into_body()).await?;
 
-            *response.body_mut() = Body::from(body);
-            response
-        });
+    // Iterate the full body in reverse order and collect into a new Vec.
+    let reversed = full_body.iter()
+        .rev()
+        .cloned()
+        .collect::<Vec<u8>>();
 
-    // We can't just return the `Response` from this match arm,
-    // because we can't set the body until the `concat` future
-    // completed...
-    //
-    // However, `reversed` is actually a `Future` that will return
-    // a `Response`! So, let's return it immediately instead of
-    // falling through to the default return of this function.
-    return Box::new(reversed)
+    *response.body_mut() = reversed.into();
 },
 #         _ => unreachable!(),
 #     }
+#     Ok(response)
 # }
 # fn main() {}
 ```

@@ -7,6 +7,7 @@ if [ ! -e tmp/Cargo.toml ]; then
         cargo init tmp
     fi
     cat >> tmp/Cargo.toml <<-EOF
+futures = "0.3"
 hyper = { git = "https://github.com/hyperium/hyper" }
 hyper-tls = { git = "https://github.com/hyperium/hyper-tls" }
 tokio = { version = "0.2", features = ["full"] }

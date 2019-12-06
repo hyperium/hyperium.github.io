@@ -12,24 +12,23 @@ Since connecting to HTTPS addresses is so common, hyper provides a separate [hyp
 crate with a pluggable `HttpsConnector`. Here's how you'd use it.
 
 ```rust
-extern crate hyper;
-extern crate hyper_tls;
-
+# extern crate hyper;
+# extern crate hyper_tls;
+#
 use hyper::Client;
 use hyper_tls::HttpsConnector;
 
 # fn run() {
-let https = HttpsConnector::new(4).expect("TLS initialization failed");
+let https = HttpsConnector::new();
 let client = Client::builder()
     .build::<_, hyper::Body>(https);
 # }
 # fn main() {}
 ```
 
-## Connect
+## Connectors
 
-As mentioned in the section about TLS, [`Client`][] is generic over any type that
-implements `Connect`.
+As mentioned in the section about TLS, [`Client`][] is generic over a connector.
 
 You can plug in any kind of connector you need. This means that you could pick a
 different TLS implementation than the one chosen by `hyper-tls`, such as `rustls`.

@@ -9,22 +9,18 @@ First, we need our dependencies. Let's tell Cargo about our dependencies by havi
 
 ```toml
 [dependencies]
-hyper = "0.12"
+hyper = "0.13"
+tokio = { version = "0.2", features = ["full"] }
 ```
 
 Now lets start on our `main.rs`, and add some imports:
 
 ```rust
-extern crate hyper;
-```
-
-We also need to `use` a few things:
-
-```rust
 # extern crate hyper;
+use std::convert::Infallible;
+use std::net::SocketAddr;
 use hyper::{Body, Request, Response, Server};
-use hyper::rt::Future;
-use hyper::service::service_fn_ok;
+use hyper::service::{make_service_fn, service_fn};
 # fn main() {}
 ```
 
@@ -36,16 +32,15 @@ that are common when using Hyper. We've included some helpers for when these
 patterns fit our needs.
 
 In this example, we don't have any state to carry around, so we really just
-need a simple function:
+need a simple `async` function:
 
 ```rust
 # extern crate hyper;
+# use std::convert::Infallible;
 # use hyper::{Body, Request, Response};
 # fn main() {}
-const PHRASE: &str = "Hello, World!";
-
-fn hello_world(_req: Request<Body>) -> Response<Body> {
-    Response::new(Body::from(PHRASE))
+async fn hello_world(_req: Request<Body>) -> Result<Response<Body>, Infallible> {
+    Ok(Response::new("Hello, World".into()))
 }
 ```
 
@@ -65,30 +60,34 @@ We'll dive in to the specifics of some of these things in another guide.
 
 ```rust
 # extern crate hyper;
+# extern crate tokio;
+# mod no_run {
+# use std::convert::Infallible;
+# use std::net::SocketAddr;
 # use hyper::{Body, Request, Response, Server};
-# use hyper::rt::Future;
-# use hyper::service::service_fn_ok;
-# const PHRASE: &str = "Hello, World!";
-# fn hello_world(_req: Request<Body>) -> Response<Body> {
-#     Response::new(Body::from(PHRASE))
+# use hyper::service::{make_service_fn, service_fn};
+# async fn hello_world(_req: Request<Body>) -> Result<Response<Body>, Infallible> {
+#     Ok(Response::new("Hello, World".into()))
 # }
-# fn run() {
-// This is our socket address...
-let addr = ([127, 0, 0, 1], 3000).into();
+#[tokio::main]
+async fn main() {
+    // We'll bind to 127.0.0.1:3000
+    let addr = SocketAddr::from(([127, 0, 0, 1], 3000));
 
-// A `Service` is needed for every connection, so this
-// creates one from our `hello_world` function.
-let new_svc = || {
-    // service_fn_ok converts our function into a `Service`
-    service_fn_ok(hello_world)
-};
+    // A `Service` is needed for every connection, so this
+    // creates one from our `hello_world` function.
+    let make_svc = make_service_fn(|_conn| async {
+        // service_fn converts our function into a `Service`
+        Ok::<_, Infallible>(service_fn(hello_world))
+    });
 
-let server = Server::bind(&addr)
-    .serve(new_svc)
-    .map_err(|e| eprintln!("server error: {}", e));
+    let server = Server::bind(&addr).serve(make_svc);
 
-// Run this server for... forever!
-hyper::rt::run(server);
+    // Run this server for... forever!
+    if let Err(e) = server.await {
+        eprintln!("server error: {}", e);
+    }
+}
 # }
 # fn main() {}
 ```

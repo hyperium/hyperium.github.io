@@ -7,18 +7,26 @@ if [ ! -e tmp/Cargo.toml ]; then
         cargo init tmp
     fi
     cat >> tmp/Cargo.toml <<-EOF
-futures = "0.1.21"
-hyper = "0.12"
-hyper-tls =  "0.3"
-tokio = "0.1.5"
+hyper = { git = "https://github.com/hyperium/hyper" }
+hyper-tls = { git = "https://github.com/hyperium/hyper-tls" }
+tokio = { version = "0.2", features = ["full"] }
 EOF
     cargo build --manifest-path tmp/Cargo.toml
 fi
 
+test_file() {
+    echo "Testing: $f"
+    rustdoc --edition 2018 --test $1 -L tmp/target/debug/deps
+}
+
+if [ -n "$1" ]; then
+    test_file $1
+    exit $?
+fi
+
 status=0
 for f in `git ls-files | grep '\.md$'`; do
-    echo $f
-    rustdoc --test $f -L tmp/target/debug/deps
+    test_file $f
     s=$?
     if [ "$s" != "0" ]; then
         status=$s

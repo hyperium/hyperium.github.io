@@ -255,6 +255,6 @@ pre code {
 
 // rouge think's `hyper = { version = "0.13" }` is an error...
 .language-toml .highlight .err {
-    background-color: none;
+    background: none;
     color: $secondary-color;
 }

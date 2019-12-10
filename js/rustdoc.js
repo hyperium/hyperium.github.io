@@ -1,5 +1,5 @@
-document.querySelectorAll('pre > code').forEach(function (el) {
-  var s = el.innerHTML.replace(/#\s.*\n/g, '');
-  s = s.replace(/<span class="err">#<\/span>\s.*\n/g, '');
-  el.innerHTML = s;
+// All Rust lines starting with `# ` get the `.cs` (comment-special)
+// class. Remove them as they are only needed to make `rustdoc` happy.
+document.querySelectorAll('.language-rust pre > code .cs').forEach(function (el) {
+  el.parentElement.removeChild(el);
 });

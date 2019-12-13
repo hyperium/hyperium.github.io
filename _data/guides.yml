@@ -9,6 +9,7 @@
   guides:
   - hello-world
   - echo
+  - graceful-shutdown
 
 - title: Client
   path: "/client"

@@ -117,7 +117,7 @@ while let Some(chunk) = resp.body_mut().data().await {
 
 And that's it! You can see the [full example here][example].
 
-[Client]: {{ site.docs_url }}/hyper/struct.Client.html
+[Client]: {{ site.docs_url }}/hyper/client/struct.Client.html
 [Tokio]: https://tokio.rs
 [Tokio-Futures]: https://tokio.rs/docs/getting-started/futures/
 [StatusCode]: {{ site.docs_url }}/hyper/struct.StatusCode.html

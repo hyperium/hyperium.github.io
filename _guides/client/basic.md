@@ -71,7 +71,7 @@ let client = Client::new();
 let uri = "http://httpbin.org/ip".parse()?;
 
 // Await the response...
-let resp = client.get(uri).await?;
+let mut resp = client.get(uri).await?;
 
 println!("Response: {}", resp.status());
 # Ok(())

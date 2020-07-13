@@ -160,7 +160,7 @@ uppercase.
 ## Buffering the Request Body
 
 What if we want our echo service to reverse the data it received and send it
-back to use? We can't really stream the data as it comes in, since we need to
+back to us? We can't really stream the data as it comes in, since we need to
 find the end before we can respond. To do this, we can explore how to easily
 collect the full body.
 

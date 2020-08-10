@@ -17,14 +17,14 @@ routing. We want to have a route explaining instructions on how to use
 our server, and another for receiving data. Oh, and we should also
 handle the case when someone asks for a route we don't know!
 
-We're going to be using more of the [futures][future-crate] crate, so let's add
+We're going to be using more of the [futures_util-crate][futures_util-crate] crate, so let's add
 that as a dependency:
 
 ```toml
 [dependencies]
 hyper = "0.13"
 tokio = { version = "0.2", features = ["full"] }
-futures = "0.3"
+futures-util = "0.3.5"
 ```
 
 Then, we need to add some to our imports:
@@ -198,4 +198,4 @@ We want to concatenate the request body, and map the result into our `reverse` f
 You can see a compiling [example here][example].
 
 [example]: {{ site.examples_url }}/echo.rs
-[future-crate]: https://github.com/rust-lang-nursery/futures-rs
+[futures_util-crate]: https://github.com/rust-lang/futures-rs/tree/master/futures-util

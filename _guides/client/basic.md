@@ -12,6 +12,7 @@ Let's tell Cargo about our dependencies by having this in the Cargo.toml.
 [dependencies]
 hyper = "0.13"
 tokio = { version = "0.2", features = ["full"] }
+pretty_env_logger = "0.4.0"
 ```
 
 Now, we are ready to import the dependencies in our Rust file.

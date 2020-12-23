@@ -9,8 +9,8 @@ First, we need our dependencies. Let's tell Cargo about our dependencies by havi
 
 ```toml
 [dependencies]
-hyper = "0.13"
-tokio = { version = "0.2", features = ["full"] }
+hyper = { version = "0.14", features = ["full"] }
+tokio = { version = "1", features = ["full"] }
 ```
 
 Now lets start on our `main.rs`, and add some imports:

@@ -8,9 +8,9 @@ if [ ! -e tmp/Cargo.toml ]; then
     fi
     cat >> tmp/Cargo.toml <<-EOF
 futures = "0.3"
-hyper = "0.13"
-hyper-tls = "0.4"
-tokio = { version = "0.2", features = ["full"] }
+hyper = { version = "0.14", features = ["full"] }
+hyper-tls = "0.5"
+tokio = { version = "1", features = ["full"] }
 EOF
     cargo build --manifest-path tmp/Cargo.toml
 fi

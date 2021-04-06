@@ -14,13 +14,7 @@ hyper = { version = "0.14", features = ["full"] }
 tokio = { version = "1", features = ["full"] }
 ```
 
-Now, we are ready to import the dependencies in our Rust file.
-
-```rust
-extern crate hyper;
-```
-
-We need to import pieces to use from our dependencies:
+Now, we need to import pieces to use from our dependencies:
 
 ```rust
 # extern crate hyper;

@@ -77,8 +77,8 @@ imports again:
 
 ```toml
 [dependencies]
-hyper = "0.13"
-tokio = { version = "0.2", features = ["full"] }
+hyper = { version = "0.14", features = ["full"] }
+tokio = { version = "1", features = ["full"] }
 futures = "0.3"
 ```
 

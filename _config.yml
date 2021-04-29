@@ -16,7 +16,6 @@ collections:
     permalink: /:collection/:path/
     output: true
   posts:
-    permalink: /blog/:path/
     output: true
 
 # Build settings

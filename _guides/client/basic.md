@@ -114,7 +114,7 @@ And that's it! You can see the [full example here][example].
 
 [Client]: {{ site.docs_url }}/hyper/client/struct.Client.html
 [Tokio]: https://tokio.rs
-[Tokio-Futures]: https://tokio.rs/docs/getting-started/futures/
+[Tokio-Futures]: https://tokio.rs/tokio/tutorial/async
 [StatusCode]: {{ site.docs_url }}/hyper/struct.StatusCode.html
 [Response]: {{ site.docs_url }}/hyper/struct.Response.html
 [example]: {{ site.examples_url }}/client.rs

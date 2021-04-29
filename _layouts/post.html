@@ -1,15 +1,34 @@
----
-layout: default
----
-<div class="post">
+<!doctype html>
+<html>
+  <head>
+    {% include head.html %}
+  </head>
+  <body id="hyper">
+    {% include header.html %}
+    <div class="hyper-pageheader">
+      <div class="container">
+        <h1>{{ page.title }}</h1>
+      </div>
+    </div>
+    <div class="container">
+      <div class="row">
+        <aside class="col-md-3 hyper-sidebar">
+          <nav>
+            <ul class="nav">
+            {% for post in site.posts %}
+              <li {% if post.url == page.url %}class="active"{% endif %}><a href="{{ post.url }}">{{ post.title }}</a></li>
+            {% endfor %}
+            </ul>
+          </nav>
+        </aside>
+        <article class="col-md-9 hyper-content hyper-post">
+          {{ content }}
 
-  <header class="post-header">
-    <h1 class="post-title">{{ page.title }}</h1>
-    <p class="post-meta">{{ page.date | date: "%b %-d, %Y" }}{% if page.author %} • {{ page.author }}{% endif %}{% if page.meta %} • {{ page.meta }}{% endif %}</p>
-  </header>
+          <!--<p class="post-meta">{{ page.date | date: "%b %-d, %Y" }}{% if page.author %} • {{ page.author }}{% endif %}{% if page.meta %} • {{ page.meta }}{% endif %}</p>-->
+        </article>
+      </div>
+    </div>
 
-  <article class="post-content">
-    {{ content }}
-  </article>
-
-</div>
+    {% include footer.html %}
+  </body>
+</html>

@@ -12,16 +12,7 @@
     </div>
     <div class="container">
       <div class="row">
-        <aside class="col-md-3 hyper-sidebar">
-          <nav>
-            <ul class="nav">
-            {% for post in site.posts %}
-              <li {% if post.url == page.url %}class="active"{% endif %}><a href="{{ post.url }}">{{ post.title }}</a></li>
-            {% endfor %}
-            </ul>
-          </nav>
-        </aside>
-        <article class="col-md-9 hyper-content hyper-post">
+        <article class="col-md align-self-center hyper-content hyper-post">
           {{ content }}
 
           <!--<p class="post-meta">{{ page.date | date: "%b %-d, %Y" }}{% if page.author %} • {{ page.author }}{% endif %}{% if page.meta %} • {{ page.meta }}{% endif %}</p>-->

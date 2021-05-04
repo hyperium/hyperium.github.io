@@ -3,19 +3,20 @@
   <head>
     {% include head.html %}
   </head>
-  <body id="hyper">
+  <body id="hyper" class="hyper-blog">
     {% include header.html %}
     <div class="hyper-pageheader">
       <div class="container">
-        <h1>{{ page.title }}</h1>
+        <div class="col">
+          <h1>{{ page.title }}</h1>
+          <p class="post-meta">{{ page.date | date: "%b %-d, %Y" }}{% if page.author %} • {{ page.author }}{% endif %}{% if page.meta %} • {{ page.meta }}{% endif %}</p>
+        </div>
       </div>
     </div>
     <div class="container">
       <div class="row">
-        <article class="col-md align-self-center hyper-content hyper-post">
+        <article class="col-md hyper-content">
           {{ content }}
-
-          <!--<p class="post-meta">{{ page.date | date: "%b %-d, %Y" }}{% if page.author %} • {{ page.author }}{% endif %}{% if page.meta %} • {{ page.meta }}{% endif %}</p>-->
         </article>
       </div>
     </div>

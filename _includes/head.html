@@ -21,3 +21,6 @@
 <meta name="twitter:site" content="@hyperium_rs" />
 <meta name="twitter:title" content="{% if page.title %}{{ page.title }}{% else %}{{ site.title }}{% endif %}" />
 <meta name="twitter:image" content="https://pbs.twimg.com/profile_banners/1260950338237956098/1589469871" />
+{% if page.excerpt %}
+<meta name="twitter:description" content="{{ page.excerpt }}" />
+{% endif %}

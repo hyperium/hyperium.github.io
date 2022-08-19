@@ -1,5 +1,4 @@
 ---
-title: hyper.rs
 layout: home
 ---
 

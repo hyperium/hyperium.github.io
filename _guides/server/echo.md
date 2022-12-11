@@ -20,8 +20,9 @@ handle the case when someone asks for a route we don't know!
 Before we get started we need to add some new imports:
 
 ```rust
-use hyper::{body::Body, Method, Request, Response, StatusCode};
-use http_body_util::{combinators::BoxBody, BodyExt, Full};
+use hyper::body::Frame;
+use hyper::{Method, StatusCode};
+use http_body_util::{combinators::BoxBody, BodyExt};
 # fn main() {}
 ```
 
@@ -36,14 +37,9 @@ this we will change the type of the `Body` in our `Response` to a boxed trait ob
 We only care that the response body implements the [Body](https://docs.rs/http-body/1.0.0-rc1/http_body/trait.Body.html) trait, that its data is `Bytes` and its error is a `hyper::Error`.
 
 ```rust
-# use std::net::SocketAddr;
-# 
 # use bytes::Bytes;
 # use http_body_util::{combinators::BoxBody, BodyExt, Empty, Full};
-# use hyper::server::conn::http1;
-# use hyper::service::service_fn;
-# use hyper::{body::Body, Method, Request, Response, StatusCode};
-# use tokio::net::TcpListener;
+# use hyper::{Method, Request, Response, StatusCode};
 async fn echo(
     req: Request<hyper::body::Incoming>,
 ) -> Result<Response<BoxBody<Bytes, hyper::Error>>, hyper::Error> {
@@ -101,14 +97,9 @@ First up, plain echo. Both the `Request` and the `Response` have body streams,
 and by default, you can easily pass the `Body` of the `Request` into a `Response`.
 
 ```rust
-# use std::net::SocketAddr;
-# 
 # use bytes::Bytes;
 # use http_body_util::{combinators::BoxBody, BodyExt, Empty, Full};
-# use hyper::server::conn::http1;
-# use hyper::service::service_fn;
-# use hyper::{body::Body, Method, Request, Response, StatusCode};
-# use tokio::net::TcpListener;
+# use hyper::{Method, Request, Response, StatusCode};
 # async fn echo(
 #    req: Request<hyper::body::Incoming>,
 # ) -> Result<Response<BoxBody<Bytes, hyper::Error>>, hyper::Error> {
@@ -134,14 +125,10 @@ Next, let's add a new `/echo/uppercase` route, mapping each byte in the data `Fr
 of our request body to uppercase, and returning the stream in our `Response`:
 
 ```rust
-# use std::net::SocketAddr;
-# 
 # use bytes::Bytes;
 # use http_body_util::{combinators::BoxBody, BodyExt, Empty, Full};
-# use hyper::server::conn::http1;
-# use hyper::service::service_fn;
-# use hyper::{body::Body, Method, Request, Response, StatusCode};
-# use tokio::net::TcpListener;
+# use hyper::body::Frame;
+# use hyper::{Method, Request, Response, StatusCode};
 # async fn echo(
 #    req: Request<hyper::body::Incoming>,
 # ) -> Result<Response<BoxBody<Bytes, hyper::Error>>, hyper::Error> {
@@ -188,14 +175,9 @@ stream to completion, collecting all the data and trailer frames into a `Collect
 We can easily turn the `Collected` body into bytes by calling its `into_bytes` method.
 
 ```rust
-# use std::net::SocketAddr;
-# 
 # use bytes::Bytes;
 # use http_body_util::{combinators::BoxBody, BodyExt, Empty, Full};
-# use hyper::server::conn::http1;
-# use hyper::service::service_fn;
-# use hyper::{body::Body, Method, Request, Response, StatusCode};
-# use tokio::net::TcpListener;
+# use hyper::{Method, Request, Response, StatusCode};
 # async fn echo(
 #    req: Request<hyper::body::Incoming>,
 # ) -> Result<Response<BoxBody<Bytes, hyper::Error>>, hyper::Error> {
@@ -206,7 +188,7 @@ We can easily turn the `Collected` body into bytes by calling its `into_bytes` m
     let whole_body = req.collect().await?.to_bytes();
 
     // Iterate the whole body in reverse order and collect into a new Vec.
-    let reversed = whole_body.iter()
+    let reversed_body = whole_body.iter()
         .rev()
         .cloned()
         .collect::<Vec<u8>>();

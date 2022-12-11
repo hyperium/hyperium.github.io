@@ -172,7 +172,8 @@ We want to collect the entire request body and map the result into our `reverse`
 function, then return the eventual result. If we import the `http_body_util::BodyExt`
 extension trait, we can call the `collect` method on our body, which will drive the
 stream to completion, collecting all the data and trailer frames into a `Collected` type.
-We can easily turn the `Collected` body into bytes by calling its `into_bytes` method.
+We can easily turn the `Collected` body into a single `Bytes` by calling its `into_bytes` 
+method.
 
 ```rust
 # use bytes::Bytes;

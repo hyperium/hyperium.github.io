@@ -17,6 +17,9 @@ http-body-util = "0.1.0-rc.1"
 Next, we need to add some imports in our `main.rs` file:
 
 ```rust
+# extern crate tokio;
+# extern crate hyper;
+# extern crate http_body_util;
 use std::convert::Infallible;
 use std::net::SocketAddr;
 
@@ -42,10 +45,13 @@ a service from our `hello` function below when we're ready to start our
 server.
 
 ```rust
+# extern crate hyper;
+# extern crate http_body_util;
 # use std::convert::Infallible;
 # use http_body_util::Full;
 # use hyper::body::Bytes;
 # use hyper::{Request, Response};
+# fn main() {}
 async fn hello(_: Request<hyper::body::Incoming>) -> Result<Response<Full<Bytes>>, Infallible> {
     Ok(Response::new(Full::new(Bytes::from("Hello, World!"))))
 }
@@ -63,6 +69,10 @@ Lastly, we need to hook up our `hello` service into a running hyper server.
 We'll dive in to the specifics of some of these things in another guide.
 
 ```rust
+# extern crate tokio;
+# extern crate hyper;
+# extern crate http_body_util;
+# mod no_run {
 # use std::convert::Infallible;
 # use std::net::SocketAddr;
 # 
@@ -78,7 +88,7 @@ We'll dive in to the specifics of some of these things in another guide.
 #     Ok(Response::new(Full::new(Bytes::from("Hello World!"))))
 # }
 #[tokio::main]
-async fn main() {
+async fn main() -> Result<(), Box<dyn std::error::Error + Send + Sync>> {
     let addr = SocketAddr::from(([127, 0, 0, 1], 3000));
 
     // We create a TcpListener and bind it to 127.0.0.1:3000

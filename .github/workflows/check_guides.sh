@@ -1,37 +1,49 @@
 #!/bin/sh
 
-if [ ! -e tmp/Cargo.toml ]; then
-    if [ ! -d tmp ]; then
-        cargo new tmp
-    else
-        cargo init tmp
-    fi
-    cat >> tmp/Cargo.toml <<-EOF
-futures = "0.3"
-hyper = { version = "0.14", features = ["full"] }
-hyper-tls = "0.5"
-tokio = { version = "1", features = ["full"] }
+for value in legacy master
+do
+    if [ ! -e "$value/Cargo.toml" ]; then
+        if [ ! -d $value ]; then
+            cargo new $value
+        else
+            cargo init $value
+        fi
+        if [ $value = legacy ]; then
+            cat >> "$value/Cargo.toml" <<-EOF
+    futures = "0.3"
+    hyper = { version = "0.14", features = ["full"] }
+    hyper-tls = "0.5"
+    tokio = { version = "1", features = ["full"] }
 EOF
-    cargo build --manifest-path tmp/Cargo.toml
-fi
-
-test_file() {
-    echo "Testing: $f"
-    rustdoc --edition 2018 --test $1 -L tmp/target/debug/deps
-}
-
-if [ -n "$1" ]; then
-    test_file $1
-    exit $?
-fi
-
-status=0
-for f in `git ls-files | grep '\.md$'`; do
-    test_file $f
-    s=$?
-    if [ "$s" != "0" ]; then
-        status=$s
+            cargo build --manifest-path "$value/Cargo.toml"
+        fi
+        if [ $value = master ]; then
+            cat >> "$value/Cargo.toml" <<-EOF
+    hyper = { version = "1.0.0-rc.1", features = ["full"] }
+    tokio = { version = "1", features = ["full"] }
+    http-body-util = "0.1.0-rc.1" 
+EOF
+            cargo build --manifest-path "$value/Cargo.toml"
+        fi
     fi
+    test_file() {
+        echo "Testing: $f"
+        rustdoc --edition 2018 --test $1 -L "$value/target/debug/deps"
+    }
+
+    if [ -n "$1" ]; then
+        test_file $1
+        exit $?
+    fi
+
+    status=0
+    for f in `git ls-files | grep "^_guides\/$value.*\.md$"`; do
+        test_file $f
+        s=$?
+        if [ "$s" != "0" ]; then
+            status=$s
+        fi
+    done
 done
 
 exit $status

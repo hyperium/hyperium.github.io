@@ -1,4 +1,5 @@
 Gemfile*
 _site*
 .sass-cache
-tmp/
+/legacy
+/master

@@ -14,12 +14,21 @@
       <div class="row">
         <aside class="col-md-3 hyper-sidebar">
           <nav>
-            {% assign topics = site.data.guides | first %}
-            {% for guides in topics.guides %}
-            {% assign topic_sub_url = guides | prepend:"/" %}
-            {% assign topic = site.data.guides | where: "path", topic_sub_url | first %}
-            {% include guide_ul.html topic=topic %}
-            {% endfor %}
+            {% if page.collection == "guides" %}
+              {% assign topics = site.data.guides | first %}
+              {% for guides in topics.guides %}
+                {% assign topic_sub_url = guides | prepend:"/" %}
+                {% assign topic = site.data.guides | where: "path", topic_sub_url | first %}
+                {% include guide_ul.html topic=topic %}
+              {% endfor %}
+            {% elsif page.collection == "stable" %}
+              {% assign topics = site.data.stable | first %}
+              {% for guides in topics.guides %}
+                {% assign topic_sub_url = guides | prepend:"/" %}
+                {% assign topic = site.data.stable | where: "path", topic_sub_url | first %}
+                {% include guide_ul.html topic=topic %}
+              {% endfor %}
+            {% endif %}
             <h4 class="guide-topic-title">
               <a href="{{ site.docs_url }}">API Reference</a>
             </h4>

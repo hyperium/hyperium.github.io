@@ -1,6 +1,6 @@
 ---
 title: Server Guides
-permalink: /guides/server/
+permalink: /stable/server/
 ---
 
 This is just placeholder page. It should probably become a table of

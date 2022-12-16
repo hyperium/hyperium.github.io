@@ -1,6 +1,6 @@
 #!/bin/sh
 
-for value in legacy master
+for value in guides stable
 do
     if [ ! -e "$value/Cargo.toml" ]; then
         if [ ! -d $value ]; then
@@ -8,7 +8,7 @@ do
         else
             cargo init $value
         fi
-        if [ $value = legacy ]; then
+        if [ $value = guides ]; then
             cat >> "$value/Cargo.toml" <<-EOF
     futures = "0.3"
     hyper = { version = "0.14", features = ["full"] }
@@ -17,7 +17,7 @@ do
 EOF
             cargo build --manifest-path "$value/Cargo.toml"
         fi
-        if [ $value = master ]; then
+        if [ $value = stable ]; then
             cat >> "$value/Cargo.toml" <<-EOF
     hyper = { version = "1.0.0-rc.1", features = ["full"] }
     tokio = { version = "1", features = ["full"] }
@@ -26,7 +26,7 @@ EOF
             cargo build --manifest-path "$value/Cargo.toml"
         fi
     fi
-    
+
     test_file() {
         echo "Testing: $f"
         rustdoc --edition 2018 --test $1 -L "$value/target/debug/deps"
@@ -38,7 +38,7 @@ EOF
     fi
 
     status=0
-    for f in `git ls-files | grep "^_guides\/$value.*\.md$"`; do
+    for f in `git ls-files | grep "^_$value\/.*\.md$"`; do
         test_file $f
         s=$?
         if [ "$s" != "0" ]; then

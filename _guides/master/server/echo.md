@@ -20,6 +20,8 @@ handle the case when someone asks for a route we don't know!
 Before we get started we need to add some new imports:
 
 ```rust
+# extern crate hyper;
+# extern crate http_body_util;
 use hyper::body::Frame;
 use hyper::{Method, StatusCode};
 use http_body_util::{combinators::BoxBody, BodyExt};
@@ -37,7 +39,9 @@ this we will change the type of the `Body` in our `Response` to a boxed trait ob
 We only care that the response body implements the [Body](https://docs.rs/http-body/1.0.0-rc1/http_body/trait.Body.html) trait, that its data is `Bytes` and its error is a `hyper::Error`.
 
 ```rust
-# use bytes::Bytes;
+# extern crate hyper;
+# extern crate http_body_util;
+# use hyper::body::Bytes;
 # use http_body_util::{combinators::BoxBody, BodyExt, Empty, Full};
 # use hyper::{Method, Request, Response, StatusCode};
 async fn echo(
@@ -49,6 +53,7 @@ async fn echo(
         ))),
         (&Method::POST, "/echo") => {
             // we'll be back
+            # Ok(Response::new(req.into_body().boxed()))
         },
 
         // Return 404 Not Found for other routes.
@@ -86,9 +91,9 @@ case will instead send back `404 Not Found`.
 
 ## Body Streams
 
-Now let's get that echo in place. An HTTP body is a stream of 
-`Frames`, each [Frame](https://docs.rs/http-body/1.0.0-rc1/http_body/struct.Frame.html) 
-containing parts of the `Body` data or trailers. So rather than reading the entire `Body` 
+Now let's get that echo in place. An HTTP body is a stream of `Frames`, each 
+[Frame](https://docs.rs/http-body/1.0.0-rc1/http_body/struct.Frame.html) containing 
+parts of the `Body` data or trailers. So rather than reading the entire `Body` 
 into a buffer before sending our response, we can stream each frame as it arrives. 
 We'll start with the simplest solution, and then make alterations exercising more complex 
 things you can do with the `Body` streams.
@@ -97,7 +102,9 @@ First up, plain echo. Both the `Request` and the `Response` have body streams,
 and by default, you can easily pass the `Body` of the `Request` into a `Response`.
 
 ```rust
-# use bytes::Bytes;
+# extern crate hyper;
+# extern crate http_body_util;
+# use hyper::body::Bytes;
 # use http_body_util::{combinators::BoxBody, BodyExt, Empty, Full};
 # use hyper::{Method, Request, Response, StatusCode};
 # async fn echo(
@@ -125,7 +132,9 @@ Next, let's add a new `/echo/uppercase` route, mapping each byte in the data `Fr
 of our request body to uppercase, and returning the stream in our `Response`:
 
 ```rust
-# use bytes::Bytes;
+# extern crate hyper;
+# extern crate http_body_util;
+# use hyper::body::Bytes;
 # use http_body_util::{combinators::BoxBody, BodyExt, Empty, Full};
 # use hyper::body::Frame;
 # use hyper::{Method, Request, Response, StatusCode};
@@ -154,6 +163,11 @@ of our request body to uppercase, and returning the stream in our `Response`:
 #         _ => unreachable!(),
 #     }
 # }
+# fn full<T: Into<Bytes>>(chunk: T) -> BoxBody<Bytes, hyper::Error> {
+#     Full::new(chunk.into())
+#         .map_err(|never| match never {})
+#         .boxed()
+# }
 # fn main() {}
 ```
 
@@ -176,7 +190,9 @@ We can easily turn the `Collected` body into a single `Bytes` by calling its `in
 method.
 
 ```rust
-# use bytes::Bytes;
+# extern crate hyper;
+# extern crate http_body_util;
+# use hyper::body::Bytes;
 # use http_body_util::{combinators::BoxBody, BodyExt, Empty, Full};
 # use hyper::{Method, Request, Response, StatusCode};
 # async fn echo(
@@ -198,6 +214,11 @@ method.
 },
 #         _ => unreachable!(),
 #     }
+# }
+# fn full<T: Into<Bytes>>(chunk: T) -> BoxBody<Bytes, hyper::Error> {
+#     Full::new(chunk.into())
+#         .map_err(|never| match never {})
+#         .boxed()
 # }
 # fn main() {}
 ```

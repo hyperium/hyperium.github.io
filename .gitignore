@@ -1,5 +1,5 @@
 Gemfile*
 _site*
 .sass-cache
-/legacy
-/master
+/guides
+/stable

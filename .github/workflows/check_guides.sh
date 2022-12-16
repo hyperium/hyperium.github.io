@@ -26,6 +26,7 @@ EOF
             cargo build --manifest-path "$value/Cargo.toml"
         fi
     fi
+    
     test_file() {
         echo "Testing: $f"
         rustdoc --edition 2018 --test $1 -L "$value/target/debug/deps"

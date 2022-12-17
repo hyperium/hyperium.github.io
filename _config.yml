@@ -6,7 +6,7 @@ url: "https://hyper.rs" # the base hostname & protocol for your site
 defaults:
   -
     scope:
-      path: "_guides/"
+      path: "_legacy/"
       type: "guides"
     values:
       layout: "guide"
@@ -20,7 +20,7 @@ defaults:
   
 
 collections:
-  guides:
+  legacy:
     permalink: /:collection/:path/
     output: true
   stable:

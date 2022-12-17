@@ -14,11 +14,12 @@
       <div class="row">
         <aside class="col-md-3 hyper-sidebar">
           <nav>
-            {% if page.collection == "guides" %}
-              {% assign topics = site.data.guides | first %}
+            {{page.collection | jsonify }}
+            {% if page.collection == "legacy" %}
+              {% assign topics = site.data.legacy | first %}
               {% for guides in topics.guides %}
                 {% assign topic_sub_url = guides | prepend:"/" %}
-                {% assign topic = site.data.guides | where: "path", topic_sub_url | first %}
+                {% assign topic = site.data.legacy | where: "path", topic_sub_url | first %}
                 {% include guide_ul.html topic=topic %}
               {% endfor %}
             {% elsif page.collection == "stable" %}

@@ -18,6 +18,6 @@ hyper = "0.14"
 
 You could also look at the [generated API documentaton][docs].
 
-[docs]: {{ site.docs_url }}
+[docs]: {{ site.legacy_docs_url }}
 [Server guide]: server/hello-world.md
 [Client guide]: client/basic.md

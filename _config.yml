@@ -46,3 +46,6 @@ docs_url: https://docs.rs/hyper/1.0.0-rc.1
 examples_url: https://github.com/hyperium/hyper/tree/master/examples
 futures_url: https://docs.rs/futures/0.3.*
 hyper_tls_url: https://docs.rs/hyper-tls/*
+
+legacy_docs_url: https://docs.rs/hyper/0.14.23
+legacy_examples_url: https://github.com/hyperium/hyper/tree/0.14.x/examples

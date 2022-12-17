@@ -39,5 +39,5 @@ ideas of things that could be connectors:
 - Proxies
 - In-memory streams (such as for testing)
 
-[`Client`]: {{ site.docs_url }}/hyper/client/struct.Client.html
+[`Client`]: {{ site.legacy_docs_url }}/hyper/client/struct.Client.html
 [hyper-tls]: {{ site.hyper_tls_url }}

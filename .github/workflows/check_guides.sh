@@ -1,6 +1,6 @@
 #!/bin/sh
 
-for value in guides stable
+for value in legacy stable
 do
     if [ ! -e "$value/Cargo.toml" ]; then
         if [ ! -d $value ]; then
@@ -8,7 +8,7 @@ do
         else
             cargo init $value
         fi
-        if [ $value = guides ]; then
+        if [ $value = legacy ]; then
             cat >> "$value/Cargo.toml" <<-EOF
     futures = "0.3"
     hyper = { version = "0.14", features = ["full"] }

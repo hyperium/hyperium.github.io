@@ -1,5 +1,6 @@
 ---
 title: Advanced Client Usage
+layout: guide
 ---
 
 Once you've done all the setup in the [simple guide][], you probably

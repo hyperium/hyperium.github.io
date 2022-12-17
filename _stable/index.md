@@ -10,7 +10,7 @@ You can start using it by first adding it to your `Cargo.toml`:
 
 ```toml
 [dependencies]
-hyper = "0.14"
+hyper = { version = "1.0.0-rc.1", features = ["full"] }
 ```
 
 - If building a web server, continue with the [Server guide][].
@@ -19,5 +19,5 @@ hyper = "0.14"
 You could also look at the [generated API documentaton][docs].
 
 [docs]: {{ site.docs_url }}
-[Server guide]: server/hello-world.md
-[Client guide]: client/basic.md
+[Server guide]: server/hello-world
+[Client guide]: client/basic

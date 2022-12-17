@@ -30,7 +30,11 @@
               {% endfor %}
             {% endif %}
             <h4 class="guide-topic-title">
-              <a href="{{ site.docs_url }}">API Reference</a>
+              {% if page.collection == "legacy" %}
+                <a href="{{ site.legacy_docs_url }}">API Reference</a>
+              {% elsif page.collection == "stable" %}
+                <a href="{{ site.docs_url }}">API Reference</a>
+              {% endif %}
             </h4>
           </nav>
         </aside>

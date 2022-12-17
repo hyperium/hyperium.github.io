@@ -3,30 +3,41 @@ layout: home
 ---
 
 ```rust
-# extern crate hyper;
 # extern crate tokio;
+# extern crate hyper;
+# extern crate http_body_util;
 # mod no_run {
-use std::{convert::Infallible, net::SocketAddr};
-use hyper::{Body, Request, Response, Server};
-use hyper::service::{make_service_fn, service_fn};
+use std::{convert::Infallible, net::SocketAddr, error::Error};
+use http_body_util::Full;
+use hyper::{Request, Response, body::Bytes, service::service_fn};
+use hyper::server::conn::http1;
+use tokio::net::TcpListener;
 
-async fn handle(_: Request<Body>) -> Result<Response<Body>, Infallible> {
-    Ok(Response::new("Hello, World!".into()))
+async fn hello(
+    _: Request<hyper::body::Incoming>,
+) -> Result<Response<Full<Bytes>>, Infallible> {
+    Ok(Response::new(Full::new(Bytes::from("Hello World!"))))
 }
 
 #[tokio::main]
-async fn main() {
+async fn main() -> Result<(), Box<dyn Error + Send + Sync>> {
     let addr = SocketAddr::from(([127, 0, 0, 1], 3000));
 
-    let make_svc = make_service_fn(|_conn| async {
-        Ok::<_, Infallible>(service_fn(handle))
-    });
+    let listener = TcpListener::bind(addr).await?;
 
-    let server = Server::bind(&addr).serve(make_svc);
+    loop {
+        let (stream, _) = listener.accept().await?;
 
-    if let Err(e) = server.await {
-        eprintln!("server error: {}", e);
+        tokio::task::spawn(async move {
+            if let Err(err) = http1::Builder::new()
+                .serve_connection(stream, service_fn(hello))
+                .await
+            {
+                println!("Error serving connection: {:?}", err);
+            }
+        });
     }
 }
 # }
+# fn main() {}
 ```

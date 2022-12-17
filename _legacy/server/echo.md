@@ -1,5 +1,6 @@
 ---
 title: Echo, echo, echo
+layout: guide
 ---
 
 You already have a [Hello World server](hello-world.md)? Excellent! Usually,

@@ -1,5 +1,6 @@
 ---
 title: Client Configuration
+layout: guide
 ---
 
 ## Using TLS

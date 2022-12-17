@@ -4,6 +4,9 @@ layout: guide
 permalink: /stable/
 ---
 
+***Note:** these guides are for the upcoming version `1.0` of hyper,
+click [here](/legacy) to see the `0.14` guides.*
+
 hyper is an HTTP library for the Rust language.
 
 You can start using it by first adding it to your `Cargo.toml`:

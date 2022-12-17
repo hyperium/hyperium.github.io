@@ -110,5 +110,5 @@ let (ip, headers) = futures::try_join!(ip_fut, headers_fut)?;
 ```
 
 [simple guide]: ./basic.md
-[Request]: {{ site.docs_url }}/hyper/struct.Request.html
-[Method]: {{ site.docs_url }}/hyper/struct.Method.html
+[Request]: {{ site.legacy_docs_url }}/hyper/struct.Request.html
+[Method]: {{ site.legacy_docs_url }}/hyper/struct.Method.html

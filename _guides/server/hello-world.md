@@ -94,5 +94,5 @@ async fn main() {
 
 To see all the snippets put together, check out the [full example][example]!
 
-[service]: {{ site.docs_url }}/hyper/service/trait.Service.html
-[example]: {{ site.examples_url }}/hello.rs
+[service]: {{ site.legacy_docs_url }}/hyper/service/trait.Service.html
+[example]: {{ site.legacy_examples_url }}/hello.rs

@@ -197,5 +197,5 @@ We want to concatenate the request body, and map the result into our `reverse` f
 
 You can see a compiling [example here][example].
 
-[example]: {{ site.examples_url }}/echo.rs
+[example]: {{ site.legacy_examples_url }}/echo.rs
 [future-crate]: https://github.com/rust-lang-nursery/futures-rs

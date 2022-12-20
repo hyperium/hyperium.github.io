@@ -4,13 +4,13 @@
   <ul class="nav">
   {% if page.collection == "legacy" %}
     {% for guide in  topic.guides %}
-      {% assign guide_url = guide | prepend:"/" | prepend: topic.path | prepend:"/legacy" | append:"/" %}
+      {% assign guide_url = guide | prepend:"/" | prepend: topic.path | prepend:"/guides/0.14" | append:"/" %}
       {% assign p = site.legacy | where:"url", guide_url | first %}
       <li {% if guide_url == page.url %}class="active"{% endif %}><a href="{{ p.url }}">{{ p.title }} </a></li>
     {% endfor %}
   {% elsif page.collection == "stable" %}
     {% for guide in  topic.guides %}
-      {% assign guide_url = guide | prepend:"/" | prepend: topic.path | prepend:"/stable" | append:"/" %}
+      {% assign guide_url = guide | prepend:"/" | prepend: topic.path | prepend:"/guides/1" | append:"/" %}
       {% assign p = site.stable | where:"url", guide_url | first %}
       <li {% if guide_url == page.url %}class="active"{% endif %}><a href="{{ p.url }}">{{ p.title }} </a></li>
     {% endfor %}

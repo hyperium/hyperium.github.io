@@ -21,10 +21,10 @@ defaults:
 
 collections:
   legacy:
-    permalink: /:collection/:path/
+    permalink: /guides/0.14/:path/
     output: true
   stable:
-    permalink: /:collection/:path/
+    permalink: /guides/1/:path/
     output: true
   posts:
     permalink: /blog/:year/:month/:day/:title/

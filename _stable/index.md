@@ -1,11 +1,11 @@
 ---
 title:  Getting Started
 layout: guide
-permalink: /stable/
+permalink: /guides/1/
 ---
 
 ***Note:** these guides are for the upcoming version `1.0` of hyper,
-click [here](/legacy) to see the `0.14` guides.*
+click [here](/guides/0.14) to see the `0.14` guides.*
 
 hyper is an HTTP library for the Rust language.
 

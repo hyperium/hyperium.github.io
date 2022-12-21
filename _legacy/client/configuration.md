@@ -1,6 +1,8 @@
 ---
 title: Client Configuration
 layout: guide
+redirect_from: 
+    - /guides/client/configuration
 ---
 
 ## Using TLS

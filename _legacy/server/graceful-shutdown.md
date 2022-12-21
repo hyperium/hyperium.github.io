@@ -1,6 +1,8 @@
 ---
 title:  Gracefully Shutdown a Server
 layout: guide
+redirect_from: 
+    - /guides/server/graceful-shutdown
 ---
 
 hyper `Server`s have the ability to "gracefully" shutdown. This means stopping to accept new requests, and shutting down once all in-progress requests have completed.

@@ -1,6 +1,8 @@
 ---
 title:  Getting Started with a Server
 layout: guide
+redirect_from: 
+    - /guides/server/hello-world
 ---
 
 Let's start by making a "Hello, World!" server, and expand from there.

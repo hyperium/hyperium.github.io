@@ -1,6 +1,8 @@
 ---
 title: Getting Started with a Client
 layout: guide
+redirect_from: 
+    - /guides/client/basic
 ---
 
 To start with, we'll just get a simple `GET` request to a webpage working,

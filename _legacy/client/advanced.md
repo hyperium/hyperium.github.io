@@ -1,6 +1,8 @@
 ---
 title: Advanced Client Usage
 layout: guide
+redirect_from: 
+    - /guides/client/advanced
 ---
 
 Once you've done all the setup in the [simple guide][], you probably

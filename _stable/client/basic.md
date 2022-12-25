@@ -64,9 +64,9 @@ which in this case is `httpbin.org` and the default port for HTTP: `80`. With ou
 connection opened, we pass it in to the `client::conn::http1::handshake` function,
 performing a handshake to verify the remote is ready to receive our requests. 
 
-Performing a handshake will give us a [Connection][Connection] future that processes
-all HTTP state, and a [SendRequest][SendRequest] struct that we can use to send our `Request`s
-on the connection. 
+A successful handshake will give us a [Connection][Connection] future that processes
+all HTTP state, and a [SendRequest][SendRequest] struct that we can use to send our 
+`Request`s on the connection. 
 
 To start driving the HTTP state we have to poll the `Connection`, so to finish our 
 setup we'll spawn a `tokio::task` and `await` it.
@@ -120,8 +120,8 @@ header in our requests. And while we can send our `Request` with an empty `Body`
 explicitly set it, which we'll do with the [`Empty`][Empty] utility struct.
 
 All we need to do now is pass the `Request` to `SendRequest::send_request`, this returns a 
-future which will resolve to the [`Response`][Response] from `httpbin.org`. We'll print the status of the
-response to see that it returned the expected `200 OK` status.
+future which will resolve to the [`Response`][Response] from `httpbin.org`. We'll print the '
+status of the response to see that it returned the expected `200 OK` status.
 
 ```rust
 # extern crate http_body_util;
@@ -174,7 +174,6 @@ In addition to `stdout`, we'll need to make use of the `BodyExt` trait:
 
 ```rust
 # extern crate http_body_util;
-# extern crate hyper;
 # extern crate tokio;
 use http_body_util::BodyExt;
 use tokio::io::{stdout, AsyncWriteExt as _};

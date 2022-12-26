@@ -120,7 +120,7 @@ header in our requests. And while we can send our `Request` with an empty `Body`
 explicitly set it, which we'll do with the [`Empty`][Empty] utility struct.
 
 All we need to do now is pass the `Request` to `SendRequest::send_request`, this returns a 
-future which will resolve to the [`Response`][Response] from `httpbin.org`. We'll print the '
+future which will resolve to the [`Response`][Response] from `httpbin.org`. We'll print the
 status of the response to see that it returned the expected `200 OK` status.
 
 ```rust
@@ -155,7 +155,7 @@ let req = Request::builder()
 // Await the response...
 let mut res = sender.send_request(req).await?;
 
-println!("Response: {}", res.status());
+println!("Response status: {}", res.status());
 # Ok(())
 # }
 # fn main() {}
@@ -164,13 +164,13 @@ println!("Response: {}", res.status());
 ## Response bodies
 
 We know that sending a GET `Request` to `httpbin.org/ip` will return our IP address in
-the `Response` body. To see the returned body, we'll write it to `stdout`.
+the `Response` body. To see the returned body, we'll simply write it to `stdout`.
 
 Bodies in hyper are asynchronous streams of [`Frame`][Frame]s, so we don't have to wait for the
 whole body to arrive, buffering it into memory, and then writing it out. We can simply 
 `await` each `Frame` and write them directly to `stdout` as they arrive!
 
-In addition to `stdout`, we'll need to make use of the `BodyExt` trait:
+In addition to importing `stdout`, we'll need to make use of the `BodyExt` trait:
 
 ```rust
 # extern crate http_body_util;

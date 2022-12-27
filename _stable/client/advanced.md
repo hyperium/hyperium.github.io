@@ -158,7 +158,7 @@ async fn prepare_sender(addr: &str) -> Result<SendRequest<BoxBody<Bytes, Infalli
 ```
 
 We'll simply pass in the address to connect to, which is the host and port from our URL, and 
-return a [`SendRequest`][SendRequest] with a boxed trait object as it's body type, allowing us 
+return a [`SendRequest`][SendRequest] with a boxed trait object as its body type, allowing us 
 some freedom in which type of body we return. We only care that it implements the [`Body`][Body] 
 trait, that its data is `Bytes`, and since we're only using [`Full`][Full] and [`Empty`][Empty] 
 to construct our bodies we can use `Infallible` for the error type.

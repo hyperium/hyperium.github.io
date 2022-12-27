@@ -159,9 +159,9 @@ async fn prepare_sender(addr: &str) -> Result<SendRequest<BoxBody<Bytes, Infalli
 
 We'll simply pass in the address to connect to, which is the host and port from our URL, and 
 return a [`SendRequest`][SendRequest] with a boxed trait object as it's body type, allowing us 
-some freedom in which type of body we return. We only care that it implements the `HttpBody` 
-trait, that its data is `Bytes`. We'll use `Infallible` for our error type, since we're only 
-using [`Full`][Full] and [`Empty`][Empty] to construct our bodies.
+some freedom in which type of body we return. We only care that it implements the [`Body`][Body] 
+trait, that its data is `Bytes`, and since we're only using [`Full`][Full] and [`Empty`][Empty] 
+to construct our bodies we can use `Infallible` for the error type.
 
 Now that we have that out of the way, we can create our `send_request` futures and run them
 in parallel.
@@ -234,3 +234,4 @@ let (ip, headers) = tokio::try_join!(
 [Empty]: {{ site.http_body_util_url }}/http_body_util/struct.Empty.html
 [Request]: {{ site.docs_url }}/hyper/struct.Request.html
 [Method]: {{ site.docs_url }}/hyper/struct.Method.html
+[Body]: {{ site.docs_url }}/hyper/body/trait.Body.html

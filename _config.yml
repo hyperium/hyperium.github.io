@@ -47,8 +47,9 @@ plugins:
   
 docs_url: https://docs.rs/hyper/1.0.0-rc.1
 examples_url: https://github.com/hyperium/hyper/tree/master/examples
-futures_url: https://docs.rs/futures/0.3.*
+http_body_util_url: https://docs.rs/http-body-util/0.1.0-rc.1
 hyper_tls_url: https://docs.rs/hyper-tls/*
 
+futures_url: https://docs.rs/futures/0.3.*
 legacy_docs_url: https://docs.rs/hyper/0.14.23
 legacy_examples_url: https://github.com/hyperium/hyper/tree/0.14.x/examples

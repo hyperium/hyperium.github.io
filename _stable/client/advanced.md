@@ -6,16 +6,15 @@ layout: guide
 Once you've done all the setup in the [simple guide][], you probably
 have more advanced requests you need to make. In this guide, we'll
 make a `POST` request to [http://httpbin.org/post](http://httpbin.org/post), 
-and make multiple requests at the same time.
+and we'll make multiple requests at the same time.
 
 ## Making a POST
 
-Like we did in the getting started guide, we can prepare a request 
-before giving it to the client by using the `Request::builder` method.
-Since we want to post some JSON, and not just simply get a resource,
-that's what we'll do.
+Like we did in the getting started guide, we can prepare a [`Request`][Request] 
+before giving it to the client by utilizing the request builder.
 
-We'll reuse the setup code we did in the getting started guide.
+We'll reuse the setup code we used in the getting started guide, but we
+need to add some imports:
 
 ```rust
 # extern crate http_body_util;
@@ -23,8 +22,6 @@ We'll reuse the setup code we did in the getting started guide.
 use http_body_util::Full;
 use hyper::Method;
 ```
-
-After a quick addition to imports, let’s prepare our POST `Request`:
 
 ```rust
 # extern crate http_body_util;
@@ -46,7 +43,9 @@ After a quick addition to imports, let’s prepare our POST `Request`:
 # println!("Connection failed: {:?}", err);
 # }
 # });
-# let authority = url.authority().unwrap().clone();
+// We'll get the hostname from the URL like before...
+let authority = url.authority().unwrap().clone();
+
 let req = Request::builder()
     .method(Method::POST)
     .uri(url)
@@ -59,13 +58,13 @@ let req = Request::builder()
 # fn main() {}
 ```
 
-Using the convenient request builder, we set the [`Method`][Method] to `POST`,
-added our URL and HOST header like before, and set the `content-type` header to 
-describe our payload. Lastly, we used the [`Full`][Full] utility to add a 
-single-chunk body containing our JSON bytes.
+You'll noticed that we now explicitly set the [`Method`][Method], we didn't have
+to do that before since the builder defaults to `GET`. In addition to setting the method,
+we added our URL and `HOST` header like before, and we set the `content-type` header
+to describe our payload. Lastly, we used the [`Full`][Full] utility to construct our
+request with a single-chunk body containing our JSON bytes.
 
-Now, we can give that to the `client` with the `request` method:
-
+Now, we can pass it to the `SendRequest` we set up earlier:
 
 ```rust
 # extern crate http_body_util;
@@ -96,10 +95,9 @@ Now, we can give that to the `client` with the `request` method:
 # .body(Full::new(Bytes::from(r#"{"library":"hyper"}"#)))?;
 // let req = ...
 
-// POST it using the SendRequest we set up earlier
+// POST it using the `SendRequest::send_request` method
 let mut res = sender.send_request(req).await?;
 
-// Print the status
 println!("Response status: {}", res.status());
 # Ok(())
 # }
@@ -138,12 +136,16 @@ use hyper::client::conn::http1::SendRequest;
 # use http_body_util::combinators::BoxBody;
 # use tokio::net::TcpStream;
 # use hyper::client::conn::http1::SendRequest;
-# type Result<T> = std::result::Result<T, Box<dyn std::error::Error + Send + Sync>>;
-async fn prepare_sender(addr: &str) -> Result<SendRequest<BoxBody<Bytes, Infallible>>> {
+// A simple type alias for errors.
+type BoxError = Box<dyn std::error::Error + Send + Sync>;
+
+async fn prepare_sender(addr: &str) -> Result<SendRequest<BoxBody<Bytes, Infallible>>, BoxError> {
     let stream = TcpStream::connect(addr).await?;
 
     let (sender, conn) = hyper::client::conn::http1::handshake(stream).await?;
 
+    // We have to remember to spawn a task to poll the connection,
+    // if we don't `SendRequest` will do nothing.
     tokio::task::spawn(async move {
         if let Err(err) = conn.await {
             println!("Connection failed: {:?}", err);
@@ -155,27 +157,29 @@ async fn prepare_sender(addr: &str) -> Result<SendRequest<BoxBody<Bytes, Infalli
 # fn main() {}
 ```
 
-We'll simply pass in the address to connect to, the host and port from our URL, and return
-a `SendRequest` with a boxed trait object as it's body type, allowing us some freedom in
-which type of body we return. We only care that it implements the `HttpBody` trait, that its
-data is `Bytes` and since we're only using `Full` and `Empty` we can use `Infallible` for the
-error type.
+We'll simply pass in the address to connect to, which is the host and port from our URL, and 
+return a [`SendRequest`][SendRequest] with a boxed trait object as it's body type, allowing us 
+some freedom in which type of body we return. We only care that it implements the `HttpBody` 
+trait, that its data is `Bytes`. We'll use `Infallible` for our error type, since we're only 
+using [`Full`][Full] and [`Empty`][Empty] to construct our bodies.
 
-Now that we have that out of the way, we can create our async blocks and execute them concurrently.
+Now that we have that out of the way, we can create our `send_request` futures and run them
+in parallel.
 
 ```rust
 # extern crate http_body_util;
 # extern crate hyper;
 # extern crate tokio;
 # use std::convert::Infallible;
-# use http_body_util::{BodyExt, Empty, Full};
+# use std::result::Result;
+# use http_body_util::{BodyExt, Empty};
 # use http_body_util::combinators::BoxBody;
 # use hyper::body::Bytes;
 # use hyper::{Method, Request};
 # use tokio::net::TcpStream;
 # use hyper::client::conn::http1::SendRequest;
-# type Result<T> = std::result::Result<T, Box<dyn std::error::Error + Send + Sync>>;
-# async fn prepare_sender(addr: &str) -> Result<SendRequest<BoxBody<Bytes, Infallible>>> {
+# type BoxError = Box<dyn std::error::Error + Send + Sync>;
+# async fn prepare_sender(addr: &str) -> Result<SendRequest<BoxBody<Bytes, Infallible>>, BoxError> {
 # let stream = TcpStream::connect(addr).await?;
 # let (sender, conn) = hyper::client::conn::http1::handshake::<_, BoxBody<Bytes, Infallible>>(stream).await?;
 # tokio::task::spawn(async move {
@@ -185,20 +189,12 @@ Now that we have that out of the way, we can create our async blocks and execute
 # });
 # Ok(sender)
 # }
-# async fn run() -> Result<()> {
+# async fn run() -> Result<(), BoxError> {
 # let url = "http://httpbin.org/ip".parse::<hyper::Uri>()?;
 # let host = url.host().expect("uri has no host");
 # let port = url.port_u16().unwrap_or(80);
 # let addr = format!("{}:{}", host, port);
-# let mut sender = prepare_sender(&addr).await?;
 # let authority = url.authority().unwrap().clone();
-# let req = Request::builder()
-# .method(Method::POST)
-# .uri(url)
-# .header(hyper::header::HOST, authority.as_str())
-# .header(hyper::header::CONTENT_TYPE, "application/json")
-# .body(Full::new(Bytes::from(r#"{"library":"hyper"}"#)).boxed())?;
-# let mut res = sender.send_request(req).await?;
 // We'll use a closure to create a request for each endpoint
 let make_request = |url: &str| {
     Request::builder()
@@ -209,31 +205,32 @@ let make_request = |url: &str| {
 };
 
 // And another closure for creating our `send_request` futures
-let send_request = |req: Request<BoxBody<Bytes, Infallible>>| async {
-    let mut sender = prepare_sender(&addr).await?;
-    let res = sender.send_request(req).await?;
+let send_request = |req: Request<BoxBody<Bytes, Infallible>>| {
+    let addr = addr.clone();
 
-    // Collect the body of the response and return it as Bytes
-    Ok::<_, Box<dyn std::error::Error + Send + Sync>>(res.collect().await?.to_bytes())
+    // Spawn a task for our futures to run them in parallel
+    tokio::spawn(async move {
+        let mut sender = prepare_sender(&addr.clone()).await?;
+        let res = sender.send_request(req).await?;
+
+        // Collect the body of the response and return it as Bytes
+        Ok::<_, BoxError>(res.collect().await?.to_bytes())
+    })
 };
 
-// Wait on both of our futures concurrently:
+// Wait on both of our futures at the same time:
 let (ip, headers) = tokio::try_join!(
     send_request(make_request("http://httpbin.org/ip")),
     send_request(make_request("http://httpbin.org/headers"))
 )?;
-
-// Convert the response bytes to a string slice and print it
-println!("Ip: {}", std::str::from_utf8(ip.as_ref()).unwrap());
-println!(
-    "Headers: {}",
-    std::str::from_utf8(headers.as_ref()).unwrap()
-);
 # Ok(())
 # }
 # fn main() {}
 ```
 
 [simple guide]: ./basic.md
-[Request]: {{ site.legacy_docs_url }}/hyper/struct.Request.html
-[Method]: {{ site.legacy_docs_url }}/hyper/struct.Method.html
+[SendRequest]: {{ site.docs_url }}/hyper/client/conn/http1/struct.SendRequest.html
+[Full]: {{ site.http_body_util_url }}/http_body_util/struct.Full.html
+[Empty]: {{ site.http_body_util_url }}/http_body_util/struct.Empty.html
+[Request]: {{ site.docs_url }}/hyper/struct.Request.html
+[Method]: {{ site.docs_url }}/hyper/struct.Method.html

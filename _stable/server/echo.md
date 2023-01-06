@@ -148,7 +148,7 @@ of our request body to uppercase, and returning the stream in our `Response`:
 (&Method::POST, "/echo/uppercase") => {
     // Map this body's frame to a different type
     let frame_stream = req.into_body().map_frame(|frame| {
-        let frame = if let Some(data) = frame.into_data() {
+        let frame = if let Ok(data) = frame.into_data() {
             // Convert every byte in every Data frame to uppercase
             data.iter()
                 .map(|byte| byte.to_ascii_uppercase())

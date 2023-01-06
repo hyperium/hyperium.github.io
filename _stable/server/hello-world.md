@@ -9,9 +9,9 @@ First we need to declare our dependencies, let's add the following to our `Cargo
 
 ```toml
 [dependencies]
-hyper = { version = "1.0.0-rc.1", features = ["full"] }
+hyper = { version = "1.0.0-rc.2", features = ["full"] }
 tokio = { version = "1", features = ["full"] }
-http-body-util = "0.1.0-rc.1" 
+http-body-util = "0.1.0-rc.2" 
 ```
 
 Next, we need to add some imports in our `main.rs` file:

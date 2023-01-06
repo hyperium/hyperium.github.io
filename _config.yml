@@ -45,9 +45,9 @@ relative_links:
 plugins:
   - jekyll-redirect-from
   
-docs_url: https://docs.rs/hyper/1.0.0-rc.1
+docs_url: https://docs.rs/hyper/1.0.0-rc.2
 examples_url: https://github.com/hyperium/hyper/tree/master/examples
-http_body_util_url: https://docs.rs/http-body-util/0.1.0-rc.1
+http_body_util_url: https://docs.rs/http-body-util/0.1.0-rc.2
 hyper_tls_url: https://docs.rs/hyper-tls/*
 
 futures_url: https://docs.rs/futures/0.3.*

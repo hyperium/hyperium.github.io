@@ -19,9 +19,9 @@ EOF
         fi
         if [ $value = stable ]; then
             cat >> "$value/Cargo.toml" <<-EOF
-    hyper = { version = "1.0.0-rc.1", features = ["full"] }
+    hyper = { version = "1.0.0-rc.2", features = ["full"] }
     tokio = { version = "1", features = ["full"] }
-    http-body-util = "0.1.0-rc.1" 
+    http-body-util = "0.1.0-rc.2" 
 EOF
             cargo build --manifest-path "$value/Cargo.toml"
         fi

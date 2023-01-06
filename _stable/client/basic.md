@@ -11,9 +11,9 @@ Let's tell Cargo about our dependencies by having this in the Cargo.toml.
 
 ```toml
 [dependencies]
-hyper = { version = "1.0.0-rc.1", features = ["full"] }
+hyper = { version = "1.0.0-rc.2", features = ["full"] }
 tokio = { version = "1", features = ["full"] }
-http-body-util = "0.1.0-rc.1"
+http-body-util = "0.1.0-rc.2"
 ```
 
 Now, we need to import pieces to use from our dependencies:

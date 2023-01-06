@@ -1,0 +1,37 @@
+name: contrib
+on:
+  schedule:
+    - cron: '0 3 * * *'
+  workflow_dispatch:
+
+permissions:
+  contents: write # to update _contrib
+
+jobs:
+  update-contrib:
+    name: Update _contrib
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout website
+        uses: actions/checkout@v3
+
+      - name: Checkout hyper
+        uses: actions/checkout@v3
+        with:
+          repository: hyperium/hyper
+          path: hyper
+
+      - name: Lowercase and copy hyper/docs
+        run: |
+          for f in hyper/docs/*; do mv -vn "$f" "$(echo "$f" | tr '[:upper:]' '[:lower:]')"; done
+          mkdir -p _contrib
+          cp -a hyper/docs/. _contrib/
+
+      - name: Push changes to website
+        run: |
+          git config user.name github-actions
+          git config user.email github-actions@github.com
+          git add _contrib/
+          git diff --staged --quiet || git commit -m "actions: update contrib"
+          git push

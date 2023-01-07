@@ -22,9 +22,18 @@ jobs:
           repository: hyperium/hyper
           path: hyper
 
-      - name: Lowercase and copy hyper/docs
+      # TODO: move this command to a script
+      # convert doc title to frontmatter title, convert filenames to lowercase,
+      # replace underscores with hyphens and copy the files to _contrib
+      - name: Copy hyper/docs to _contrib
         run: |
-          for f in hyper/docs/*; do mv -vn "$f" "$(echo "$f" | tr '[:upper:]' '[:lower:]')"; done
+          for f in docs/*.md; do
+            sed -i -e '1i ---' \
+            -e '1s/#/title:/'\
+            -e '2i layout: guide' \
+            -e '2i ---' $f;
+            mv -vn "$f" "$(echo "$f" | tr '[:upper:]' '[:lower:]' | tr '_' '-')"; 
+          done
           mkdir -p _contrib
           cp -a hyper/docs/. _contrib/
 

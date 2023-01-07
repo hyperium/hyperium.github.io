@@ -11,9 +11,14 @@ defaults:
     values:
       layout: "guide"
   -
-    
     scope:
       path: "_stable/"
+      type: "guides"
+    values:
+      layout: "guide"
+  -
+    scope:
+      path: "_contrib/"
       type: "guides"
     values:
       layout: "guide"
@@ -28,6 +33,9 @@ collections:
     output: true
   posts:
     permalink: /blog/:year/:month/:day/:title/
+    output: true
+  contrib:
+    permalink: /contrib/:path/
     output: true
 
 # Build settings

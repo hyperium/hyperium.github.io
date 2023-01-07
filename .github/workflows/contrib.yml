@@ -27,7 +27,7 @@ jobs:
       # replace underscores with hyphens and copy the files to _contrib
       - name: Copy hyper/docs to _contrib
         run: |
-          for f in docs/*.md; do
+          for f in hyper/docs/*.md; do
             sed -i -e '1i ---' \
             -e '1s/#/title:/'\
             -e '2i layout: guide' \

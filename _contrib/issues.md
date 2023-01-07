@@ -1,4 +1,7 @@
-# Issues
+---
+title: Issues
+layout: guide
+---
 
 The [issue tracker][issues] for hyper is where we track all features, bugs, and discuss proposals.
 

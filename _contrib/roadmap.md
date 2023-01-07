@@ -1,4 +1,7 @@
-# hyper 1.0 Roadmap
+---
+title: hyper 1.0 Roadmap
+layout: guide
+---
 
 ## Goal
 

@@ -1,4 +1,7 @@
-# Git Commit Guidelines
+---
+title: Git Commit Guidelines
+layout: guide
+---
 
 We have very precise rules over how our git commit messages can be formatted.  This leads to **more
 readable messages** that are easy to follow when looking through the **project history**.  But also,

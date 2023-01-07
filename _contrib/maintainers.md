@@ -1,4 +1,7 @@
-# The People
+---
+title: The People
+layout: guide
+---
 
 To see what these roles do, and how to become one, look at [GOVERNANCE](./GOVERNANCE.md).
 

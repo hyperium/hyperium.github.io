@@ -1,4 +1,7 @@
-# Minimum Support Rust Version (MSRV)
+---
+title: Minimum Support Rust Version (MSRV)
+layout: guide
+---
 
 hyper's current policy is to always support a Rust version at least 6 months
 old. That is, a compiler version released within the last 6 months can compile

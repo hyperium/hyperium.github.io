@@ -1,4 +1,7 @@
-# Governance
+---
+title: Governance
+layout: guide
+---
 
 ## Making decisions
 

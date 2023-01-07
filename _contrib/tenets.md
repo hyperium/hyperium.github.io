@@ -1,4 +1,7 @@
-# Charter
+---
+title: Charter
+layout: guide
+---
 
 > hyper is a protective and efficient HTTP library for all.
 

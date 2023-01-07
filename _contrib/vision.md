@@ -1,4 +1,7 @@
-# hyper Vision
+---
+title: hyper Vision
+layout: guide
+---
 
 ## Purpose
 

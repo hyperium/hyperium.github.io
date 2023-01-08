@@ -1,9 +1,13 @@
 - title: Contributing 
   path: ""
-  guides:
-  - contrib 
-
-- title: Contrib
-  path: ""
-  guides:
-    - code-of-conduct
+  docs:
+  - code-of-conduct 
+  - commits
+  - governance
+  - issues
+  - maintainers
+  - msrv
+  - pull-requests
+  - roadmap
+  - tenets
+  - vision

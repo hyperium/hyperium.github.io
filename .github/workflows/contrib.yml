@@ -31,6 +31,11 @@ jobs:
             -e '2i ---' $f;
           done
 
+      - name: Convert readme to index
+        run: |
+          sed -i -e '4i permalink: /contrib/' hyper/docs/README.md
+          mv hyper/docs/README.md hyper/docs/index.md
+
       - name: Lowercase filenames and replace underscores
         run: |
           for f in hyper/docs/*; do

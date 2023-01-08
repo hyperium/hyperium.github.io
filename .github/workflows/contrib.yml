@@ -36,10 +36,7 @@ jobs:
           sed -i -e '4i permalink: /contrib/' hyper/docs/README.md
           mv hyper/docs/README.md hyper/docs/index.md
 
-      - name: Fix svg link
-        run: sed -i -e 's/.\/vision-arch.svg/..\/vision-arch.svg/g' hyper/docs/VISION.md
-
-      # TODO: fix other markdown links as well
+      # TODO: fix markdown links
 
       - name: Lowercase filenames and replace underscores
         run: |

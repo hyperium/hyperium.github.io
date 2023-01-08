@@ -22,22 +22,27 @@ jobs:
           repository: hyperium/hyper
           path: hyper
 
-      # TODO: move this command to a script
-      # convert doc title to frontmatter title, convert filenames to lowercase,
-      # replace underscores with hyphens and copy the files to _contrib
-      - name: Copy hyper/docs to _contrib
+      - name: Convert doc titles to frontmatter 
         run: |
           for f in hyper/docs/*.md; do
             sed -i -e '1i ---' \
             -e '1s/#/title:/'\
             -e '2i layout: guide' \
             -e '2i ---' $f;
+          done
+
+      - name: Lowercase filenames and replace underscores
+        run: |
+          for f in hyper/docs/*; do
             mv -vn "$f" "$(echo "$f" | tr '[:upper:]' '[:lower:]' | tr '_' '-')"; 
           done
+
+      - name: Copy docs to contrib
+        run: |  
           mkdir -p _contrib
           cp -a hyper/docs/. _contrib/
 
-      - name: Push changes to website
+      - name: Push contrib changes to website
         run: |
           git config user.name github-actions
           git config user.email github-actions@github.com

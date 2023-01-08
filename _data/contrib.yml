@@ -1,9 +1,9 @@
 - title: Contributing 
   path: ""
-  docs:
-  - docs 
+  guides:
+  - contrib 
 
-- title: Docs
+- title: Contrib
   path: ""
   guides:
-    - Code of Conduct
+    - code-of-conduct

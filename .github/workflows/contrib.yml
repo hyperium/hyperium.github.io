@@ -15,10 +15,13 @@ jobs:
     steps:
       - name: Checkout website
         uses: actions/checkout@v3
+        with:
+          persist-credentials: false
 
       - name: Checkout hyper
         uses: actions/checkout@v3
         with:
+          persist-credentials: false
           repository: hyperium/hyper
           path: hyper
 
@@ -49,10 +52,24 @@ jobs:
           mkdir -p _contrib
           cp -a hyper/docs/. _contrib/
 
-      - name: Push contrib changes to website
-        run: |
-          git config user.name github-actions
-          git config user.email github-actions@github.com
-          git add _contrib/
-          git diff --staged --quiet || git commit -m "actions: update contrib"
-          git push
+      - uses: gr2m/create-or-update-pull-request-action@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          author: github-actions <github-actions@github.com>
+          branch: actions/update-contrib
+          title: 'doc: update contrib docs'
+          body: >
+            The _contrib docs are likely out of date. This is an automatically 
+            generated PR by the `contrib.yml` GitHub Action, which clones the docs
+            from the main repo, implements the changes here then submits a new PR or 
+            updates an existing PR.
+          commit-message: 'doc: update contrib docs'
+          path: _contrib/
+      # - name: Push contrib changes to website
+      #   run: |
+      #     git config user.name github-actions
+      #     git config user.email github-actions@github.com
+      #     git add _contrib/
+      #     git diff --staged --quiet || git commit -m "actions: update contrib"
+      #     git push

@@ -6,7 +6,8 @@ on:
 
 permissions:
   contents: write # to update _contrib
-
+  pull-requests: write # to send the update _contrib PRs
+  
 jobs:
   update-contrib:
     name: Update _contrib

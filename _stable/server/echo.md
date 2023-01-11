@@ -191,18 +191,29 @@ stream to completion, collecting all the data and trailer frames into a `Collect
 We can easily turn the `Collected` body into a single `Bytes` by calling its `into_bytes` 
 method.
 
+> Note: You must always be careful not to buffer without a max bounds. We'll
+> set a 64kb maximum here.
+
 ```rust
 # extern crate hyper;
 # extern crate http_body_util;
 # use hyper::body::Bytes;
 # use http_body_util::{combinators::BoxBody, BodyExt, Empty, Full};
-# use hyper::{Method, Request, Response, StatusCode};
+# use hyper::{body::Body, Method, Request, Response, StatusCode};
 # async fn echo(
 #    req: Request<hyper::body::Incoming>,
 # ) -> Result<Response<BoxBody<Bytes, hyper::Error>>, hyper::Error> {
 #    match (req.method(), req.uri().path()) {
 // Yet another route inside our match block...
 (&Method::POST, "/echo/reversed") => {
+    // Protect our server from massive bodies.
+    let upper = req.body().size_hint().upper().unwrap_or(u64::MAX);
+    if upper > 1024 * 64 {
+        let mut resp = Response::new(full("Body too big"));
+        *resp.status_mut() = hyper::StatusCode::PAYLOAD_TOO_LARGE;
+        return Ok(resp);
+    }
+
     // Await the whole body to be collected into a single `Bytes`...
     let whole_body = req.collect().await?.to_bytes();
 

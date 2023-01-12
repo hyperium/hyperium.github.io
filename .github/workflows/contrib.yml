@@ -40,7 +40,13 @@ jobs:
           sed -i -e '4i permalink: /contrib/' hyper/docs/README.md
           mv hyper/docs/README.md hyper/docs/index.md
 
-      # TODO: fix markdown links
+      - name: Lowercase internal links
+        run: |
+          for filename in hyper/docs/*.md; do
+            for file in hyper/docs/*.md; do
+              sed -i -e "s|${filename##*/}|\L\0|g" $file;
+            done
+          done
 
       - name: Lowercase filenames and replace underscores
         run: |

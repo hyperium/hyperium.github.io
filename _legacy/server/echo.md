@@ -170,16 +170,29 @@ collect the full body.
 In this case, we can't really generate a `Response` immediately. Instead, we
 must wait for the full request body to be received.
 
-We want to concatenate the request body, and map the result into our `reverse` function, and return the eventual result. We can make use of the `hyper::body::to_bytes` utility function to make this easy.
+We want to concatenate the request body, and map the result into our `reverse`
+function, and return the eventual result. We can make use of the
+`hyper::body::to_bytes` utility function to make this easy.
+
+> Note: You must always be careful not to buffer without a max bounds. We'll
+> set a 64kb maximum here.
 
 ```rust
 # extern crate hyper;
-# use hyper::{Body, Method, Request, Response};
+# use hyper::{body::HttpBody, Body, Method, Request, Response};
 # async fn echo(req: Request<Body>) -> Result<Response<Body>, hyper::Error> {
 #     let mut response = Response::default();
 #     match (req.method(), req.uri().path()) {
 // Yet another route inside our match block...
 (&Method::POST, "/echo/reverse") => {
+    // Protect our server from massive bodies.
+    let upper = req.body().size_hint().upper().unwrap_or(u64::MAX);
+    if upper > 1024 * 64 {
+        let mut resp = Response::new(Body::from("Body too big"));
+        *resp.status_mut() = hyper::StatusCode::PAYLOAD_TOO_LARGE;
+        return Ok(resp);
+    }
+
     // Await the full body to be concatenated into a single `Bytes`...
     let full_body = hyper::body::to_bytes(req.into_body()).await?;
 

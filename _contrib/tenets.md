@@ -20,10 +20,8 @@ community building and using it. All contributions are in the open. We don't
 maintain private versions, and don't include features that aren't useful to
 others.
 
-[We prioritize kindness][CONDUCT], compassion and empathy towards all
+[We prioritize kindness](./code_of_conduct.md), compassion and empathy towards all
 contributors. Technical skill is not a substitute for human decency.
-
-[CONDUCT]: https://github.com/hyperium/hyper/blob/master/docs/CODE_OF_CONDUCT.md
 
 ### Examples
 

@@ -8,7 +8,7 @@ Pull requests are the way to submit changes to the hyper repository.
 ## Submitting a Pull Request
 
 In most cases, it a good idea to discuss a potential change in an
-[issue](ISSUES.md). This will allow other contributors to provide guidance and
+[issue](issues.md). This will allow other contributors to provide guidance and
 feedback _before_ significant code work is done, and can increase the
 likelihood of getting the pull request merged.
 
@@ -22,7 +22,7 @@ include one or more tests to ensure that hyper does not regress in the future.
 ### Commits
 
 Once code, tests, and documentation have been written, a commit needs to be
-made. Following the [commit guidelines](COMMITS.md) will help with the review
+made. Following the [commit guidelines](commits.md) will help with the review
 process by making your change easier to understand, and makes it easier for
 hyper to produce a valuable changelog with each release.
 

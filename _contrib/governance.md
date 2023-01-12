@@ -20,21 +20,21 @@ users. Some actively contribute their thoughts, but many others we must seek
 out to learn about their usage, joys, and headaches. Those insights allow our
 experts to determine the best solutions for the users.
 
-We then define a set of [TENETS](./TENETS.md), which are guiding principles
+We then define a set of [TENETS](./tenets.md), which are guiding principles
 that can be used to measure aspects of individual decisions. It should be
 possible to identify one or more tenets that apply to why a decision is made.
 And the set helps us balance which priorities are more important for our users.
 
-We combine the usecases with the tenets to come up with a [VISION](./VISION.md)
+We combine the usecases with the tenets to come up with a [VISION](./vision.md)
 that provides a longer-term plan of what hyper _should_ look like.
 
-Finally, we define a [ROADMAP](./ROADMAP.md) that describes what the
+Finally, we define a [ROADMAP](./roadmap.md) that describes what the
 short-term, tactical changes to bring hyper closer in line with the vision.
 
 ## Roles
 
 These are the roles people can fill when participating in the project. A list
-of the people in each role is available in [MAINTAINERS](./MAINTAINERS.md).
+of the people in each role is available in [MAINTAINERS](./maintainers.md).
 
 ### Contributor
 
@@ -69,7 +69,7 @@ How to become:
 - Make a few [contributions][contrib] to the project, to show you can follow
   the [Code of Conduct][coc].
 - Self-nominate by making a pull request adding yourself to the
-  [list](./MAINTAINERS.md#triagers).
+  [list](./maintainers.md#triagers).
 
 
 ### Collaborator
@@ -79,7 +79,7 @@ Collaborators are contributors who have been helping out in a consistent basis.
 Responsibilities:
 
 - Be exemplars of the [Code of Conduct][coc]
-- Internalize the [VISION](./VISION.md)
+- Internalize the [VISION](./vision.md)
 - Reviewing pull requests from other contributors
 - Provide feedback on proposed features and design documents
 - [Welcome new contributors][triage-guide]
@@ -106,9 +106,9 @@ goal!
 ### Maintainer
 
 Maintainers are the project admins. Besides being a collaborator, they take care
-house-keeping duties, help lead the direction, and have the final authority when
+of house-keeping duties, help lead the direction, and have the final authority when
 required.
 
-[coc]: ./CODE_OF_CONDUCT.md
+[coc]: ./code_of_conduct.md
 [contrib]: ../CONTRIBUTING.md
-[triage-guide]: ./ISSUES.md#triaging
+[triage-guide]: ./issues.md#triaging

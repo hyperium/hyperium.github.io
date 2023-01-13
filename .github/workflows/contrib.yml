@@ -1,12 +1,11 @@
 name: contrib
 on:
   schedule:
-    - cron: '0 3 * * *'
+    - cron: '15 3 * * *'
   workflow_dispatch:
 
 permissions:
-  contents: write # to update _contrib
-  pull-requests: write # to send the update _contrib PRs
+  pull-requests: write # to send the updated _contrib PRs
   
 jobs:
   update-contrib:
@@ -25,25 +24,36 @@ jobs:
           persist-credentials: false
           repository: hyperium/hyper
           path: hyper
-
+            
+      # Insert frontmatter borders, replace markdown header with
+      # frontmatter title and insert layout: guide
       - name: Convert doc titles to frontmatter 
         run: |
           for f in hyper/docs/*.md; do
             sed -i -e '1i ---' \
-            -e '1s/#/title:/'\
+            -e '1s/#/title:/' \
             -e '2i layout: guide' \
             -e '2i ---' $f;
           done
 
+      # Use the hyper docs readme as the index page of contrib,
+      # and insert permalink: /contrib/ in the frontmatter
       - name: Convert readme to index
         run: |
           sed -i -e '4i permalink: /contrib/' hyper/docs/README.md
           mv hyper/docs/README.md hyper/docs/index.md
 
+      # Lowercase the internal links so they will correctly point to
+      # the lowercased filenames.
       - name: Lowercase internal links
         run: |
           for filename in hyper/docs/*.md; do
+            # cut `.md` from the filename before search and replace
+            filename=${filename::-3};
+
             for file in hyper/docs/*.md; do
+              # match instances of only the filename, not including
+              # the parent path, and convert them to lowercase
               sed -i -e "s|${filename##*/}|\L\0|g" $file;
             done
           done
@@ -68,15 +78,9 @@ jobs:
           title: 'doc: update contrib docs'
           body: >
             The _contrib docs are likely out of date. This is an automatically 
-            generated PR by the `contrib.yml` GitHub Action, which clones the docs
-            from the main repo, implements the changes here then submits a new PR or 
-            updates an existing PR.
+            generated PR by the `contrib.yml` GitHub workflow, which clones the docs
+            from the main repo, implements the changes in _contrib then submits a new 
+            PR or updates an existing PR.
           commit-message: 'doc: update contrib docs'
           path: _contrib/
-      # - name: Push contrib changes to website
-      #   run: |
-      #     git config user.name github-actions
-      #     git config user.email github-actions@github.com
-      #     git add _contrib/
-      #     git diff --staged --quiet || git commit -m "actions: update contrib"
-      #     git push
+

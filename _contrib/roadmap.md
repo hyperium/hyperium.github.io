@@ -5,12 +5,12 @@ layout: guide
 
 ## Goal
 
-Align current hyper to the [hyper VISION][VISION].
+Align current hyper to the [hyper vision][vision].
 
-The VISION outlines a decision-making framework, use-cases, and general shape
+The vision outlines a decision-making framework, use-cases, and general shape
 of hyper. This roadmap describes the currently known problems with hyper, and
 then shows what changes are needed to make hyper 1.0 look more like what is in
-the VISION.
+the vision.
 
 ## Known Issues
 
@@ -142,7 +142,7 @@ more to encourage best practices?
 
 ## Design
 
-The goal is to get hyper closer to the [VISION][], using that to determine the
+The goal is to get hyper closer to the [vision][], using that to determine the
 best way to solve the known issues above. The main thrust of the proposed
 changes are to make hyper more **Flexible** and stable.
 
@@ -166,7 +166,7 @@ For example, there will now be `hyper::server::conn::http1::Connection` and
 `hyper::server::conn::http2::Connection` types.
 
 These specific types will still have a very similar looking API that, as the
-VISION describes, provides **Correct** connection management as it pertains to
+vision describes, provides **Correct** connection management as it pertains to
 HTTP.
 
 There will be still be a type to wrap the different versions. It will no longer
@@ -390,7 +390,7 @@ abstraction, and then make an internal adapter.
 
 ### Isn't this making hyper harder?
 
-We are making hyper more **flexible**. As noted in the [VISION][], most use
+We are making hyper more **flexible**. As noted in the [vision][], most use
 cases of hyper require it to be flexible. That _can_ mean that the exposed API
 is lower level, and that it feels more complicated. It should still be
 **understandable**.
@@ -403,5 +403,5 @@ they need, we will also write guides for the [hyper.rs][] showing people how to
 accomplish the most common tasks.
 
 [timeline]: https://seanmonstar.com/post/676912131372875776/hyper-10-timeline
-[VISION]: https://github.com/hyperium/hyper/pull/2772
+[vision]: https://github.com/hyperium/hyper/pull/2772
 [hyper.rs]: https://hyper.rs

@@ -53,6 +53,11 @@ jobs:
             filename=${filename::-3};
 
             for file in hyper/docs/*.md; do
+              # don't lowercase MSRV
+              if [[ "${filename##*/}" == 'MSRV' ]]; then
+                continue
+              fi
+
               # match instances of only the filename, not including
               # the parent path, and convert them to lowercase
               sed -i -e "s|${filename##*/}|\L\0|g" $file;

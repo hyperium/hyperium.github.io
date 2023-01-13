@@ -28,7 +28,7 @@ that come later (but every case is different).
 4. Flexible
 5. Understandable
 
-There's a lot more detail about each in [TENETS](./tenets.md).
+There's a lot more detail about each in [tenets](./tenets.md).
 
 ## Use Cases
 

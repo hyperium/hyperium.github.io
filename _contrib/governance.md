@@ -110,5 +110,5 @@ of house-keeping duties, help lead the direction, and have the final authority w
 required.
 
 [coc]: ./code_of_conduct.md
-[contrib]: ../CONTRIBUTING.md
+[contrib]: ../contributing.md
 [triage-guide]: ./issues.md#triaging

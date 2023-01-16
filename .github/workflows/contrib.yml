@@ -25,7 +25,12 @@ jobs:
           persist-credentials: false
           repository: hyperium/hyper
           path: hyper
-            
+
+      - name: Copy CONTRIBUTING.md into docs
+        run: |
+          sed -i -e 's|./docs/||g' hyper/CONTRIBUTING.md
+          cp -a hyper/CONTRIBUTING.md hyper/docs
+      
       # Insert frontmatter borders, replace markdown header with
       # frontmatter title and insert layout: guide
       - name: Convert doc titles to frontmatter 

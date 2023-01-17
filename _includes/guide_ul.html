@@ -14,6 +14,12 @@
       {% assign p = site.stable | where:"url", guide_url | first %}
       <li {% if guide_url == page.url %}class="active"{% endif %}><a href="{{ p.url }}">{{ p.title }} </a></li>
     {% endfor %}
+  {% elsif page.collection == "contrib" %}
+    {% for doc in topic.docs %}
+      {% assign doc_url = doc | prepend:"/" | prepend:"/contrib" | append:"/" %}
+      {% assign p = site.contrib | where:"url", doc_url | first %}
+      <li {% if doc_url == page.url %}class="active"{% endif %}><a href="{{ p.url }}">{{ p.title }} </a></li>
+    {% endfor %}
   {% endif %}
   </ul>
 </section>

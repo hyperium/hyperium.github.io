@@ -1,0 +1,14 @@
+- title: Contributing 
+  path: ""
+  docs:
+  - code-of-conduct 
+  - commits
+  - contributing
+  - governance
+  - issues
+  - maintainers
+  - msrv
+  - pull-requests
+  - roadmap
+  - tenets
+  - vision

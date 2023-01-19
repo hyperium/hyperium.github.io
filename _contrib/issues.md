@@ -112,6 +112,6 @@ The severity marks how _severe_ the issue is. Note this isn't "importance" or "p
 - **S-refactor**: improve internal code to help readability and maintenance.
 
 [issues]: https://github.com/hyperium/hyper/issues
-[COC]: ./code_of_conduct.md
-[PRs]: ./pull_requests.md
+[COC]: ./code-of-conduct.md
+[PRs]: ./pull-requests.md
 [MRE]: https://en.wikipedia.org/wiki/Minimal_reproducible_example

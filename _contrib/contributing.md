@@ -8,7 +8,7 @@ You want to contribute? You're awesome! Don't know where to start? Check the [li
 [easy tag]: https://github.com/hyperium/hyper/issues?q=label%3AE-easy+is%3Aopen
 
 
-## [Pull Requests](pull_requests.md)
+## [Pull Requests](pull-requests.md)
 
-- [Submitting a Pull Request](pull_requests.md#submitting-a-pull-request)
+- [Submitting a Pull Request](pull-requests.md#submitting-a-pull-request)
 - [Commit Guidelines](commits.md)

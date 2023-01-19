@@ -109,6 +109,6 @@ Maintainers are the project admins. Besides being a collaborator, they take care
 of house-keeping duties, help lead the direction, and have the final authority when
 required.
 
-[coc]: ./code_of_conduct.md
+[coc]: ./code-of-conduct.md
 [contrib]: ../contributing.md
 [triage-guide]: ./issues.md#triaging

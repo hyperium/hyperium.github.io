@@ -29,8 +29,8 @@ jobs:
       - name: Copy CONTRIBUTING.md into docs
         run: |
           sed -i -e 's|./docs/||g' hyper/CONTRIBUTING.md
-          cp -a hyper/CONTRIBUTING.md hyper/docs
-      
+          cp -a hyper/CONTRIBUTING.md hyper/docs/CONTRIBUTING.md
+
       # Insert frontmatter borders, replace markdown header with
       # frontmatter title and insert layout: guide
       - name: Convert doc titles to frontmatter 
@@ -49,8 +49,9 @@ jobs:
           sed -i -e '4i permalink: /contrib/' hyper/docs/README.md
           mv hyper/docs/README.md hyper/docs/index.md
 
-      # Lowercase the internal links so they will correctly point to
-      # the lowercased filenames.
+
+      # Lowercase the internal links and replace underscores with
+      # hyphens, so they will point to the correct file.
       - name: Lowercase internal links
         run: |
           for filename in hyper/docs/*.md; do
@@ -58,14 +59,24 @@ jobs:
             filename=${filename::-3};
 
             for file in hyper/docs/*.md; do
+              # filename without parent path
+              filename=${filename##*/}
+
               # don't lowercase MSRV
-              if [[ "${filename##*/}" == 'MSRV' ]]; then
+              if [[ "${filename}" == 'MSRV' ]]; then
                 continue
               fi
 
-              # match instances of only the filename, not including
-              # the parent path, and convert them to lowercase
-              sed -i -e "s|${filename##*/}|\L\0|g" $file;
+              # lowercase filenames
+              sed -i -e "s|${filename}|${filename,,}|g" $file;
+
+              # match on the lowercased filename from here on
+              lowercased=${filename,,}
+
+              hyphenated=${lowercased//_/-}
+
+              # replace underscores in internal links with hyphens
+              sed -i -e "s|${lowercased}|${hyphenated}|g" $file;
             done
           done
 
@@ -75,7 +86,7 @@ jobs:
             mv -vn "$f" "$(echo "$f" | tr '[:upper:]' '[:lower:]' | tr '_' '-')"; 
           done
 
-      - name: Copy docs to contrib
+      - name: Copy the hyper docs to contrib
         run: |  
           mkdir -p _contrib
           cp -a hyper/docs/. _contrib/

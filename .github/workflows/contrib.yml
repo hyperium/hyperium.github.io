@@ -55,6 +55,10 @@ jobs:
       - name: Lowercase internal links
         run: |
           for filename in hyper/docs/*.md; do
+            # since we move some docs from hyper root into the docs folder,
+            # fix links to them
+            sed -i -e 's|\.\./|\./|g' $filename;
+
             # cut `.md` from the filename before search and replace
             filename=${filename::-3};
 

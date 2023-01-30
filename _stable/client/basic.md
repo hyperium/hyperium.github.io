@@ -210,7 +210,7 @@ use tokio::io::{stdout, AsyncWriteExt as _};
 while let Some(next) = res.frame().await {
     let frame = next?;
     if let Some(chunk) = frame.data_ref() {
-        io::stdout().write_all(&chunk).await?;
+        stdout().write_all(&chunk).await?;
     }
 }
 # Ok(())

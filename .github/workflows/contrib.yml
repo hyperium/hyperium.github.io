@@ -49,7 +49,7 @@ jobs:
       # This adjustment links the correct source file.
       - name: Retain correct CONTRIBUTING.md path
         run: |
-          sed -i -e '4s/docs\///' docs/CONTRIBUTING.md
+          sed -i -e '4s/docs\///' hyper/docs/CONTRIBUTING.md
 
       # Use the hyper docs readme as the index page of contrib,
       # and insert permalink: /contrib/ in the frontmatter

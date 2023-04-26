@@ -41,7 +41,7 @@ jobs:
             sed -i -e '1i ---' \
             -e '1s/#/title:/' \
             -e '2i layout: guide' \
-            -e "2i hyper_path: ${f:2}" \
+            -e "2i hyper_path: ${f:6}" \
             -e '2i ---' $f;
           done
 

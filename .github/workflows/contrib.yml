@@ -80,8 +80,8 @@ jobs:
                 continue
               fi
 
-              # lowercase filenames
-              sed -i -e "s|${filename}|${filename,,}|g" $file;
+              # lowercase filenames outside frontmatter
+              sed -i -e "1,4!s|${filename}|${filename,,}|g" $file;
 
               # match on the lowercased filename from here on
               lowercased=${filename,,}

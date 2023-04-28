@@ -3,9 +3,15 @@
         <div class="row">
             <div class="col-sm-6 text-center text-sm-left text-muted">&copy; 2023 hyper</div>
             <div class="col-sm-6 text-center text-sm-right">
-                <a href="https://github.com/hyperium/hyperium.github.io/blob/master/{{ page.path }}">
-                    edit this page on github
-                </a>
+                {% if page.hyper_path %}
+                    <a href="https://github.com/hyperium/hyper/blob/master/{{ page.hyper_path }}">
+                        edit this page on github
+                    </a>
+                {% else %}
+                    <a href="https://github.com/hyperium/hyperium.github.io/blob/master/{{ page.path }}">
+                        edit this page on github
+                    </a>
+                {% endif %}
             </div>
         </div>
     </div>

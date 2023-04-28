@@ -32,15 +32,24 @@ jobs:
           cp -a hyper/CONTRIBUTING.md hyper/docs/CONTRIBUTING.md
 
       # Insert frontmatter borders, replace markdown header with
-      # frontmatter title and insert layout: guide
+      # frontmatter title and insert: 
+      #   - layout: guide
+      #   - hyper_path: {path}
       - name: Convert doc titles to frontmatter 
         run: |
           for f in hyper/docs/*.md; do
             sed -i -e '1i ---' \
             -e '1s/#/title:/' \
             -e '2i layout: guide' \
+            -e "2i hyper_path: ${f:6}" \
             -e '2i ---' $f;
           done
+
+      # CONTRIBUTING.md is uniquely copied into the docs folder.
+      # This adjustment links the correct source file.
+      - name: Retain correct CONTRIBUTING.md path
+        run: |
+          sed -i -e '4s/docs\///' hyper/docs/CONTRIBUTING.md
 
       # Use the hyper docs readme as the index page of contrib,
       # and insert permalink: /contrib/ in the frontmatter
@@ -71,8 +80,8 @@ jobs:
                 continue
               fi
 
-              # lowercase filenames
-              sed -i -e "s|${filename}|${filename,,}|g" $file;
+              # lowercase filenames outside frontmatter
+              sed -i -e "1,/^---$/!s|${filename}|${filename,,}|g" $file;
 
               # match on the lowercased filename from here on
               lowercased=${filename,,}

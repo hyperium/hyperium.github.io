@@ -1,6 +1,7 @@
 ---
 title: Governance
 layout: guide
+hyper_path: docs/GOVERNANCE.md
 ---
 
 ## Making decisions

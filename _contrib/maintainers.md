@@ -1,6 +1,7 @@
 ---
 title: The People
 layout: guide
+hyper_path: docs/MAINTAINERS.md
 ---
 
 To see what these roles do, and how to become one, look at [governance](./governance.md).

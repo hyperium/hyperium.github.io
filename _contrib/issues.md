@@ -1,6 +1,7 @@
 ---
 title: Issues
 layout: guide
+hyper_path: docs/ISSUES.md
 ---
 
 The [issue tracker][issues] for hyper is where we track all features, bugs, and discuss proposals.

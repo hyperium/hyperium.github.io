@@ -1,6 +1,7 @@
 ---
 title: Contributing to Hyper
 layout: guide
+hyper_path: CONTRIBUTING.md
 ---
 
 You want to contribute? You're awesome! Don't know where to start? Check the [list of easy issues](https://github.com/hyperium/hyper/issues?q=is%3Aopen+is%3Aissue+label%3AE-easy).

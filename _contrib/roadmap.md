@@ -1,6 +1,7 @@
 ---
 title: hyper 1.0 Roadmap
 layout: guide
+hyper_path: docs/ROADMAP.md
 ---
 
 ## Goal

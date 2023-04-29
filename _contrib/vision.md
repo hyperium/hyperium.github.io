@@ -1,6 +1,7 @@
 ---
 title: hyper Vision
 layout: guide
+hyper_path: docs/VISION.md
 ---
 
 ## Purpose

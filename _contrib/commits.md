@@ -1,6 +1,7 @@
 ---
 title: Git Commit Guidelines
 layout: guide
+hyper_path: docs/COMMITS.md
 ---
 
 We have very precise rules over how our git commit messages can be formatted.  This leads to **more

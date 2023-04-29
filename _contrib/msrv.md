@@ -1,6 +1,7 @@
 ---
 title: Minimum Support Rust Version (MSRV)
 layout: guide
+hyper_path: docs/MSRV.md
 ---
 
 hyper's current policy is to always support a Rust version at least 6 months

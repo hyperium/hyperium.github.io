@@ -1,6 +1,7 @@
 ---
 title: Charter
 layout: guide
+hyper_path: docs/TENETS.md
 ---
 
 > hyper is a protective and efficient HTTP library for all.

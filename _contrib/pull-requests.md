@@ -1,6 +1,7 @@
 ---
 title: Pull Requests
 layout: guide
+hyper_path: docs/PULL_REQUESTS.md
 ---
 
 Pull requests are the way to submit changes to the hyper repository.

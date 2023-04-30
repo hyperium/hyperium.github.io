@@ -12,7 +12,7 @@
     </div>
     <div class="container">
       <div class="row">
-        <aside class="col-md-3 hyper-sidebar">
+        <aside class="col-lg-3 hyper-sidebar">
           <nav>
             {% if page.collection == "legacy" %}
               {% assign topics = site.data.legacy | first %}
@@ -41,7 +41,7 @@
             </h4>
           </nav>
         </aside>
-        <article class="col-md-9 hyper-content">
+        <article class="col-lg-9 hyper-content">
           {{ content }}
           {% include guide_footer.html %}
         </article>

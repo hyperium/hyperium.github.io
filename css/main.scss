@@ -274,3 +274,96 @@ pre code {
     background: none;
     color: $secondary-color;
 }
+
+// Below are shims for a bootstrap 4 to 5 migration.
+// https://getbootstrap.com/docs/5.2/migration/
+//
+// Dropping these styles can incrementally shift the sites UI to a bootstrap 5 aesthetic.
+
+// container
+.container {
+    padding-left: 15px;
+    padding-right: 15px;
+}
+
+@media (min-width: 1400px) {
+    .container {
+        max-width: 1140px;
+    }
+}
+
+// btn
+.btn {
+    border-radius: 0.25rem;
+    line-height: 1.25;
+}
+
+// headers
+h1 {
+    font-size: 2.5rem;
+    line-height: 1.1;
+}
+
+h2, h3, h4, h5, h6 {
+    font-size: 2rem;
+    line-height: 1.1;
+}
+
+article h3 {
+    font-size: 1.75rem;
+    line-height: 1.1;
+}
+
+// a
+a {
+    text-decoration: none;
+}
+
+a.btn:hover {
+    text-decoration: none;
+}
+
+a:hover, a:focus {
+    text-decoration: underline;
+}
+
+// code 
+code {
+    font-size: 90%;
+    border-radius: 0.25rem;
+}
+
+// ul
+ul {
+    padding-inline-start: 40px;
+}
+
+// row
+.row {
+    --bs-gutter-x: 30px;
+}
+
+// code
+pre code {
+    font-size: 12.96px;
+    border-radius: 0;
+}
+
+// navbar
+.navbar a {
+    color: $primary-color;
+    transition: none;
+}
+
+.navbar a:hover, .navbar a:focus {
+    color: $primary-highlight-color;
+    text-decoration: none;
+}
+
+.navbar .navbar-brand {
+    color: $primary-color
+}
+
+.navbar .navbar-brand:hover {
+    color: $primary-highlight-color
+}

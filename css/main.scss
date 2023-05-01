@@ -77,6 +77,12 @@ pre code {
     text-transform: lowercase;
 }
 
+@media (min-width: 992px) {
+    #hyper .nav-link {
+        line-height: 3rem;
+    }
+}
+
 #hyper .navbar a:hover, #hyper .navbar a:focus {
     background: none;
     border-color: $primary-highlight-color;

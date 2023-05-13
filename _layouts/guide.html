@@ -32,10 +32,12 @@
               {% assign topic = site.data.contrib | first %}
               {% include guide_ul.html topic=topic %}
             {% endif %}
-            <h4 class="guide-topic-title">
+            <h4 class="guide-links">
               {% if page.collection == "legacy" %}
+                <a href="{{ site.legacy_examples_url }}/README.md">Additional Examples</a>
                 <a href="{{ site.legacy_docs_url }}">API Reference</a>
               {% elsif page.collection == "stable" %}
+                <a href="{{ site.examples_url }}/README.md">Additional Examples</a>
                 <a href="{{ site.docs_url }}">API Reference</a>
               {% endif %}
             </h4>

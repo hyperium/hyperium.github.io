@@ -146,6 +146,16 @@ pre code {
     font-size: 1.1rem;
 }
 
+.hyper-sidebar .guide-links {
+    display: flex;
+    flex-direction: column;
+    font-size: 1.1rem;
+}
+
+.hyper-sidebar .guide-links a:not(:last-child) {
+    margin-bottom: 1rem;
+}
+
 .hyper-sidebar .nav {
     display: block;
     margin-bottom: 2rem;

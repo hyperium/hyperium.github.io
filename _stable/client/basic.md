@@ -106,6 +106,7 @@ tokio::task::spawn(async move {
 #     .uri(url)
 #     .header(hyper::header::HOST, authority.as_str())
 #     .body(Empty::<Bytes>::new())?;
+# sender.ready().await?;
 # let mut res = sender.send_request(req).await?;
 # Ok(())
 # }
@@ -153,6 +154,7 @@ let req = Request::builder()
     .body(Empty::<Bytes>::new())?;
 
 // Await the response...
+sender.ready().await?;
 let mut res = sender.send_request(req).await?;
 
 println!("Response status: {}", res.status());
@@ -205,6 +207,7 @@ use tokio::io::{stdout, AsyncWriteExt as _};
 # .uri(url)
 # .header(hyper::header::HOST, authority.as_str())
 # .body(Empty::<Bytes>::new())?;
+# sender.ready().await?;
 # let mut res = sender.send_request(req).await?;
 // Stream the body, writing each frame to stdout as it arrives
 while let Some(next) = res.frame().await {

@@ -13,7 +13,7 @@ You can start using it by first adding it to your `Cargo.toml`:
 
 ```toml
 [dependencies]
-hyper = { version = "1.0.0-rc.3", features = ["full"] }
+hyper = { version = "1.0.0-rc.4", features = ["full"] }
 ```
 
 - If building a web server, continue with the [Server guide][].

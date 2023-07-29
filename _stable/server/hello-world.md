@@ -9,9 +9,10 @@ First we need to declare our dependencies, let's add the following to our `Cargo
 
 ```toml
 [dependencies]
-hyper = { version = "1.0.0-rc.3", features = ["full"] }
+hyper = { version = "1.0.0-rc.4", features = ["full"] }
 tokio = { version = "1", features = ["full"] }
-http-body-util = "0.1.0-rc.2" 
+http-body-util = "0.1.0-rc.3"
+hyper-util = { git = "https://github.com/hyperium/hyper-util.git" }
 ```
 
 Next, we need to add some imports in our `main.rs` file:
@@ -20,6 +21,7 @@ Next, we need to add some imports in our `main.rs` file:
 # extern crate tokio;
 # extern crate hyper;
 # extern crate http_body_util;
+# extern crate hyper_util;
 use std::convert::Infallible;
 use std::net::SocketAddr;
 
@@ -28,6 +30,7 @@ use hyper::body::Bytes;
 use hyper::server::conn::http1;
 use hyper::service::service_fn;
 use hyper::{Request, Response};
+use hyper_util::rt::TokioIo;
 use tokio::net::TcpListener;
 # fn main() {}
 ```
@@ -72,6 +75,7 @@ We'll dive in to the specifics of some of these things in another guide.
 # extern crate tokio;
 # extern crate hyper;
 # extern crate http_body_util;
+# extern crate hyper_util;
 # mod no_run {
 # use std::convert::Infallible;
 # use std::net::SocketAddr;
@@ -81,6 +85,7 @@ We'll dive in to the specifics of some of these things in another guide.
 # use hyper::server::conn::http1;
 # use hyper::service::service_fn;
 # use hyper::{Request, Response};
+# use hyper_util::rt::TokioIo;
 # use tokio::net::TcpListener;
 # async fn hello(
 #     _: Request<hyper::body::Incoming>,
@@ -98,12 +103,16 @@ async fn main() -> Result<(), Box<dyn std::error::Error + Send + Sync>> {
     loop {
         let (stream, _) = listener.accept().await?;
 
+        // Use an adapter to access something implementing `tokio::io` traits as if they implement
+        // `hyper::rt` IO traits.
+        let io = TokioIo::new(stream);
+
         // Spawn a tokio task to serve multiple connections concurrently
         tokio::task::spawn(async move {
             // Finally, we bind the incoming connection to our `hello` service
             if let Err(err) = http1::Builder::new()
                 // `service_fn` converts our function in a `Service`
-                .serve_connection(stream, service_fn(hello))
+                .serve_connection(io, service_fn(hello))
                 .await
             {
                 println!("Error serving connection: {:?}", err);

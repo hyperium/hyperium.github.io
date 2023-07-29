@@ -19,9 +19,10 @@ EOF
         fi
         if [ $value = stable ]; then
             cat >> "$value/Cargo.toml" <<-EOF
-    hyper = { version = "1.0.0-rc.3", features = ["full"] }
+    hyper = { version = "1.0.0-rc.4", features = ["full"] }
     tokio = { version = "1", features = ["full"] }
-    http-body-util = "0.1.0-rc.2" 
+    http-body-util = "0.1.0-rc.3" 
+    hyper-util = { git = "https://github.com/hyperium/hyper-util.git" }
 EOF
             cargo build --manifest-path "$value/Cargo.toml"
         fi

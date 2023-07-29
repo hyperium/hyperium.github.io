@@ -11,9 +11,10 @@ Let's tell Cargo about our dependencies by having this in the Cargo.toml.
 
 ```toml
 [dependencies]
-hyper = { version = "1.0.0-rc.3", features = ["full"] }
+hyper = { version = "1.0.0-rc.4", features = ["full"] }
 tokio = { version = "1", features = ["full"] }
-http-body-util = "0.1.0-rc.2"
+http-body-util = "0.1.0-rc.3"
+hyper-util = { git = "https://github.com/hyperium/hyper-util.git" }
 ```
 
 Now, we need to import pieces to use from our dependencies:
@@ -22,9 +23,11 @@ Now, we need to import pieces to use from our dependencies:
 # extern crate http_body_util;
 # extern crate hyper;
 # extern crate tokio;
+# extern crate hyper_util;
 use http_body_util::Empty;
 use hyper::Request;
 use hyper::body::Bytes;
+use hyper_util::rt::TokioIo;
 use tokio::net::TcpStream;
 # fn main() {}
 ```
@@ -74,10 +77,12 @@ setup we'll spawn a `tokio::task` and `await` it.
 ```rust
 # extern crate http_body_util;
 # extern crate hyper;
+# extern crate hyper_util;
 # extern crate tokio;
 # use http_body_util::Empty;
 # use hyper::body::Bytes;
 # use hyper::Request;
+# use hyper_util::rt::TokioIo;
 # use tokio::net::TcpStream;
 # async fn run() -> Result<(), Box<dyn std::error::Error + Send + Sync>> {
 // Parse our URL...
@@ -92,8 +97,12 @@ let address = format!("{}:{}", host, port);
 // Open a TCP connection to the remote host
 let stream = TcpStream::connect(address).await?;
 
+// Use an adapter to access something implementing `tokio::io` traits as if they implement
+// `hyper::rt` IO traits.
+let io = TokioIo::new(stream);
+
 // Perform a TCP handshake
-let (mut sender, conn) = hyper::client::conn::http1::handshake(stream).await?;
+let (mut sender, conn) = hyper::client::conn::http1::handshake(io).await?;
 
 // Spawn a task to poll the connection, driving the HTTP state
 tokio::task::spawn(async move {
@@ -126,10 +135,12 @@ status of the response to see that it returned the expected `200 OK` status.
 ```rust
 # extern crate http_body_util;
 # extern crate hyper;
+# extern crate hyper_util;
 # extern crate tokio;
 # use http_body_util::Empty;
 # use hyper::body::Bytes;
 # use hyper::Request;
+# use hyper_util::rt::TokioIo;
 # use tokio::net::TcpStream;
 # async fn run() -> Result<(), Box<dyn std::error::Error + Send + Sync>> {
 # let url = "http://httpbin.org/ip".parse::<hyper::Uri>()?;
@@ -137,7 +148,8 @@ status of the response to see that it returned the expected `200 OK` status.
 # let port = url.port_u16().unwrap_or(80);
 # let addr = format!("{}:{}", host, port);
 # let stream = TcpStream::connect(addr).await?;
-# let (mut sender, conn) = hyper::client::conn::http1::handshake(stream).await?;
+# let io = TokioIo::new(stream);
+# let (mut sender, conn) = hyper::client::conn::http1::handshake(io).await?;
 # tokio::task::spawn(async move {
 # if let Err(err) = conn.await {
 # println!("Connection failed: {:?}", err);
@@ -182,10 +194,12 @@ use tokio::io::{stdout, AsyncWriteExt as _};
 ```rust
 # extern crate http_body_util;
 # extern crate hyper;
+# extern crate hyper_util;
 # extern crate tokio;
 # use http_body_util::{BodyExt, Empty};
 # use hyper::body::Bytes;
 # use hyper::Request;
+# use hyper_util::rt::TokioIo;
 # use tokio::net::TcpStream;
 # use tokio::io::{self, AsyncWriteExt as _};
 # async fn run() -> Result<(), Box<dyn std::error::Error + Send + Sync>> {
@@ -194,7 +208,8 @@ use tokio::io::{stdout, AsyncWriteExt as _};
 # let port = url.port_u16().unwrap_or(80);
 # let addr = format!("{}:{}", host, port);
 # let stream = TcpStream::connect(addr).await?;
-# let (mut sender, conn) = hyper::client::conn::http1::handshake(stream).await?;
+# let io = TokioIo::new(stream);
+# let (mut sender, conn) = hyper::client::conn::http1::handshake(io).await?;
 # tokio::task::spawn(async move {
 #     if let Err(err) = conn.await {
 #         println!("Connection failed: {:?}", err);

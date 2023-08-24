@@ -8,34 +8,53 @@
     <section class="hyper-pageheader">
       <div class="container">
         <h1>hyper</h1>
-        <p>Fast and safe HTTP for the Rust language.</p>
+        <p>A protective and efficient HTTP library for all.</p>
         <p><a href="/guides/1" class="btn hyper-getstarted">Get Started</a></p>
       </div>
     </section>
     <section class="container">
       <div class="row">
         <div class="col-md-6">
-        <p class="lead">
-          <b>Note:</b> hyper is planning a stable <code>1.0</code> release in 2023.
-          These guides will be gradually transitioned to <code>1.0</code>, but if you're looking for
-          guides for <code>0.14</code> you can find them <a href="/guides/0.14">here</a>. If you'd like to
-          learn more about the move to <code>1.0</code>, 
-          <a href="https://seanmonstar.com/post/680802159018803200/hyper-10-roadmap">this</a> is a good place to start.
-        </p>
-        <p class="lead">hyper is a fast HTTP implementation written in and for Rust.</p>
-        <ul>
-            <li>A <strong>Client</strong> for talking to web services.</li>
-            <li>A <strong>Server</strong> for building those web services.</li>
-            <li>Blazing <strong>fast</strong><a href="https://www.techempower.com/benchmarks/#section=data-r18&hw=ph&test=plaintext">*</a> thanks to Rust.</li>
-            <li>High <strong>concurrency</strong> with non-blocking sockets.</li>
-            <li>HTTP/1 and <strong>HTTP/2</strong> support.</li>
-        </ul>
+          <h3>The HTTP implementation for Rust</h3>
+          <ul>
+              <li>A <strong>Client</strong> for talking to web services.</li>
+              <li>A <strong>Server</strong> for building those web services.</li>
+              <li>Blazing <strong>fast</strong><a href="https://www.techempower.com/benchmarks/#section=data-r18&hw=ph&test=plaintext">*</a> thanks to Rust.</li>
+              <li>High <strong>concurrency</strong> with non-blocking sockets.</li>
+              <li>HTTP/1 and <strong>HTTP/2</strong> support.</li>
+          </ul>
+        </div>
+        <div class="col-md-6">
+          <h3>Latest: 1.0 coming soon</h3>
+          <p><strong>Note:</strong> hyper is planning a stable <code>1.0</code> release in 2023. These guides will be gradually transitioned to <code>1.0</code>, but if you're looking for guides for <code>0.14</code> you can find them <a href="/guides/0.14">here</a>. If you'd like to learn more about the move to <code>1.0</code>, <a href="https://seanmonstar.com/post/680802159018803200/hyper-10-roadmap">this</a> is a good place to start.</p>
+        </div>
       </div>
-      <div class="col-md-6">
-        {{ content }}
+      <div class="row">
+        <div class="col-md-6 col-lg-4">
+          <h3>Open</h3>
+          <p>hyper is open source, always. The success of hyper depends on the health of the community building and using it. All contributions are in the open.</p>
+        </div>
+        <div class="col-md-6 col-lg-4">
+          <h3>Correct</h3>
+          <p>hyper is a memory safe and robust implementation of the HTTP specification. Memory safety is vital in a core Internet technology. Following the HTTP specifications correctly protects users. It makes the software durable to the “real world”. Where feasible, hyper enforces correct usage.</p>
+        </div>
+        <div class="col-md-6 col-lg-4">
+          <h3>Fast</h3>
+          <p>A fast experience delights users. A faster network library means a faster application, resulting in delighting our users’ users. Whether with one request, or millions.</p>
+        </div>
+        <div class="col-md-6 col-lg-4">
+          <h3>HTTP/*</h3>
+          <p>hyper is specifically focused on HTTP. Support for HTTP/1 and HTTP/2, with HTTP/3 in the works.</p>
+        </div>
+        <div class="col-md-6 col-lg-4">
+          <h3>Flexible</h3>
+          <p>hyper enables as many usecases as possible. It has no opinion on application structure, and makes few assumptions about its environment. This includes being portable to different operating systems.</p>
+        </div>
+        <div class="col-md-6 col-lg-4">
+          <h3>Understable</h3>
+          <p>hyper is no more complicated than it has to be. HTTP is not simple. It may not be as “easy” as 1-line to do everything, but it shouldn’t be “hard” to find the answers.</p>
+        </div>
       </div>
-
-    </div>
     </section>
 
     {% include footer.html %}

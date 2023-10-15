@@ -11,6 +11,7 @@ To see what these roles do, and how to become one, look at [governance](./govern
 - Eray Karatay (@programatik29)
 - Oddbjørn Grødem (@oddgrd)
 - Noah Kennedy (@Noah-Kennedy)
+- tottoto (@tottoto)
 
 ## Collaborators
 

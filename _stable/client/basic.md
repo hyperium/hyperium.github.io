@@ -11,9 +11,9 @@ Let's tell Cargo about our dependencies by having this in the Cargo.toml.
 
 ```toml
 [dependencies]
-hyper = { version = "1.0.0-rc.4", features = ["full"] }
+hyper = { version = "1", features = ["full"] }
 tokio = { version = "1", features = ["full"] }
-http-body-util = "0.1.0-rc.3"
+http-body-util = "0.1"
 hyper-util = { git = "https://github.com/hyperium/hyper-util.git" }
 ```
 

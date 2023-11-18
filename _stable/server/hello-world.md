@@ -12,7 +12,7 @@ First we need to declare our dependencies, let's add the following to our `Cargo
 hyper = { version = "1", features = ["full"] }
 tokio = { version = "1", features = ["full"] }
 http-body-util = "0.1"
-hyper-util = { git = "https://github.com/hyperium/hyper-util.git" }
+hyper-util = { git = "https://github.com/hyperium/hyper-util.git", features = ["tokio"] }
 ```
 
 Next, we need to add some imports in our `main.rs` file:

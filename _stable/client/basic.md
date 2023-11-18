@@ -14,7 +14,7 @@ Let's tell Cargo about our dependencies by having this in the Cargo.toml.
 hyper = { version = "1", features = ["full"] }
 tokio = { version = "1", features = ["full"] }
 http-body-util = "0.1"
-hyper-util = { git = "https://github.com/hyperium/hyper-util.git" }
+hyper-util = { version = "0.1", features = ["full"] }
 ```
 
 Now, we need to import pieces to use from our dependencies:

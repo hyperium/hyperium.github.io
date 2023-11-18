@@ -22,7 +22,7 @@ EOF
     hyper = { version = "1", features = ["full"] }
     tokio = { version = "1", features = ["full"] }
     http-body-util = "0.1"
-    hyper-util = { git = "https://github.com/hyperium/hyper-util.git" }
+    hyper-util = { git = "https://github.com/hyperium/hyper-util.git", features = ["tokio"] }
 EOF
             cargo build --manifest-path "$value/Cargo.toml"
         fi

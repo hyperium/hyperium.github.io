@@ -1,7 +1,7 @@
 
 <section class="guide-topic">
   <h4 class="guide-topic-title">
-      {% if topic.anchor %}<a href="{{ topic.path | prepend:"/" | prepend: topic.path | prepend:"/guides/1" | append:"/" }}>{% endif %}
+      {% if topic.anchor %}<a href="{{ topic.path | prepend:"/guides/1" | append:"/" }}">{% endif %}
       {{ topic.title }}
       {% if topic.anchor %}</a>{% endif %}
   </h4>

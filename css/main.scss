@@ -49,6 +49,13 @@ pre code {
     padding: 1.5rem;
 }
 
+blockquote {
+    border-left: 3px solid $grey-color-light;
+    color: $grey-color-dark;
+    margin-left: 1em;
+    padding: 0 1em;
+}
+
 .card pre {
     background: none;
 }

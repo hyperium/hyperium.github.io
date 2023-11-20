@@ -3,6 +3,7 @@
   guides:
   - server
   - client
+  - upgrading
 
 - title: Server
   path: "/server"
@@ -17,3 +18,7 @@
   - basic
   - advanced
   - configuration
+
+- title: Upgrading
+  path: "/upgrading"
+  guides: []

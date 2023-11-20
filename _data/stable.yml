@@ -21,4 +21,5 @@
 
 - title: Upgrading
   path: "/upgrading"
+  anchor: true
   guides: []

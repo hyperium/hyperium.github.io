@@ -1,6 +1,10 @@
 
 <section class="guide-topic">
-  <h4 class="guide-topic-title">{{ topic.title }}</h4>
+  <h4 class="guide-topic-title">
+      {% if topic.anchor %}<a href="{{ topic.path | prepend:"/" | prepend: topic.path | prepend:"/guides/1" | append:"/" }}>{% endif %}
+      {{ topic.title }}
+      {% if topic.anchor %}</a>{% endif %}
+  </h4>
   <ul class="nav">
   {% if page.collection == "legacy" %}
     {% for guide in  topic.guides %}

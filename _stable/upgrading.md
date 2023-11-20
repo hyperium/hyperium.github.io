@@ -1,12 +1,14 @@
 ---
-title:  Upgrade from 0.14 to 1
+title:  Upgrade from v0.14 to v1
 layout: guide
 permalink: /guides/1/upgrading/
 ---
 
 This guide is meant to help you upgrade from v0.14 of hyper to v1.
 
-## Backports and Deprecations
+> Were you looking for the [v0.14 guides](/guides/0.14/)?
+
+## Prepare with Backports and Deprecations
 
 Before upgrading, you can start preparing your 0.14 code base by enabling the
 `backports` and `deprecated` features of hyper in your `Cargo.toml`. Like
@@ -21,10 +23,10 @@ The `backports` feature brings several of the new types from 1.0 to 0.14. If
 you enable `deprecated` feature as well, it will add deprecation warnings to
 any of hyper's types that have direct backports available.
 
-**NOTE**: This won't give you warnings about changes where backports were not
+> **NOTE**: This won't give you warnings about changes where backports were not
 able to be provided.
 
-## Changelog
+## Read the Changelog
 
 As a general rule, we tried hard to mark every possible breaking change in the
 [changelog][]. Read through the "breaking changes" section of the 1.0 releases
@@ -64,5 +66,6 @@ The listening server acceptor can be replaced with a simple loop.
 
 [changelog]: https://github.com/hyperium/hyper/blob/master/CHANGELOG.md#v100-2023-11-15
 [`hyper-util`]: https://crates.io/crates/hyper-util
+[http-body-util]: https://docs.rs/http-body-util
 [legacy]: https://docs.rs/hyper-util/latest/hyper_util/client/legacy/struct.Client.html
 [auto]: https://docs.rs/hyper-util/latest/hyper_util/server/conn/auto/struct.Builder.html

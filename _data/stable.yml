@@ -1,9 +1,15 @@
 - title: Guide
   path: ""
   guides:
+  - init
   - server
   - client
   - upgrading
+
+- title: Init
+  path: "/init"
+  guides:
+  - setup
 
 - title: Server
   path: "/server"

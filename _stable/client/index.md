@@ -1,6 +1,7 @@
 ---
 title: Client Guides
-permalink: /1/client/
+layout: guide
+permalink: /guides/1/client/
 ---
 
 This is just placeholder page. It should probably become a table of

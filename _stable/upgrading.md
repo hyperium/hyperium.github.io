@@ -33,7 +33,7 @@ As a general rule, we tried hard to mark every possible breaking change in the
 (including the RC 1-4), which will provide suggestions on how to overcome each
 one.
 
-## `hyper::Body`
+## `Body`
 
 The `Body` type has changed to be a trait (what used to be `HttpBody`).
 
@@ -47,13 +47,13 @@ use `hyper::Body` to decide which solution to switch to.
 - Otherwise, the [more specific variants][http-body-util] allow for a more
   explicit API in your code.
 
-## `hyper::Client`
+## `Client`
 
 The higher-level pooling `Client` was removed from hyper 1.0. A similar type
 was added to [`hyper-util`][], called [`client::legacy::Client`][legacy]. It's
 mostly a drop-in replacement.
 
-## `hyper::Server`
+## `Server`
 
 The v0.14 `hyper::Server` does not have a drop-in replacement, since it had
 problems.

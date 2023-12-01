@@ -2,11 +2,12 @@
 title:  Getting Started
 layout: guide
 permalink: /guides/0.14/
-redirect_from: 
-    - /guides/
 ---
 
 hyper is an HTTP library for the Rust language.
+
+> **NOTE**: These guides are for the older 0.14.x version of hyper. Did
+> you want the [v1 guides](/guides/1)?
 
 You can start using it by first adding it to your `Cargo.toml`:
 

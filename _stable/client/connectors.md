@@ -31,5 +31,4 @@ help you get started[^tls-list]:
 - [hyper-rustls](https://crates.io/crates/hyper-rustls)
 - [hyper-openssl](https://crates.io/crates/hyper-openssl)
 
-[^tls-list]: This isn't an endorsement for any of the crates, and they
-  all are maintained separately from hyper.
+[^tls-list]: This isn't an endorsement for any of the crates, and they all are maintained separately from hyper.

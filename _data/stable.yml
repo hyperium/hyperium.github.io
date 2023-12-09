@@ -16,14 +16,12 @@
   guides:
   - hello-world
   - echo
-  - graceful-shutdown
 
 - title: Client
   path: "/client"
   guides:
   - basic
-  - advanced
-  - configuration
+  - connectors
 
 - title: Upgrading
   path: "/upgrading"

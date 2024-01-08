@@ -40,7 +40,7 @@ but the point here is just to show all the setup required. Once you have this,
 you are set to make thousands of client requests efficiently.
 
 We have to setup some sort of runtime. You can use whichever async runtime you'd
-like, but for this guide we're going to use tokio. If you've never used futures 
+like, but for this guide we're going to use tokio. If you've never used futures
 in Rust before, you may wish to read through [Tokio's guide on Futures][Tokio-Futures].
 
 ```rust
@@ -59,19 +59,19 @@ async fn main() -> Result<(), Box<dyn std::error::Error + Send + Sync>> {
 ## Setup
 
 To get started we'll need to get a few things setup. For this guide we're
-going to send a GET [`Request`][Request] to [http://httpbin.org/ip](http://httpbin.org/ip), 
-which will return a `200 OK` and the Requester's IP address in the body. 
+going to send a GET [`Request`][Request] to [http://httpbin.org/ip](http://httpbin.org/ip),
+which will return a `200 OK` and the Requester's IP address in the body.
 
 We need to open a TCP connection to the remote host using a hostname and port,
 which in this case is `httpbin.org` and the default port for HTTP: `80`. With our
 connection opened, we pass it in to the `client::conn::http1::handshake` function,
-performing a handshake to verify the remote is ready to receive our requests. 
+performing a handshake to verify the remote is ready to receive our requests.
 
 A successful handshake will give us a [Connection][Connection] future that processes
-all HTTP state, and a [SendRequest][SendRequest] struct that we can use to send our 
-`Request`s on the connection. 
+all HTTP state, and a [SendRequest][SendRequest] struct that we can use to send our
+`Request`s on the connection.
 
-To start driving the HTTP state we have to poll the `Connection`, so to finish our 
+To start driving the HTTP state we have to poll the `Connection`, so to finish our
 setup we'll spawn a `tokio::task` and `await` it.
 
 ```rust
@@ -123,12 +123,12 @@ tokio::task::spawn(async move {
 
 ## GET
 
-Now that we've set up our connection, we're ready to construct and send our first `Request`! 
-Since `SendRequest` doesn't require absolute-form `URI`s we are required to include a `HOST` 
+Now that we've set up our connection, we're ready to construct and send our first `Request`!
+Since `SendRequest` doesn't require absolute-form `URI`s we are required to include a `HOST`
 header in our requests. And while we can send our `Request` with an empty `Body`, we need to
 explicitly set it, which we'll do with the [`Empty`][Empty] utility struct.
 
-All we need to do now is pass the `Request` to `SendRequest::send_request`, this returns a 
+All we need to do now is pass the `Request` to `SendRequest::send_request`, this returns a
 future which will resolve to the [`Response`][Response] from `httpbin.org`. We'll print the
 status of the response to see that it returned the expected `200 OK` status.
 
@@ -179,7 +179,7 @@ We know that sending a GET `Request` to `httpbin.org/ip` will return our IP addr
 the `Response` body. To see the returned body, we'll simply write it to `stdout`.
 
 Bodies in hyper are asynchronous streams of [`Frame`][Frame]s, so we don't have to wait for the
-whole body to arrive, buffering it into memory, and then writing it out. We can simply 
+whole body to arrive, buffering it into memory, and then writing it out. We can simply
 `await` each `Frame` and write them directly to `stdout` as they arrive!
 
 In addition to importing `stdout`, we'll need to make use of the `BodyExt` trait:
@@ -188,7 +188,7 @@ In addition to importing `stdout`, we'll need to make use of the `BodyExt` trait
 # extern crate http_body_util;
 # extern crate tokio;
 use http_body_util::BodyExt;
-use tokio::io::{stdout, AsyncWriteExt as _};
+use tokio::io::{AsyncWriteExt as _, self};
 ```
 
 ```rust
@@ -225,7 +225,7 @@ use tokio::io::{stdout, AsyncWriteExt as _};
 while let Some(next) = res.frame().await {
     let frame = next?;
     if let Some(chunk) = frame.data_ref() {
-        io::stdout().write_all(&chunk).await?;
+        io::stdout().write_all(chunk).await?;
     }
 }
 # Ok(())

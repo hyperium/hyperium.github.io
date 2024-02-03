@@ -3,7 +3,7 @@ title: Getting Started with a Server Middleware
 layout: guide
 ---
 
-As [Upgrade](upgrading) mentioned, hyper v1 is not depended on tower for the Service trait. When we want to add tower-like middleware, there are 2 kind of approach to make it.
+As [Upgrade](upgrading) mentioned, hyper v1 does not depend on tower for the `Service` trait. When we want to add tower-like middleware, there are 2 kinds of approach to make it.
 
 Let's create a Logger middleware in [hello-world server](hello-world) for instance:
 

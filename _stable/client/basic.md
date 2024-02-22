@@ -101,7 +101,7 @@ let stream = TcpStream::connect(address).await?;
 // `hyper::rt` IO traits.
 let io = TokioIo::new(stream);
 
-// Perform a TCP handshake
+// Create the Hyper client
 let (mut sender, conn) = hyper::client::conn::http1::handshake(io).await?;
 
 // Spawn a task to poll the connection, driving the HTTP state

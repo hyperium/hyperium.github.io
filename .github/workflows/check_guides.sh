@@ -30,7 +30,7 @@ EOF
 
     test_file() {
         echo "Testing: $f"
-        rustdoc --edition 2018 --test $1 -L "$value/target/debug/deps"
+        rustdoc --edition 2021 --test $1 -L "$value/target/debug/deps"
     }
 
     if [ -n "$1" ]; then

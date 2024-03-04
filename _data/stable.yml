@@ -10,6 +10,7 @@
   path: "/init"
   guides:
   - setup
+  - runtime
 
 - title: Server
   path: "/server"

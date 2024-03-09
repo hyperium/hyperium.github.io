@@ -17,6 +17,7 @@
   guides:
   - hello-world
   - echo
+  - middleware
 
 - title: Client
   path: "/client"

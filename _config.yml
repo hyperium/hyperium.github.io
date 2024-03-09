@@ -57,6 +57,7 @@ docs_url: https://docs.rs/hyper
 examples_url: https://github.com/hyperium/hyper/tree/master/examples
 http_body_util_url: https://docs.rs/http-body-util
 hyper_tls_url: https://docs.rs/hyper-tls
+hyper_util_url: https://docs.rs/hyper-util
 
 futures_url: https://docs.rs/futures/0.3.*
 legacy_docs_url: https://docs.rs/hyper/0.14.*

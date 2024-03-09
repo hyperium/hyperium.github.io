@@ -68,7 +68,7 @@ The listening server acceptor can be replaced with a simple loop.
 Previously, hyper depended on `tower` for the `Service` trait. Because
 `tower` is not yet 1.0, hyper could not publicly depend on it. So, it's
 `Service` trait and the helper function `service_fn` are defined in
-`hyper::service`.
+`hyper::service`. Check [middleware](https://hyper.rs/guides/1/server/middleware/) for more details.
 
 [changelog]: https://github.com/hyperium/hyper/blob/master/CHANGELOG.md#v100-2023-11-15
 [`hyper-util`]: https://crates.io/crates/hyper-util

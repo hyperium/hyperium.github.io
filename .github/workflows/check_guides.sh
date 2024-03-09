@@ -23,6 +23,7 @@ EOF
     tokio = { version = "1", features = ["full"] }
     http-body-util = "0.1"
     hyper-util = { version = "0.1", features = ["full"] }
+    tower = "0.4"
 EOF
             cargo build --manifest-path "$value/Cargo.toml"
         fi

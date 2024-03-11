@@ -3,9 +3,9 @@ title: Getting Started with a Server Middleware
 layout: guide
 ---
 
-As [Upgrade](upgrading) mentioned, hyper v1 does not depend on tower for the `Service` trait. When we want to add tower-like middleware, there are 2 kinds of approach to make it.
+As [Upgrade][upgrading] mentioned, hyper v1 does not depend on tower for the `Service` trait. When we want to add tower-like middleware, there are 2 kinds of approach to make it.
 
-Let's create a Logger middleware in [hello-world server](hello-world) for instance:
+Let's create a Logger middleware in [hello-world server][hello-world] for instance:
 
 Add tower dependency first
 
@@ -122,7 +122,7 @@ async fn main() -> Result<(), Box<dyn std::error::Error + Send + Sync>> {
 
 ## Option 2: use hyper TowerToHyperService trait
 
-[hyper_util::service::TowerToHyperService](adapter-trait) trait is an adapter to convert tower Service to hyper Service.
+[hyper_util::service::TowerToHyperService][adapter-trait] trait is an adapter to convert tower Service to hyper Service.
 
 Now implement a tower Logger middleware
 

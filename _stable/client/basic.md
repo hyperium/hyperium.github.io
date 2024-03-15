@@ -112,7 +112,7 @@ tokio::task::spawn(async move {
 });
 # let authority = url.authority().unwrap().clone();
 # let req = Request::builder()
-#     .uri(url)
+#     .uri(url.path())
 #     .header(hyper::header::HOST, authority.as_str())
 #     .body(Empty::<Bytes>::new())?;
 # let mut res = sender.send_request(req).await?;
@@ -160,7 +160,7 @@ let authority = url.authority().unwrap().clone();
 
 // Create an HTTP request with an empty body and a HOST header
 let req = Request::builder()
-    .uri(url)
+    .uri(url.path())
     .header(hyper::header::HOST, authority.as_str())
     .body(Empty::<Bytes>::new())?;
 
@@ -217,9 +217,9 @@ use tokio::io::{AsyncWriteExt as _, self};
 # });
 # let authority = url.authority().unwrap().clone();
 # let req = Request::builder()
-# .uri(url)
-# .header(hyper::header::HOST, authority.as_str())
-# .body(Empty::<Bytes>::new())?;
+#     .uri(url.path())
+#     .header(hyper::header::HOST, authority.as_str())
+#     .body(Empty::<Bytes>::new())?;
 # let mut res = sender.send_request(req).await?;
 // Stream the body, writing each frame to stdout as it arrives
 while let Some(next) = res.frame().await {

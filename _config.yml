@@ -53,11 +53,12 @@ relative_links:
 plugins:
   - jekyll-redirect-from
 
-docs_url: https://docs.rs/hyper
+hyper_docs_url: https://docs.rs/hyper/latest
 examples_url: https://github.com/hyperium/hyper/tree/master/examples
-http_body_util_url: https://docs.rs/http-body-util
-hyper_tls_url: https://docs.rs/hyper-tls
-hyper_util_url: https://docs.rs/hyper-util
+http_body_util_url: https://docs.rs/http-body-util/latest
+hyper_tls_url: https://docs.rs/hyper-tls/latest
+hyper_util_url: https://docs.rs/hyper-util/latest
+http_docs_url: https://docs.rs/http/latest
 
 futures_url: https://docs.rs/futures/0.3.*
 legacy_docs_url: https://docs.rs/hyper/0.14.*

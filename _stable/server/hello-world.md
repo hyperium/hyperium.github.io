@@ -129,10 +129,10 @@ To see all the snippets put together, check out the [full example][example]!
 Also, if `service_fn` doesn't meet your requirements and you'd like to implement 
 `Service` yourself, see this [example][impl service].
 
-[service]: {{ site.docs_url }}/hyper/service/trait.Service.html
-[service_fn]: {{ site.docs_url }}/hyper/service/fn.service_fn.html
-[request]: {{ site.docs_url }}/hyper/struct.Request.html
-[response]: {{ site.docs_url }}/hyper/struct.Response.html
-[parts]: {{ site.docs_url }}/http/0.2.8/http/response/struct.Parts.html
+[service]: {{ site.hyper_docs_url }}/hyper/service/trait.Service.html
+[service_fn]: {{ site.hyper_docs_url }}/hyper/service/fn.service_fn.html
+[request]: {{ site.hyper_docs_url }}/hyper/struct.Request.html
+[response]: {{ site.hyper_docs_url }}/hyper/struct.Response.html
+[parts]: {{ site.http_docs_url }}/http/response/struct.Parts.html
 [example]: {{ site.examples_url }}/hello.rs
 [impl service]: {{ site.examples_url }}/service_struct_impl.rs

@@ -115,7 +115,7 @@ async fn main() -> Result<(), Box<dyn std::error::Error + Send + Sync>> {
                 .serve_connection(io, service_fn(hello))
                 .await
             {
-                println!("Error serving connection: {:?}", err);
+                eprintln!("Error serving connection: {:?}", err);
             }
         });
     }

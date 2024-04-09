@@ -16,6 +16,6 @@ setup](init/setup).
 
 You could also look at the [generated API documentaton][docs].
 
-[docs]: {{ site.docs_url }}
+[docs]: {{ site.hyper_docs_url }}
 [Server guide]: server/hello-world
 [Client guide]: client/basic

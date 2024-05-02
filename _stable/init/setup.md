@@ -24,5 +24,5 @@ And with that, you're good to go! Depending on what you want to
 accomplish, you can move on to either the [client][] or [server][]
 guides.
 
-[client]: ../../client
-[server]: ../../server
+[client]: ../../client/basic
+[server]: ../../server/basic

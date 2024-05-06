@@ -25,4 +25,4 @@ accomplish, you can move on to either the [client][] or [server][]
 guides.
 
 [client]: ../../client/basic
-[server]: ../../server/basic
+[server]: ../../server/hello-world/

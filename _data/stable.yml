@@ -18,6 +18,7 @@
   - hello-world
   - echo
   - middleware
+  - graceful-shutdown
 
 - title: Client
   path: "/client"

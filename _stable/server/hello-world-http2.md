@@ -5,7 +5,7 @@ layout: guide
 
 Let's start by making a "Hello, World!" server but this time with http2.
 
-First we need to declare out dependencies, let's add the following to out `Cargo.toml`:
+First we need to declare our dependencies, let's add the following to our `Cargo.toml`:
 
 ```toml
 [dependencies]
@@ -15,7 +15,7 @@ http-body-util = "0.1"
 hyper-util = { version = "0.1", features = ["full"] }
 ```
 
-Next, we need to add these imports in out `main.rs` file:
+Next, we need to add these imports in our `main.rs` file:
 
 ```rust
 # extern crate tokio;
@@ -58,9 +58,9 @@ with a default `200 OK` status. The response `Body` will contain our friendly
 greeting as a single chunk of bytes, and the `Content-Length` header will be 
 set automatically.
 
-## Creating an Executor that uses the tokio runtime
+## Creating an Executor
 
-The http2 server requires an executor to run. We can use the build this declaring a struct that implements the hyper `Executor` trait.
+The http2 server requires an executor to run.
 
 ```rust
 impl<F> hyper::rt::Executor<F> for TokioExecutor
@@ -74,9 +74,9 @@ where
 }
 ```
 
-## Starting the Server
+## Starting the Server              
 
-Lastly, we need to hook up our `hello` service into a running hyper server.
+We now have to add our `hello` service into a running hyper server.
 
 ```rust
 # use std::convert::Infallible;
@@ -124,7 +124,7 @@ async fn main() -> Result<(), Box<dyn std::error::Error + Send + Sync>> {
 
         // Spawn a tokio task to serve multiple connections concurrently
         tokio::task::spawn(async move{
-            // Finally, we bind the incoming connection to our http2 `hello` service
+            // Finally, we bind the incoming connection to our http2 `hello` service along with our executor
             if let Err(err) = http2::Builder::new(TokioExecutor)
                 // `service_fn` converts our function in a `Service`
                 .serve_connection(io, service_fn(hello))

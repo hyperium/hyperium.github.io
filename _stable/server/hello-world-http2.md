@@ -148,4 +148,4 @@ Also, if `service_fn` doesn't meet your requirements and you'd like to implement
 [response]: {{ site.hyper_docs_url }}/hyper/struct.Response.html
 [parts]: {{ site.http_docs_url }}/http/response/struct.Parts.html
 [example]: {{ site.examples_url }}/hello-http2.rs
-[impl service]: {{ site.examples_url }}/service_struct_impl-http2.rs
+[impl service]: {{ site.examples_url }}/service_struct_impl.rs

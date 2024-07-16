@@ -126,6 +126,24 @@ async fn main() -> Result<(), Box<dyn std::error::Error + Send + Sync>> {
 
 To see all the snippets put together, check out the [full example][example]!
 
+This example uses the `http1` module to create a server that speaks HTTP/1.
+In case you want to use HTTP/2, you can use the `http2` module with a few changes to the
+http1 server. The http2 builder requires an executor to run. Executor should implement the `hyper::rt::Executor` trait.
+
+```rust
+impl<F> hyper::rt::Executor<F> for TokioExecutor
+where
+    F: std::future::Future + Send + 'static,
+    F::Output: Send + 'static,
+    {
+        fn execute(&self, fut: F) { 
+        tokio::task::spawn(fut);    
+    }
+}
+```
+
+The see the full example with HTTP/2, check out the [full example][example_http2]!
+
 Also, if `service_fn` doesn't meet your requirements and you'd like to implement 
 `Service` yourself, see this [example][impl service].
 
@@ -135,4 +153,5 @@ Also, if `service_fn` doesn't meet your requirements and you'd like to implement
 [response]: {{ site.hyper_docs_url }}/hyper/struct.Response.html
 [parts]: {{ site.http_docs_url }}/http/response/struct.Parts.html
 [example]: {{ site.examples_url }}/hello.rs
+[example_http2]: {{ site.examples_url }}/hello-http2.rs 
 [impl service]: {{ site.examples_url }}/service_struct_impl.rs

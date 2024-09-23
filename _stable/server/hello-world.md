@@ -5,7 +5,7 @@ layout: guide
 
 Let's start by making a "Hello, World!" server, and expand from there.
 
-First we need to declare our dependencies, let's add the following to our `Cargo.toml`:
+First, we need to declare our dependencies, let's add the following to our `Cargo.toml`:
 
 ```toml
 [dependencies]
@@ -43,7 +43,7 @@ incoming requests. It represents an async function that takes a
 future is complete, it will resolve to a [`Response`][response] or an error.
 
 Hyper provides a utility for creating a `Service` from a function that should 
-serve most usecases: [`service_fn`][service_fn]. We will use this to create 
+serve most use cases: [`service_fn`][service_fn]. We will use this to create 
 a service from our `hello` function below when we're ready to start our 
 server.
 
@@ -67,7 +67,7 @@ set automatically.
 
 ## Starting the Server
 
-Lastly, we need to hook up our `hello` service into a running hyper server.
+Lastly, we need to hook up our `hello` service into a running Hyper server.
 
 We'll dive in to the specifics of some of these things in another guide.
 
@@ -129,10 +129,21 @@ To see all the snippets put together, check out the [full example][example]!
 Also, if `service_fn` doesn't meet your requirements and you'd like to implement 
 `Service` yourself, see this [example][impl service].
 
+## HTTP/2
+
+This example uses the `http1` module to create a server that speaks HTTP/1.
+In case you want to use HTTP/2, you can use the `http2` module with a few changes to the
+http1 server. The http2 builder requires an executor to run. Executor should implement the `hyper::rt::Executor` trait.
+
+To implement the Executor, check out the runtime [example][runtime].
+To see the full example with HTTP/2, check out the [full example][example_http2]!
+
 [service]: {{ site.hyper_docs_url }}/hyper/service/trait.Service.html
 [service_fn]: {{ site.hyper_docs_url }}/hyper/service/fn.service_fn.html
 [request]: {{ site.hyper_docs_url }}/hyper/struct.Request.html
 [response]: {{ site.hyper_docs_url }}/hyper/struct.Response.html
 [parts]: {{ site.http_docs_url }}/http/response/struct.Parts.html
 [example]: {{ site.examples_url }}/hello.rs
+[example_http2]: {{ site.examples_url }}/hello-http2.rs 
+[runtime]: ../init/runtime.md
 [impl service]: {{ site.examples_url }}/service_struct_impl.rs

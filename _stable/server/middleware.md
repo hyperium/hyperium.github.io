@@ -233,7 +233,7 @@ async fn main() -> Result<(), Box<dyn std::error::Error + Send + Sync>> {
         let (stream, _) = listener.accept().await?;
         let io = TokioIo::new(stream);
         tokio::spawn(async move {
-            // N.B. should use tower service_fn here, since it's reuqired to be implemented tower Service trait before convert to hyper Service!
+            // N.B. should use tower service_fn here, since it's required to be implemented tower Service trait before convert to hyper Service!
             let svc = tower::service_fn(hello);
             let svc = ServiceBuilder::new().layer_fn(Logger::new).service(svc);
             // Convert it to hyper service

@@ -66,7 +66,7 @@ The listening server acceptor can be replaced with a simple loop.
 ## `Service`/`service_fn`
 
 Previously, hyper depended on `tower` for the `Service` trait. Because
-`tower` is not yet 1.0, hyper could not publicly depend on it. So, it's
+`tower` is not yet 1.0, hyper could not publicly depend on it. So, its
 `Service` trait and the helper function `service_fn` are defined in
 `hyper::service`. Check [middleware](https://hyper.rs/guides/1/server/middleware/) for more details.
 

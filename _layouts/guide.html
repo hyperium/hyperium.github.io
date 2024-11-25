@@ -43,10 +43,15 @@
             </h4>
           </nav>
         </aside>
-        <article class="col-lg-9 hyper-content">
-          {{ content }}
+        <main class="col-lg-9 row">
+          <article class="hyper-content col-lg-9">
+            {{ content }}
+          </article>
+          <aside class="toc col-lg-3">
+            {% include toc.html html=content %}
+          </aside>
           {% include guide_footer.html %}
-        </article>
+        </main>
       </div>
     </div>
 

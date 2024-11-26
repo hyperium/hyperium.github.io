@@ -69,11 +69,11 @@ blockquote {
     background-color: $primary-pagehead-color;
     border: 0;
     margin: 0;
-    padding: 0;
+    padding: 0.5rem 0;
 }
 
 #hyper .navbar a {
-    color: #f5f5f5;
+    color: rgba(255,255,255,0.85);
     display: flex;
     flex-direction: column;
     justify-content: center;
@@ -398,8 +398,17 @@ pre code {
     text-decoration: none;
 }
 
+.navbar .hyper-logo {
+    background: #fff;
+    border-radius: 10px;
+}
+
+.navbar .navbar-brand {
+    transition: transform 0.2s ease-in-out;
+}
+
 .navbar .navbar-brand:hover {
-    color: $primary-highlight-color
+    transform: rotate(-5deg) scale(1.1);
 }
 
 .footnotes {
@@ -414,5 +423,5 @@ pre code {
 }
 
 .hyper-middle {
-    margin-top: 1rem;
+    margin-top: 2rem;
 }

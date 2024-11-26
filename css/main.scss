@@ -66,15 +66,14 @@ blockquote {
 }
 
 .navbar-hyper {
+    background-color: $primary-pagehead-color;
     border: 0;
-    border-bottom: 1px solid #ee9107;
-    border-radius: 0;
     margin: 0;
     padding: 0;
 }
 
 #hyper .navbar a {
-    border-bottom: 5px solid #fff;
+    color: #eee;
     display: flex;
     flex-direction: column;
     justify-content: center;
@@ -92,7 +91,6 @@ blockquote {
 
 #hyper .navbar a:hover, #hyper .navbar a:focus {
     background: none;
-    border-color: $primary-highlight-color;
 }
 
 .navbar .navbar-brand {
@@ -188,6 +186,10 @@ blockquote {
     max-width: 700px;
 }
 
+.hyper-content h1 {
+    color: $primary-color;
+}
+
 .hyper-content h2 {
     color: $primary-color;
     margin: 2rem 0 1rem;
@@ -209,6 +211,10 @@ h3 {
     display: block;
     font-size: 90%;
     padding: 0.25em 0;
+}
+
+.toc li ul {
+    padding-left: 1em;
 }
 
 // footer
@@ -375,7 +381,6 @@ ul, ol {
 
 // row
 .row {
-    --bs-gutter-x: 30px;
 }
 
 // code
@@ -386,17 +391,12 @@ pre code {
 
 // navbar
 .navbar a {
-    color: $primary-color;
     transition: none;
 }
 
 .navbar a:hover, .navbar a:focus {
-    color: $primary-highlight-color;
+    color: #fff;
     text-decoration: none;
-}
-
-.navbar .navbar-brand {
-    color: $primary-color
 }
 
 .navbar .navbar-brand:hover {
@@ -414,4 +414,6 @@ pre code {
     font-size: 0.9rem;
 }
 
-
+.hyper-middle {
+    margin-top: 1rem;
+}

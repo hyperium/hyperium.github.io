@@ -96,7 +96,7 @@ jobs:
       - name: Lowercase filenames and replace underscores
         run: |
           for f in hyper/docs/*; do
-            mv -vn "$f" "$(echo '$f' | tr '[:upper:]' '[:lower:]' | tr '_' '-')";
+            mv -vn "$f" "$(echo \"$f\" | tr '[:upper:]' '[:lower:]' | tr '_' '-')" || true;
           done
 
       - name: Copy the hyper docs to contrib

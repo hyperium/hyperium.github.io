@@ -237,8 +237,8 @@ And that's it! You can see the [full example here][example].
 [Tokio]: https://tokio.rs
 [Tokio-Futures]: https://tokio.rs/tokio/tutorial/async
 [StatusCode]: {{ site.hyper_docs_url }}/hyper/struct.StatusCode.html
-[Response]: {{ site.hyper_docs_url }}/hyper/struct.Response.html
-[Request]: {{ site.hyper_docs_url }}/hyper/struct.Request.html
+[Response]: {{ site.http_docs_url }}/http/request/struct.Request.html
+[Request]: {{ site.http_docs_urll }}/http/response/index.html
 [Connection]: {{ site.hyper_docs_url }}/hyper/client/conn/http1/struct.Connection.html
 [SendRequest]: {{ site.hyper_docs_url }}/hyper/client/conn/http1/struct.SendRequest.html
 [Frame]: {{ site.hyper_docs_url }}/hyper/body/struct.Frame.html

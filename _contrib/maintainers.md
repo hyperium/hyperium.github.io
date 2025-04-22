@@ -24,6 +24,7 @@ To see what these roles do, and how to become one, look at [governance](./govern
 - Noah Kennedy (@Noah-Kennedy)
 - dswij (@dswij)
 - tottoto (@tottoto)
+- katelyn martin (@cratelyn)
 
 <details>
 <summary>Emeriti</summary>

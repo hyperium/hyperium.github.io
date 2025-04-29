@@ -88,6 +88,7 @@ loop {
         },
 
         _ = &mut signal => {
+            drop(listener);
             eprintln!("graceful shutdown signal received");
             // stop the accept loop
             break;

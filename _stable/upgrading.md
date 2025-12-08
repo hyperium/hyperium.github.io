@@ -25,6 +25,8 @@ any of hyper's types that have direct backports available.
 
 > **NOTE**: This won't give you warnings about changes where backports were not
 able to be provided.
+> **NOTE**: You should upgrade `http-body` to version `0.4.6` or newer to be
+> able to access methods in some suggestions.
 
 ## Read the Changelog
 

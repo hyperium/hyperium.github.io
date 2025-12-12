@@ -248,6 +248,6 @@ async fn main() -> Result<(), Box<dyn std::error::Error + Send + Sync>> {
 # fn main() {}
 ```
 
-[hellp-world]: {{ site.url }}/guides/1/server/hello-world/
+[hello-world]: {{ site.url }}/guides/1/server/hello-world/
 [upgrading]: {{ site.url }}/guides/1/upgrading/
 [adapter-trait]: {{ site.hyper_util_url }}/latest/hyper_util/service/struct.TowerToHyperService.html

@@ -19,7 +19,7 @@ For the body, we have a couple of options. We can use a simple string, a JSON st
 # extern crate hyper;
 # extern crate hyper_util;
 # extern crate tokio;
-# use http_body_util::Empty;
+# use http_body_util::{Empty, Full};
 # use hyper::body::Bytes;
 # use hyper::Request;
 # use hyper_util::rt::TokioIo;

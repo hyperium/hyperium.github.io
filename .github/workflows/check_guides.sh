@@ -1,4 +1,6 @@
-#!/bin/sh
+#!/bin/bash
+
+status=0
 
 for value in legacy stable; do
   if [ ! -e "$value/Cargo.toml" ]; then
@@ -11,7 +13,6 @@ for value in legacy stable; do
     case "$value" in
       legacy)
         cat >> "$value/Cargo.toml" <<-EOF
-        [dependencies]
         futures = "0.3"
         hyper = { version = "0.14", features = ["full"] }
         hyper-tls = "0.5"
@@ -20,12 +21,11 @@ EOF
         ;;
       stable)
         cat >> "$value/Cargo.toml" <<-EOF
-        [dependencies]
         hyper = { version = "1", features = ["full"] }
         tokio = { version = "1", features = ["full"] }
         http-body-util = "0.1"
         hyper-util = { version = "0.1", features = ["full"] }
-        tower = "0.4"
+        tower = { version = "0.4", features = ["util"] }
 EOF
         ;;
     esac
@@ -43,7 +43,6 @@ EOF
     exit $?
   fi
 
-  status=0
   for f in $(git ls-files | grep "^_$value\/.*\.md$"); do
     test_file "$f"
     s=$?

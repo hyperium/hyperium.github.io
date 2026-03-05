@@ -66,7 +66,7 @@ We're assuming you have an accept loop for your server, similar to what was show
 # let addr = SocketAddr::from(([127, 0, 0, 1], 3000));
 let listener = TcpListener::bind(addr).await?;
 // specify our HTTP settings (http1, http2, auto all work)
-let mut http = http1::Builder::new();
+let http = http1::Builder::new();
 // the graceful watcher
 let graceful = hyper_util::server::graceful::GracefulShutdown::new();
 // when this signal completes, start shutdown

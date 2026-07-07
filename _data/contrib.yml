@@ -1,14 +1,25 @@
-- title: Contributing 
+- title: Contributing
   path: ""
   docs:
-  - code-of-conduct 
-  - commits
-  - contributing
-  - governance
-  - issues
-  - maintainers
-  - msrv
-  - pull-requests
-  - roadmap
-  - tenets
-  - vision
+  - title: Getting started
+    path: contributing
+  - title: Code of conduct
+    path: code-of-conduct
+  - title: Commits
+    path: commits
+  - title: Issues
+    path: issues
+  - title: Pull requests
+    path: pull-requests
+  - title: MSRV
+    path: msrv
+  - title: Governance
+    path: governance
+  - title: Maintainers
+    path: maintainers
+  - title: Tenets
+    path: tenets
+  - title: Vision
+    path: vision
+  - title: Roadmap
+    path: roadmap

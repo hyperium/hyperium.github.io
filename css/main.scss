@@ -5,8 +5,11 @@
 
 
 
-// Our variables
-$text-color: #333;
+// Core design tokens
+$text-color: #2d333b;
+$muted-text-color: #667085;
+$surface-color: #f7f8fa;
+$border-color: #dfe3e8;
 
 // Orange
 $primary-color: #ee9107;
@@ -16,44 +19,61 @@ $primary-dim-color: #f5b454;
 
 // Blue
 $secondary-color: #077cee;
+$link-color: $secondary-color;
+$link-highlight-color: #0059b3;
 
-$code-bg-color: #f5f5f5;
+$code-bg-color: #f5f7f9;
 
 $grey-color:       #828282;
 $grey-color-light: lighten($grey-color, 40%);
 $grey-color-dark:  darken($grey-color, 25%);
 
+body {
+    color: $text-color;
+    line-height: 1.6;
+    text-rendering: optimizeLegibility;
+}
+
 a {
-    color: #ee9107;
+    color: $link-color;
+    text-decoration-thickness: 0.08em;
+    text-underline-offset: 0.16em;
 }
 
 a:hover, a:focus {
-    color: $primary-highlight-color;
+    color: $link-highlight-color;
 }
 
 code {
     background: $code-bg-color;
-    color: $secondary-color;
-    padding: 3px 5px;
+    color: $text-color;
+    padding: 0.15em 0.35em;
 }
 
 pre {
     background: $code-bg-color;
-    border: 0;
+    border: 1px solid $border-color;
+    border-radius: 0.375rem;
+    overflow-x: auto;
 }
 
 pre code {
     display: block;
-    font-size:90%;
-    line-height: 1.2rem;
+    font-size: 0.875rem;
+    line-height: 1.5;
     padding: 1.5rem;
 }
 
 blockquote {
-    border-left: 3px solid $grey-color-light;
+    background: $surface-color;
+    border-left: 4px solid $primary-color;
     color: $grey-color-dark;
-    margin-left: 1em;
-    padding: 0 1em;
+    margin: 1.5rem 0;
+    padding: 1rem 1.25rem;
+}
+
+blockquote > :last-child {
+    margin-bottom: 0;
 }
 
 .card pre {
@@ -67,13 +87,14 @@ blockquote {
 
 .navbar-hyper {
     background-color: $primary-pagehead-color;
+    box-shadow: 0 1px 0 rgba(45, 51, 59, 0.12);
     border: 0;
     margin: 0;
     padding: 0.5rem 0;
 }
 
 .navbar a {
-    color: rgba(255,255,255,0.85);
+    color: $text-color;
     display: flex;
     flex-direction: column;
     justify-content: center;
@@ -91,6 +112,7 @@ blockquote {
 
 #hyper .navbar a:hover, #hyper .navbar a:focus {
     background: none;
+    color: #111827;
 }
 
 .navbar .navbar-brand {
@@ -104,9 +126,9 @@ blockquote {
 
 .hyper-pageheader {
     background: $primary-pagehead-color;
-    color: #fff;
+    color: $text-color;
     margin-bottom: 4rem;
-    padding:4rem;
+    padding: 4rem 0;
 }
 
 .hyper-home .hyper-pageheader {
@@ -116,38 +138,46 @@ blockquote {
 }
 
 .hyper-home .hyper-pageheader h1 {
-    font-size: 4rem;
+    font-size: clamp(3rem, 8vw, 5rem);
+    letter-spacing: -0.04em;
     margin: 2rem 0;
 }
 .hyper-home .hyper-pageheader p {
-    font-size: 2rem;
+    font-size: clamp(1.25rem, 4vw, 2rem);
     margin: 2rem 0;
 }
 
 .hyper-home .hyper-pageheader .hyper-getstarted {
     background: none;
-    border: 1px solid #fff;
-    color: #fff;
+    border: 1px solid $text-color;
+    color: $text-color;
     font-size: 1.25rem;
     padding: 1rem 2rem;
 }
 
 .hyper-home .hyper-pageheader .hyper-getstarted:hover {
     background: #fff;
-    color: $primary-color;
+    border-color: #fff;
+    color: $text-color;
+}
+
+.hyper-home .hyper-pageheader .hyper-getstarted:focus-visible {
+    outline-color: $text-color;
 }
 
 .btn.btn-primary {
     border-color: #ffb300;
     background-color: #ffc107;
+    color: $text-color;
 }
 
 .btn.btn-primary:hover {
     background-color: #ffb300;
+    color: #111827;
 }
 
 .hyper-sidebar .guide-topic-title {
-    color: #6b7280;
+    color: $muted-text-color;
     font-size: 1.1rem;
 }
 
@@ -167,7 +197,7 @@ blockquote {
 }
 
 .hyper-sidebar .nav li > a {
-    color: #777;
+    color: $muted-text-color;
     display: block;
     font-size: 90%;
     padding: .25rem 0;
@@ -178,11 +208,12 @@ blockquote {
 }
 
 .hyper-sidebar .nav li.active > a {
-    color: $primary-highlight-color;
+    color: $link-color;
 }
 
 .hyper-content {
-    line-height: 1.7rem;
+    font-size: 1.05rem;
+    line-height: 1.7;
     max-width: 700px;
 }
 
@@ -196,11 +227,47 @@ blockquote {
 }
 
 .hyper-content h2 {
-    margin: 2rem 0 1rem;
+    border-bottom: 1px solid $border-color;
+    margin: 2.5rem 0 1rem;
+    padding-bottom: 0.4rem;
+}
+
+.hyper-content h3 {
+    margin: 2.25rem 0 0.75rem;
+}
+
+.hyper-content h4 {
+    border-left: 3px solid $primary-color;
+    margin: 2rem 0 0.75rem;
+    padding-left: 0.65rem;
+}
+
+.hyper-content h5 {
+    letter-spacing: 0.06em;
+    margin: 1.75rem 0 0.75rem;
+    text-transform: uppercase;
+}
+
+.hyper-content h6 {
+    color: $muted-text-color;
+    margin: 1.5rem 0 0.75rem;
+}
+
+.hyper-content p,
+.hyper-content ul,
+.hyper-content ol,
+.hyper-content pre,
+.hyper-content table {
+    margin-bottom: 1.25rem;
+}
+
+.hyper-content img {
+    height: auto;
+    max-width: 100%;
 }
 
 .hyper-home h3 {
-    color: $primary-dim-color;
+    color: $primary-color;
 }
 
 // table of contents
@@ -211,7 +278,7 @@ blockquote {
 }
 
 .toc ul li a {
-    color: #777;
+    color: $muted-text-color;
     display: block;
     font-size: 90%;
     padding: 0.25em 0;
@@ -224,7 +291,8 @@ blockquote {
 // footer
 
 .hyper-footer {
-    background: #f5f5f5;
+    background: $surface-color;
+    border-top: 1px solid $border-color;
     margin-top: 4rem;
     padding: 4rem;
 }
@@ -345,12 +413,14 @@ blockquote {
 
 // headers
 h1 {
-    font-size: 2.5rem;
-    line-height: 1.1;
+    font-size: clamp(2.25rem, 5vw, 2.75rem);
+    letter-spacing: -0.025em;
+    line-height: 1.15;
 }
 
 h2, h3, h4, h5, h6 {
-    line-height: 1.1;
+    font-weight: 650;
+    line-height: 1.2;
 }
 
 h2 {
@@ -358,15 +428,15 @@ h2 {
 }
 
 h3 {
-    font-size: 1.75rem;
-}
-
-h4 {
     font-size: 1.5rem;
 }
 
+h4 {
+    font-size: 1.2rem;
+}
+
 h5 {
-    font-size: 1.25rem;
+    font-size: 1rem;
 }
 
 h6 {
@@ -389,7 +459,6 @@ a:hover, a:focus {
 // code 
 code {
     font-size: 90%;
-    border-radius: 0.25rem;
 }
 
 // ul, ol
@@ -397,22 +466,8 @@ ul, ol {
     padding-inline-start: 40px;
 }
 
-// row
-.row {
-}
-
-// code
-pre code {
-    font-size: 12.96px;
-    border-radius: 0;
-}
-
-// navbar
-.navbar a {
-}
-
 .navbar a:hover, .navbar a:focus {
-    color: #fff;
+    color: #111827;
     text-decoration: none;
 }
 
@@ -442,4 +497,71 @@ pre code {
 
 .hyper-middle {
     margin-top: 2rem;
+}
+
+:focus-visible {
+    outline: 3px solid rgba(7, 124, 238, 0.65);
+    outline-offset: 3px;
+}
+
+table {
+    width: 100%;
+}
+
+th,
+td {
+    border-bottom: 1px solid $border-color;
+    padding: 0.65rem 0.75rem;
+    text-align: left;
+}
+
+thead {
+    background: $surface-color;
+}
+
+@media (min-width: 992px) {
+    .toc {
+        align-self: flex-start;
+        position: sticky;
+        top: 2rem;
+    }
+}
+
+@media (max-width: 991.98px) {
+    .navbar a {
+        align-items: flex-start;
+        min-height: 2.75rem;
+    }
+
+    .hyper-sidebar {
+        border-bottom: 1px solid $border-color;
+        margin-bottom: 2rem;
+        padding-bottom: 1rem;
+    }
+
+    .toc {
+        border-top: 1px solid $border-color;
+        margin-top: 2rem;
+        padding-top: 1.5rem;
+    }
+}
+
+@media (max-width: 575.98px) {
+    .hyper-pageheader {
+        margin-bottom: 2.5rem;
+        padding: 2.75rem 0;
+    }
+
+    .hyper-home .hyper-pageheader {
+        padding: 4rem 0 3.5rem;
+    }
+
+    .hyper-footer {
+        margin-top: 3rem;
+        padding: 2.5rem 1rem;
+    }
+
+    pre code {
+        padding: 1rem;
+    }
 }

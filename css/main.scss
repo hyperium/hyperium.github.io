@@ -186,16 +186,20 @@ blockquote {
     max-width: 700px;
 }
 
-.hyper-content h1 {
-    color: $primary-color;
+.hyper-content h1,
+.hyper-content h2,
+.hyper-content h3,
+.hyper-content h4,
+.hyper-content h5,
+.hyper-content h6 {
+    color: $text-color;
 }
 
 .hyper-content h2 {
-    color: $primary-color;
     margin: 2rem 0 1rem;
 }
 
-h3 {
+.hyper-home h3 {
     color: $primary-dim-color;
 }
 
@@ -346,13 +350,27 @@ h1 {
 }
 
 h2, h3, h4, h5, h6 {
-    font-size: 2rem;
     line-height: 1.1;
 }
 
-article h3 {
+h2 {
+    font-size: 2rem;
+}
+
+h3 {
     font-size: 1.75rem;
-    line-height: 1.1;
+}
+
+h4 {
+    font-size: 1.5rem;
+}
+
+h5 {
+    font-size: 1.25rem;
+}
+
+h6 {
+    font-size: 1rem;
 }
 
 // a

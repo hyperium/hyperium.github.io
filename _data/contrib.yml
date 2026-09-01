@@ -17,6 +17,8 @@
     path: governance
   - title: Maintainers
     path: maintainers
+  - title: Collaborators
+    path: collaborators
   - title: Tenets
     path: tenets
   - title: Vision

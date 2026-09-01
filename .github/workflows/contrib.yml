@@ -31,18 +31,33 @@ jobs:
           sed -i -e 's|./docs/||g' hyper/CONTRIBUTING.md
           cp -a hyper/CONTRIBUTING.md hyper/docs/CONTRIBUTING.md
 
+      - name: Generate HIP index
+        run: |
+          index=hyper/docs/hips/index.md
+          printf '# hyper Improvement Proposals\n\n' > "$index"
+          for f in hyper/docs/hips/[0-9][0-9][0-9][0-9]-*.md; do
+            if [[ "$(basename "$f")" == '0000-template.md' ]]; then
+              continue
+            fi
+
+            title=$(sed -n '1s/^# //p' "$f")
+            path=$(basename "$f" .md)
+            printf -- '- [%s](./%s/)\n' "$title" "$path" >> "$index"
+          done
+
       # Insert frontmatter borders, replace markdown header with
       # frontmatter title and insert: 
       #   - layout: guide
       #   - hyper_path: {path}
       - name: Convert doc titles to frontmatter 
         run: |
-          for f in hyper/docs/*.md; do
+          find hyper/docs -mindepth 1 -maxdepth 2 -type f -name '*.md' -print0 |
+          while IFS= read -r -d '' f; do
             sed -i -e '1i ---' \
             -e '1s/#/title:/' \
             -e '2i layout: guide' \
-            -e "2i hyper_path: ${f:6}" \
-            -e '2i ---' $f;
+            -e "2i hyper_path: ${f#hyper/}" \
+            -e '2i ---' "$f"
           done
 
       # CONTRIBUTING.md is uniquely copied into the docs folder.
@@ -57,21 +72,29 @@ jobs:
         run: |
           sed -i -e '4i permalink: /contrib/' hyper/docs/README.md
           mv hyper/docs/README.md hyper/docs/index.md
+          sed -i -e '/^hyper_path:/d' hyper/docs/hips/index.md
+          sed -i -e '4i permalink: /contrib/hips/' hyper/docs/hips/index.md
 
 
       # Lowercase the internal links and replace underscores with
       # hyphens, so they will point to the correct file.
       - name: Lowercase internal links
         run: |
-          for filename in hyper/docs/*.md; do
+          mapfile -d '' markdown_files < <(
+            find hyper/docs -mindepth 1 -maxdepth 2 -type f -name '*.md' -print0
+          )
+
+          for filename in "${markdown_files[@]}"; do
             # since we move some docs from hyper root into the docs folder,
             # fix links to them
-            sed -i -e 's|\.\./|\./|g' $filename;
+            if [[ "$filename" != hyper/docs/hips/* ]]; then
+              sed -i -e 's|\.\./|\./|g' "$filename"
+            fi
 
             # cut `.md` from the filename before search and replace
             filename=${filename::-3};
 
-            for file in hyper/docs/*.md; do
+            for file in "${markdown_files[@]}"; do
               # filename without parent path
               filename=${filename##*/}
 
@@ -81,7 +104,7 @@ jobs:
               fi
 
               # lowercase filenames outside frontmatter
-              sed -i -e "1,/^---$/!s|${filename}|${filename,,}|g" $file;
+              sed -i -e "1,/^---$/!s|${filename}|${filename,,}|g" "$file"
 
               # match on the lowercased filename from here on
               lowercased=${filename,,}
@@ -89,14 +112,17 @@ jobs:
               hyphenated=${lowercased//_/-}
 
               # replace underscores in internal links with hyphens
-              sed -i -e "s|${lowercased}|${hyphenated}|g" $file;
+              sed -i -e "s|${lowercased}|${hyphenated}|g" "$file"
             done
           done
 
       - name: Lowercase filenames and replace underscores
         run: |
-          for f in hyper/docs/*; do
-            mv -vn "$f" "$(echo "$f" | tr '[:upper:]' '[:lower:]' | tr '_' '-')" || true;
+          find hyper/docs -mindepth 1 -maxdepth 2 -type f -print0 |
+          while IFS= read -r -d '' f; do
+            directory=$(dirname "$f")
+            filename=$(basename "$f" | tr '[:upper:]' '[:lower:]' | tr '_' '-')
+            mv -vn "$f" "$directory/$filename" || true
           done
 
       - name: Copy the hyper docs to contrib
@@ -118,4 +144,3 @@ jobs:
             PR or updates an existing PR.
           commit-message: 'doc: update contrib docs'
           path: _contrib/
-

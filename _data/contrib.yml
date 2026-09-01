@@ -11,6 +11,8 @@
     path: issues
   - title: Pull requests
     path: pull-requests
+  - title: HIPs
+    path: hips
   - title: MSRV
     path: msrv
   - title: Governance

@@ -1,5 +1,6 @@
 ---
-title: HIP-0001: hyper Improvement Proposals
+title: >-
+  HIP-0001: hyper Improvement Proposals
 layout: guide
 hyper_path: docs/hips/0001-hyper-improvement-proposals.md
 ---

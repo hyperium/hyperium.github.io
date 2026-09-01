@@ -1,5 +1,6 @@
 ---
-title: HIP-0000: Template
+title: >-
+  HIP-0000: Template
 layout: guide
 hyper_path: docs/hips/0000-template.md
 ---
@@ -42,4 +43,3 @@ hyper_path: docs/hips/0000-template.md
 
 
 ## References
-

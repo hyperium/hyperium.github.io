@@ -1,5 +1,6 @@
 ---
-title: Pull Requests
+title: >-
+  Pull Requests
 layout: guide
 hyper_path: docs/PULL_REQUESTS.md
 ---

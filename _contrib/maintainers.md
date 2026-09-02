@@ -1,5 +1,6 @@
 ---
-title: The People
+title: >-
+  The People
 layout: guide
 hyper_path: docs/MAINTAINERS.md
 ---

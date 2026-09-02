@@ -1,5 +1,6 @@
 ---
-title: Charter
+title: >-
+  Charter
 layout: guide
 hyper_path: docs/TENETS.md
 ---

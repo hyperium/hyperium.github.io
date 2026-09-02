@@ -1,7 +1,8 @@
 ---
-title: Developing hyper
-layout: guide
+title: >-
+  Developing hyper
 permalink: /contrib/
+layout: guide
 hyper_path: docs/README.md
 ---
 

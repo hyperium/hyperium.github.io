@@ -1,5 +1,6 @@
 ---
-title: Issues
+title: >-
+  Issues
 layout: guide
 hyper_path: docs/ISSUES.md
 ---

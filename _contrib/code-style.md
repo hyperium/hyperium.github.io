@@ -1,5 +1,6 @@
 ---
-title: Code Style
+title: >-
+  Code Style
 layout: guide
 hyper_path: docs/CODE_STYLE.md
 ---

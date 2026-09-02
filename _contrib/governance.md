@@ -1,5 +1,6 @@
 ---
-title: Governance
+title: >-
+  Governance
 layout: guide
 hyper_path: docs/GOVERNANCE.md
 ---

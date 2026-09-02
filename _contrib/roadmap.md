@@ -1,5 +1,6 @@
 ---
-title: Roadmap
+title: >-
+  Roadmap
 layout: guide
 hyper_path: docs/ROADMAP.md
 ---

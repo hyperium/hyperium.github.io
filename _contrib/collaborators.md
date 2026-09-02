@@ -1,5 +1,6 @@
 ---
-title: hyper Collaborator Guide
+title: >-
+  hyper Collaborator Guide
 layout: guide
 hyper_path: docs/COLLABORATORS.md
 ---

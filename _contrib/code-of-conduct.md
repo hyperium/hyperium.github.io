@@ -1,5 +1,6 @@
 ---
-title: Code of Conduct
+title: >-
+  Code of Conduct
 layout: guide
 hyper_path: docs/CODE_OF_CONDUCT.md
 ---

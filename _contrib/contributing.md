@@ -1,7 +1,8 @@
 ---
-title: Contributing to Hyper
+title: >-
+  Contributing to Hyper
 layout: guide
-hyper_path: CONTRIBUTING.md
+hyper_path: docs/CONTRIBUTING.md
 ---
 
 You want to contribute? You're awesome!

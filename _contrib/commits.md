@@ -1,5 +1,6 @@
 ---
-title: Git Commit Guidelines
+title: >-
+  Git Commit Guidelines
 layout: guide
 hyper_path: docs/COMMITS.md
 ---

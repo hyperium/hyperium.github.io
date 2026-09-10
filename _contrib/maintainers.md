@@ -19,6 +19,7 @@ To see what these roles do, and how to become one, look at [governance](./govern
 - dswij (@dswij)
 - tottoto (@tottoto)
 - katelyn martin (@cratelyn)
+- 0x676e67 (@0x676e67)
 
 ### Collaborator emeriti
 

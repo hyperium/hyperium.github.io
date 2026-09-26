@@ -1,6 +1,6 @@
 ---
 title: >-
-  Minimum Support Rust Version (MSRV)
+  Minimum Supported Rust Version (MSRV)
 layout: guide
 hyper_path: docs/MSRV.md
 ---
